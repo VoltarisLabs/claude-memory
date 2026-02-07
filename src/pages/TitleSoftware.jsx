@@ -1,14 +1,15 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
-import { Database, Shield, Zap, Users, Clock, CheckCircle } from 'lucide-react'
+import { Database, Shield, Zap, Users, CheckCircle, ArrowRight, Calendar } from 'lucide-react'
+import Sparkles from '../components/Sparkles'
+import VoiceWaves from '../components/VoiceWaves'
+import GlowCard from '../components/GlowCard'
+import BorderBeam from '../components/BorderBeam'
+import { PrimaryButton, OutlineButton } from '../components/Buttons'
+import { WordReveal, FadeUpText } from '../components/TextAnimations'
+import SEO from '../components/SEO'
 
 const TitleSoftware = () => {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1
-  })
-
   const softwareFeatures = [
     {
       icon: Database,
@@ -38,209 +39,197 @@ const TitleSoftware = () => {
 
   const benefits = [
     {
+      icon: Zap,
       title: "Automated Workflows",
-      description: "Eliminate manual data entry with automated workflows that sync across all your title software.",
-      icon: "⚡"
+      description: "Eliminate manual data entry with automated workflows that sync across all your title software."
     },
     {
+      icon: Database,
       title: "Real-time Updates",
-      description: "Keep all systems synchronized with real-time updates across ResWare, RamQuest, and CRM systems.",
-      icon: "🔄"
+      description: "Keep all systems synchronized with real-time updates across ResWare, RamQuest, and CRM systems."
     },
     {
+      icon: CheckCircle,
       title: "Reduced Errors",
-      description: "Minimize human error with automated data validation and cross-system verification.",
-      icon: "✅"
+      description: "Minimize human error with automated data validation and cross-system verification."
     },
     {
+      icon: Shield,
       title: "Cost Savings",
-      description: "Reduce operational costs by automating routine tasks and improving efficiency.",
-      icon: "💰"
+      description: "Reduce operational costs by automating routine tasks and improving efficiency."
     }
   ]
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  }
-
-  const itemVariants = {
-    hidden: { y: 50, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    }
-  }
-
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen"
-    >
+    <div className="min-h-screen bg-black text-white relative">
+      <SEO
+        title="Title Software Integration"
+        description="Seamlessly integrate Title Voice with ResWare, RamQuest, and all major title production software."
+        canonical="/title-software"
+      />
+
+      {/* Background Canvas Layers */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <Sparkles particleColor="#38bdf8" particleDensity={50} minSize={1} maxSize={2.5} speed={0.8} />
+      </div>
+      <VoiceWaves />
+
       {/* Hero Section */}
-      <section className="pt-20 pb-16 bg-gradient-to-br from-[#1B262C] via-[#0F4C75] to-[#3282B8] text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#3282B8]/20 to-transparent"></div>
+      <section className="relative min-h-[70vh] flex items-center justify-center px-4 py-20 overflow-hidden">
+        <div className="absolute inset-0">
+          <img src="/spheremotion.gif" alt="" className="w-full h-full object-cover opacity-60 scale-75" />
         </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
+
+        <div className="container mx-auto text-center relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-              Title Company Software{' '}
-              <span className="text-[#BBE1FA]">Integration</span>
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 text-sm font-semibold text-white bg-white/[0.04] border border-white/20 rounded-full font-['Urbanist'] backdrop-blur-md mb-8">
+              <Database className="w-4 h-4" />
+              Software Integration
+            </span>
+
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold font-['Urbanist'] mb-6">
+              <WordReveal text="Title Company Software Integration" delay={0.3} />
             </h1>
-            <p className="text-xl lg:text-2xl text-gray-300 mb-8 leading-relaxed">
-              Seamlessly integrate Title Voice with ResWare, RamQuest, and all major 
-              title production software for unified workflows and automated processes.
-            </p>
+
+            <FadeUpText delay={0.8} blur={6}>
+              <p className="text-xl sm:text-2xl text-white/60 max-w-3xl mx-auto font-['Urbanist']">
+                Seamlessly integrate Title Voice with ResWare, RamQuest, and all major
+                title production software for unified workflows and automated processes.
+              </p>
+            </FadeUpText>
+
             <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
+              transition={{ delay: 1, duration: 0.6 }}
+              className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-10"
             >
-              <motion.button
-                className="bg-white text-[#1B262C] px-8 py-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-200"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                View Software Integration
-              </motion.button>
-              <motion.button
-                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-[#1B262C] transition-all duration-200"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
+              <PrimaryButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
+                Schedule Integration Demo
+                <ArrowRight className="w-5 h-5" />
+              </PrimaryButton>
+              <OutlineButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
+                <Calendar className="w-5 h-5" />
                 Request Custom Integration
-              </motion.button>
+              </OutlineButton>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
+      {/* Gradient Divider */}
+
       {/* Software Features */}
-      <section ref={ref} className="py-20 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-24 px-4 relative z-10">
+        <div className="container mx-auto max-w-6xl">
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            className="text-center mb-16"
-          >
-            <motion.h2
-              variants={itemVariants}
-              className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6"
-            >
-              Integrates with All Major{' '}
-              <span className="text-[#0F4C75]">Title Software</span>
-            </motion.h2>
-            <motion.p
-              variants={itemVariants}
-              className="text-xl text-gray-600 max-w-3xl mx-auto"
-            >
-              Our AI virtual assistant works seamlessly with your existing title company 
-              software stack, creating a unified workflow experience.
-            </motion.p>
-          </motion.div>
-
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            className="grid lg:grid-cols-2 gap-12"
-          >
-            {softwareFeatures.map((feature, index) => (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                className="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition-all duration-300"
-                whileHover={{ 
-                  y: -5,
-                  scale: 1.02,
-                  transition: { duration: 0.2 }
-                }}
-              >
-                <div className="flex items-start gap-6">
-                  <div className="w-16 h-16 bg-[#0F4C75] rounded-xl flex items-center justify-center flex-shrink-0">
-                    <feature.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600 mb-6 leading-relaxed">
-                      {feature.description}
-                    </p>
-                    <ul className="space-y-2">
-                      {feature.features.map((item, idx) => (
-                        <li key={idx} className="flex items-center gap-3">
-                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                          <span className="text-gray-700">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Why Title Companies Choose{' '}
-              <span className="text-[#0F4C75]">Our Integration</span>
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 text-sm font-medium text-[#0080FF] uppercase tracking-[0.15em] mb-4 font-['Urbanist'] bg-gradient-to-r from-[#0080FF]/[0.08] to-[#4F1AD6]/[0.08] border border-[#0080FF]/20 rounded-full backdrop-blur-sm">
+              <span className="w-2 h-2 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6]" />
+              Integrations
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-['Urbanist']">
+              <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                Integrates with All Major Title Software
+              </span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Experience the benefits of seamless software integration with 
+            <p className="text-xl text-white/60 max-w-3xl mx-auto font-['Urbanist']">
+              Our AI virtual assistant works seamlessly with your existing title company
+              software stack, creating a unified workflow experience.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            {softwareFeatures.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <GlowCard className="h-full rounded-2xl">
+                  <div className="relative p-8 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/20 transition-all duration-300 h-full group overflow-hidden">
+                    <BorderBeam size={200} duration={8} delay={index * 2} />
+                    <div className="flex items-start gap-6">
+                      <div className="w-14 h-14 rounded-2xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[#0080FF]/20 transition-colors duration-300">
+                        <feature.icon className="w-7 h-7 text-[#0080FF]" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-white mb-3 font-['Urbanist']">
+                          {feature.title}
+                        </h3>
+                        <p className="text-white/60 mb-5 leading-relaxed font-['Urbanist']">
+                          {feature.description}
+                        </p>
+                        <ul className="space-y-2">
+                          {feature.features.map((item, idx) => (
+                            <li key={idx} className="flex items-center gap-3">
+                              <CheckCircle className="w-4 h-4 text-[#0080FF] flex-shrink-0" />
+                              <span className="text-white/70 text-sm font-['Urbanist']">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </GlowCard>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Gradient Divider */}
+
+      {/* Benefits Section */}
+      <section className="py-24 px-4 relative z-10">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 text-sm font-medium text-[#0080FF] uppercase tracking-[0.15em] mb-4 font-['Urbanist'] bg-gradient-to-r from-[#0080FF]/[0.08] to-[#4F1AD6]/[0.08] border border-[#0080FF]/20 rounded-full backdrop-blur-sm">
+              <span className="w-2 h-2 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6]" />
+              Benefits
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-['Urbanist']">
+              <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                Why Title Companies Choose Our Integration
+              </span>
+            </h2>
+            <p className="text-xl text-white/60 max-w-3xl mx-auto font-['Urbanist']">
+              Experience the benefits of seamless software integration with
               automated workflows and real-time data synchronization.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {benefits.map((benefit, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.6 }}
-                className="text-center group"
-                whileHover={{ scale: 1.05 }}
+                className="p-6 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-[#0080FF]/30 transition-all duration-500 group text-center"
               >
-                <div className="w-20 h-20 bg-[#0F4C75] rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-[#3282B8] transition-colors duration-300">
-                  <span className="text-3xl">{benefit.icon}</span>
+                <div className="w-14 h-14 rounded-2xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mx-auto mb-6 group-hover:bg-[#0080FF]/20 transition-colors duration-300">
+                  <benefit.icon className="w-7 h-7 text-[#0080FF]" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                <h3 className="text-lg font-bold text-white mb-3 font-['Urbanist']">
                   {benefit.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-white/60 leading-relaxed text-sm font-['Urbanist']">
                   {benefit.description}
                 </p>
               </motion.div>
@@ -249,45 +238,53 @@ const TitleSoftware = () => {
         </div>
       </section>
 
+      {/* Gradient Divider */}
+
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-[#1B262C] to-[#0F4C75] text-white">
-        <div className="container mx-auto px-4">
+      <section className="py-16 sm:py-24 lg:py-32 px-4 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#0080FF]/10 rounded-full blur-[200px]"
+            animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.15, 0.1] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
+
+        <div className="container mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Ready to Integrate Your{' '}
-              <span className="text-[#BBE1FA]">Title Software?</span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 font-['Urbanist'] leading-tight">
+              <span className="text-white">Ready to Integrate Your</span>
+              <br />
+              <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                Title Software?
+              </span>
             </h2>
-            <p className="text-xl text-gray-300 mb-12">
-              Get started with Title Voice integration for your title company software. 
+            <p className="text-base sm:text-lg md:text-xl text-white/60 mb-14 max-w-2xl mx-auto font-['Urbanist'] leading-relaxed">
+              Get started with Title Voice integration for your title company software.
               Our team will handle the technical setup while you focus on your business.
             </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button
-                className="bg-white text-[#1B262C] px-8 py-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-200"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}
-              >
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <PrimaryButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
                 Schedule Integration Demo
-              </motion.button>
-              <motion.button
-                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-[#1B262C] transition-all duration-200"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
+                <ArrowRight className="w-5 h-5" />
+              </PrimaryButton>
+              <OutlineButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
+                <Calendar className="w-5 h-5" />
                 Contact Integration Team
-              </motion.button>
+              </OutlineButton>
             </div>
           </motion.div>
         </div>
       </section>
-    </motion.div>
+    </div>
   )
 }
 

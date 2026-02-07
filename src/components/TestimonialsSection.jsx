@@ -124,8 +124,22 @@ const TestimonialsSection = () => {
         <motion.div
           variants={itemVariants}
           className="max-w-4xl mx-auto"
+          style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
+          whileHover={{ y: -8 }}
+          onMouseMove={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect()
+            const x = (e.clientX - rect.left) / rect.width - 0.5
+            const y = (e.clientY - rect.top) / rect.height - 0.5
+            // Subtle tilt for minimal design
+            e.currentTarget.style.transform = `rotateX(${y * -8}deg) rotateY(${x * 8}deg) translateY(-8px)`
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0px)'
+          }}
         >
-          <div className="relative bg-white rounded-2xl shadow-xl p-8 md:p-12">
+          <div className="relative bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-gray-100">
+            {/* Subtle gradient overlay on hover */}
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-50/0 via-blue-50/50 to-purple-50/0 opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
@@ -133,7 +147,7 @@ const TestimonialsSection = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -50 }}
                 transition={{ duration: 0.5 }}
-                className="text-center"
+                className="text-center relative z-10"
               >
                 {/* Rating */}
                 <div className="flex justify-center gap-1 mb-6">

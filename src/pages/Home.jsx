@@ -1,32 +1,40 @@
-import React, { useState, useEffect } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import React, { useState, useEffect, useRef } from 'react'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import SphereMotion from '../components/SphereMotion'
-import { 
-  Phone, 
-  Calendar, 
-  MessageSquare, 
-  Clock, 
-  CheckCircle, 
+import Sparkles from '../components/Sparkles'
+import VoiceWaves from '../components/VoiceWaves'
+import GlowCard from '../components/GlowCard'
+import { WordReveal } from '../components/TextAnimations'
+import { PrimaryButton, OutlineButton } from '../components/Buttons'
+import { useBooking } from '../context/BookingContext'
+import AudioPlayer from '../components/AudioPlayer'
+import {
+  Phone,
+  Calendar,
+  MessageSquare,
+  Clock,
+  CheckCircle,
   Star,
   ArrowRight,
   ArrowDown,
   Play,
   Users,
-  TrendingUp,
   Shield,
   Zap,
   Check,
   BarChart3,
-  Bell,
   Mic,
   Target,
   Volume2,
   Headphones,
   Database,
-  Settings
+  Settings,
+  TrendingUp,
+  Quote
 } from 'lucide-react'
 
 const Home = () => {
+  const { openModal } = useBooking()
   const [activeTab, setActiveTab] = useState('receptionist')
   const [activeSection, setActiveSection] = useState('receptionist')
   const [showMiniNav, setShowMiniNav] = useState(false)
@@ -34,6 +42,16 @@ const Home = () => {
   const [activeCategory, setActiveCategory] = useState('ai-answering-service')
   const { scrollYProgress } = useScroll()
   const y = useTransform(scrollYProgress, [0, 1], [0, -50])
+
+  // Scroll to receptionist section
+  const scrollToReceptionist = () => {
+    const section = document.getElementById('receptionist-section')
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
+
 
   // Mini navbar sections
   const miniNavSections = [
@@ -144,21 +162,21 @@ integrations.configure({
       const heroSection = document.getElementById('hero-section')
       const miniNavSection = document.getElementById('mini-nav-section')
       const outboundSection = document.getElementById('outbound-campaigns-section')
-      
+
       if (heroSection && miniNavSection && outboundSection) {
         const heroBottom = heroSection.offsetTop + heroSection.offsetHeight
         const miniNavBottom = miniNavSection.offsetTop + miniNavSection.offsetHeight
         const outboundBottom = outboundSection.offsetTop + outboundSection.offsetHeight
         const scrollY = window.scrollY
-        
+
         // Show following nav when we're in the feature sections area
         const shouldShow = scrollY > heroBottom - 200 && scrollY < outboundBottom
         setShowMiniNav(shouldShow)
-        
+
         // Check if following navbar should be sticky (when scrolled past original navbar)
         const shouldBeSticky = scrollY > miniNavBottom - 100 && shouldShow
         setIsSticky(shouldBeSticky)
-        
+
         // Track active section
         const sections = miniNavSections.map(section => document.getElementById(`${section.id}-section`))
         const currentSection = sections.find(section => {
@@ -168,7 +186,7 @@ integrations.configure({
           }
           return false
         })
-        
+
         if (currentSection) {
           setActiveSection(currentSection.id.replace('-section', ''))
         }
@@ -177,7 +195,7 @@ integrations.configure({
 
     // Initial check
     handleScroll()
-    
+
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -190,28 +208,28 @@ integrations.configure({
     if (element) {
       const offset = 120 // Account for sticky navbar
       const elementPosition = element.offsetTop - offset
-      
+
       // Smooth scroll with easing
       const startPosition = window.pageYOffset
       const distance = elementPosition - startPosition
       const duration = Math.min(Math.abs(distance) / 2, 1000) // Max 1 second
       let startTime = null
-      
+
       const easeInOutCubic = (t) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
-      
+
       const animation = (currentTime) => {
         if (startTime === null) startTime = currentTime
         const timeElapsed = currentTime - startTime
         const progress = Math.min(timeElapsed / duration, 1)
         const ease = easeInOutCubic(progress)
-        
+
         window.scrollTo(0, startPosition + distance * ease)
-        
+
         if (progress < 1) {
           requestAnimationFrame(animation)
         }
       }
-      
+
       requestAnimationFrame(animation)
     }
   }
@@ -305,58 +323,26 @@ integrations.configure({
     }
   ]
 
-  const pricingPlans = [
-    {
-      name: 'Basic',
-      price: '$1,500',
-      period: '/ Month',
-      description: 'Perfect for small title companies getting started with AI automation.',
-      badge: 'Most Pick',
-      icon: '🚀',
-      projects: '1,500 Free Minutes',
-      revisions: 'Single Location',
-      features: ['24/7 AI Title Receptionist', 'Deal status inquiries', 'Appointment scheduling', 'Basic CRM integration', 'Call transcripts & summaries', 'Email support', 'Cancel anytime', '$0 setup fee'],
-      highlight: false
-    },
-    {
-      name: 'Professional',
-      price: '$2,000',
-      period: '/ Month',
-      description: 'Ideal for growing title companies with multiple locations.',
-      badge: 'Advanced',
-      icon: '🔔',
-      projects: '2,000 Free Minutes',
-      revisions: 'Multi-location',
-      features: ['Everything in Basic', 'Multi-location team management', 'Escalation to live agent (optional)', 'Multilingual intake support', 'Custom script & workflows', 'Advanced CRM integrations', 'Priority support (email + phone)', 'Volume discounts available'],
-      highlight: true
-    },
-    {
-      name: 'Enterprise',
-      price: '$3,500',
-      period: '/ Month',
-      description: 'Advanced solutions for large title companies and enterprises.',
-      badge: 'Recommended',
-      icon: '👑',
-      projects: '3,500 Free Minutes',
-      revisions: 'Unlimited Locations',
-      features: ['Everything in Professional', 'Dedicated account manager', 'Custom integrations', 'White-label solution', 'Advanced analytics & reporting', 'HIPAA & compliance features', 'Secure storage + redaction', '24/7 dedicated support'],
-      highlight: false
-    }
-  ]
+
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-black text-white overflow-hidden relative">
+      {/* Background Canvas Layers */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <Sparkles particleColor="#38bdf8" particleDensity={60} speed={0.3} />
+      </div>
+      <VoiceWaves />
       {/* Hero Section - Cinematic Animated Orb */}
       <section id="hero-section" className="relative flex flex-col justify-center items-center text-center min-h-screen bg-black overflow-hidden">
         {/* Sphere Motion GIF Animation - Full Cover */}
         <div className="absolute inset-0">
-          <img 
-            src="/spheremotion.gif" 
+          <img
+            src="/spheremotion.gif"
             alt="Sphere Motion Animation"
             className="w-full h-full object-cover opacity-60"
           />
         </div>
-        
+
         {/* Gradient overlay for smooth transition */}
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -365,7 +351,7 @@ integrations.configure({
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ 
+            transition={{
               duration: 0.8,
               type: "spring",
               stiffness: 100
@@ -374,7 +360,7 @@ integrations.configure({
           >
             <div className="mb-6">
               <h1 className="text-4xl md:text-6xl font-bold text-white font-['Urbanist']">
-                Never miss a call again.
+                <WordReveal text="Never miss a call again." delay={0.2} />
               </h1>
             </div>
             <div className="mb-8">
@@ -382,12 +368,12 @@ integrations.configure({
                 Human-like Conversations. Real-time Deal Support.
               </h2>
             </div>
-            <motion.p 
+            <motion.p
               className="text-xl md:text-2xl text-white mb-12 max-w-4xl mx-auto font-['Urbanist']"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ 
-                duration: 0.8, 
+              transition={{
+                duration: 0.8,
                 delay: 0.6,
                 type: "spring",
                 stiffness: 100
@@ -400,32 +386,45 @@ integrations.configure({
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ 
-              duration: 0.8, 
+            transition={{
+              duration: 0.8,
               delay: 0.8,
               type: "spring",
               stiffness: 100
             }}
             className="flex flex-col sm:flex-row gap-6 justify-center items-center"
           >
-            <motion.button
-              className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 font-['Urbanist']"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 20px 40px rgba(0, 128, 255, 0.3)"
+            {/* Single prominent "Listen to Live Call" button */}
+            <motion.div
+              animate={{
+                boxShadow: [
+                  '0 0 30px rgba(0, 128, 255, 0.4)',
+                  '0 0 50px rgba(0, 128, 255, 0.6)',
+                  '0 0 30px rgba(0, 128, 255, 0.4)',
+                ]
               }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1 }}
-              onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="rounded-full"
             >
-              Book a Demo
-              <ArrowRight className="w-5 h-5" />
-            </motion.button>
+              <PrimaryButton
+                size="lg"
+                onClick={scrollToReceptionist}
+                className="text-lg"
+              >
+                <Play className="w-6 h-6" />
+                Listen to Live Call
+                <Volume2 className="w-6 h-6" />
+              </PrimaryButton>
+            </motion.div>
           </motion.div>
         </div>
       </section>
+
+      {/* Gradient Divider */}
 
       {/* Why Title Companies Need An AI Answering Service Section */}
       <section className="py-16 px-4 bg-black">
@@ -433,7 +432,7 @@ integrations.configure({
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ 
+            transition={{
               duration: 0.8,
               type: "spring",
               stiffness: 100
@@ -450,7 +449,7 @@ integrations.configure({
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ 
+              transition={{
                 duration: 0.6,
                 delay: 0.2,
                 type: "spring",
@@ -463,38 +462,35 @@ integrations.configure({
                   <div className="w-1.5 h-1.5 bg-[#0080FF] rounded-full"></div>
                   SYSTEMS
                 </h3>
-                
+
                 <div className="mb-6">
                   <h4 className="text-lg font-bold text-white mb-2 font-['Urbanist']">
                     Never miss a call with AI-powered answering services.
                   </h4>
                   <p className="text-gray-500 text-xs font-['Urbanist']">
                     Title companies need reliable answering services to handle client calls 24/7.
-                </p>
-              </div>
-                
+                  </p>
+                </div>
+
                 <div className="space-y-3">
                   {categories.map((category) => (
                     <div
                       key={category.id}
-                      className={`cursor-pointer transition-all duration-200 ${
-                        activeCategory === category.id
-                          ? 'bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-md p-2 border border-transparent'
-                          : 'hover:bg-gray-800 rounded-md p-2'
-                      }`}
+                      className={`cursor-pointer transition-all duration-200 ${activeCategory === category.id
+                        ? 'bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-md p-2 border border-transparent'
+                        : 'hover:bg-gray-800 rounded-md p-2'
+                        }`}
                       onClick={() => setActiveCategory(category.id)}
                     >
-                      <h5 className={`text-xs font-semibold mb-1 font-['Urbanist'] uppercase tracking-wide flex items-center gap-1 ${
-                        activeCategory === category.id ? 'text-white' : 'text-gray-400'
-                      }`}>
+                      <h5 className={`text-xs font-semibold mb-1 font-['Urbanist'] uppercase tracking-wide flex items-center gap-1 ${activeCategory === category.id ? 'text-white' : 'text-gray-400'
+                        }`}>
                         {activeCategory === category.id && (
                           <div className="w-1 h-1 bg-white rounded-full"></div>
                         )}
                         {category.title}
                       </h5>
-                      <ul className={`text-xs space-y-0.5 font-['Urbanist'] ${
-                        activeCategory === category.id ? 'text-white' : 'text-gray-500'
-                      }`}>
+                      <ul className={`text-xs space-y-0.5 font-['Urbanist'] ${activeCategory === category.id ? 'text-white' : 'text-gray-500'
+                        }`}>
                         {category.items.map((item, index) => (
                           <li key={index}>{item}</li>
                         ))}
@@ -509,7 +505,7 @@ integrations.configure({
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ 
+              transition={{
                 duration: 0.6,
                 delay: 0.4,
                 type: "spring",
@@ -523,13 +519,13 @@ integrations.configure({
                     <div className="w-1.5 h-1.5 bg-[#0080FF] rounded-full"></div>
                     {categories.find(cat => cat.id === activeCategory)?.content.title || 'AI ANSWERING SERVICE'}
                   </h3>
-              </div>
+                </div>
 
                 {/* Dynamic Content Based on Selected Category */}
                 {(() => {
                   const currentCategory = categories.find(cat => cat.id === activeCategory);
                   if (!currentCategory) return null;
-                  
+
                   return (
                     <>
                       {/* Animation and Implementation Side by Side */}
@@ -543,7 +539,7 @@ integrations.configure({
                             {activeCategory === 'call-handling' && (
                               <div className="relative w-16 h-16 flex items-center justify-center">
                                 {/* Phone icon animation */}
-                <motion.div
+                                <motion.div
                                   className="w-6 h-6 bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-sm"
                                   animate={{
                                     rotate: [0, 5, -5, 0],
@@ -581,19 +577,19 @@ integrations.configure({
                                     delay: 0.3
                                   }}
                                 />
-              </div>
+                              </div>
                             )}
 
                             {activeCategory === 'ai-answering-service' && (
                               <div className="relative w-16 h-16 flex items-center justify-center">
                                 {/* AI brain animation */}
-            <motion.div
+                                <motion.div
                                   className="w-4 h-4 bg-[#0080FF] rounded-full"
                                   animate={{
                                     scale: [1, 1.3, 1],
                                     opacity: [0.8, 1, 0.8]
                                   }}
-              transition={{ 
+                                  transition={{
                                     duration: 1.8,
                                     repeat: Infinity,
                                     ease: "easeInOut"
@@ -613,7 +609,7 @@ integrations.configure({
                                     delay: 0.2
                                   }}
                                 />
-                <motion.div
+                                <motion.div
                                   className="absolute w-12 h-12 border-2 border-[#0080FF] rounded-full"
                                   animate={{
                                     scale: [0.3, 1.4, 0.3],
@@ -639,19 +635,19 @@ integrations.configure({
                                     delay: 0.6
                                   }}
                                 />
-              </div>
+                              </div>
                             )}
 
                             {activeCategory === 'title-company-integrations' && (
                               <div className="relative w-16 h-16 flex items-center justify-center">
                                 {/* Database/Integration animation */}
-            <motion.div
+                                <motion.div
                                   className="w-5 h-3 bg-[#0080FF] rounded-sm"
                                   animate={{
                                     y: [0, -2, 0],
                                     scale: [1, 1.05, 1]
                                   }}
-              transition={{ 
+                                  transition={{
                                     duration: 1.5,
                                     repeat: Infinity,
                                     ease: "easeInOut"
@@ -670,7 +666,7 @@ integrations.configure({
                                     ease: "easeInOut"
                                   }}
                                 />
-                <motion.div
+                                <motion.div
                                   className="absolute w-2 h-8 bg-[#0080FF] rounded-full"
                                   style={{ left: '8px' }}
                                   animate={{
@@ -701,7 +697,7 @@ integrations.configure({
                               </div>
                             )}
                           </div>
-              <div className="text-center">
+                          <div className="text-center">
                             <h5 className="text-[#0080FF] font-medium mb-1 text-xs font-['Urbanist']">
                               {currentCategory.content.features[0].subtitle}
                             </h5>
@@ -740,7 +736,7 @@ integrations.configure({
                 {(() => {
                   const currentCategory = categories.find(cat => cat.id === activeCategory);
                   if (!currentCategory) return null;
-                  
+
                   return (
                     <div className="grid md:grid-cols-2 gap-3">
                       <div className="bg-gray-950 rounded-md p-3 border border-gray-900">
@@ -754,7 +750,7 @@ integrations.configure({
                           ))}
                         </ul>
                       </div>
-                      
+
                       <div className="bg-gray-950 rounded-md p-3 border border-gray-900">
                         <h4 className="text-xs font-semibold text-gray-300 mb-2 font-['Urbanist'] uppercase tracking-wide">CAPABILITIES</h4>
                         <ul className="space-y-0.5">
@@ -777,7 +773,7 @@ integrations.configure({
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ 
+            transition={{
               duration: 0.6,
               delay: 0.6,
               type: "spring",
@@ -785,48 +781,23 @@ integrations.configure({
             }}
             className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-12"
           >
-            <motion.button
-              className="border-2 border-[#0080FF] text-[#0080FF] px-8 py-4 rounded-xl font-semibold text-lg hover:bg-[#0080FF] hover:text-white transition-all duration-300 flex items-center gap-2 justify-center font-['Urbanist']"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 10px 30px rgba(0, 128, 255, 0.2)"
-              }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}
-            >
+            <PrimaryButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
               Book A Demo
               <ArrowRight className="w-5 h-5" />
-            </motion.button>
+            </PrimaryButton>
           </motion.div>
         </div>
       </section>
 
-      {/* Title Voice Operations Heading Section */}
-      <section className="py-20 px-4 bg-black">
-        <div className="container mx-auto max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-center"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 font-['Urbanist']">
-              Title Voice keeps your operations always-on.
-            </h2>
-            <p className="text-3xl text-white/80 font-['Urbanist']">
-              Answer every call. Update every deal. Instantly.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      {/* Gradient Divider */}
 
       {/* Mini Navigation Tracker - ALWAYS VISIBLE in Original Position */}
       <motion.section
         id="mini-nav-section"
         initial={{ opacity: 0, y: 20 }}
-        animate={{ 
-          opacity: 1, 
-          y: 0 
+        animate={{
+          opacity: 1,
+          y: 0
         }}
         transition={{ duration: 0.4, ease: "easeOut" }}
         className="py-8 px-4 bg-black"
@@ -834,23 +805,30 @@ integrations.configure({
         <div className="container mx-auto max-w-7xl">
           <div className="flex items-center justify-center">
             <div className="bg-black/95 backdrop-blur-lg border border-white/30 rounded-full px-8 py-4 shadow-xl">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 relative">
                 {miniNavSections.map((section, index) => {
                   const Icon = section.icon
+                  const isActive = activeSection === section.id
                   return (
                     <motion.button
                       key={section.id}
                       onClick={() => scrollToSection(section.id)}
-                      className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all duration-300 font-['Urbanist'] ${
-                        activeSection === section.id
-                          ? 'bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] text-white shadow-lg'
-                          : 'text-white/70 hover:text-white hover:bg-white/10'
-                      }`}
+                      className={`relative flex items-center gap-2 px-5 py-2.5 rounded-full transition-colors duration-300 font-['Urbanist'] ${isActive
+                        ? 'text-white'
+                        : 'text-white/70 hover:text-white hover:bg-white/10'
+                        }`}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      <Icon className="w-4 h-4" />
-                      <span className="text-sm font-medium">{section.title}</span>
+                      {isActive && (
+                        <motion.div
+                          layoutId="miniNavIndicator"
+                          className="absolute inset-0 bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-full shadow-lg"
+                          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                        />
+                      )}
+                      <Icon className="w-4 h-4 relative z-10" />
+                      <span className="text-sm font-medium relative z-10">{section.title}</span>
                     </motion.button>
                   )
                 })}
@@ -863,31 +841,30 @@ integrations.configure({
       {/* Following Mini Navigation - Advanced Sticky Following Navbar */}
       <motion.div
         initial={{ opacity: 0, y: -20, scale: 0.95 }}
-        animate={{ 
-          opacity: isSticky ? 1 : 0, 
+        animate={{
+          opacity: isSticky ? 1 : 0,
           y: isSticky ? 0 : -20,
           scale: isSticky ? 1 : 0.95
         }}
-        transition={{ 
-          duration: 0.5, 
+        transition={{
+          duration: 0.5,
           ease: "easeOut",
           type: "spring",
           stiffness: 100,
           damping: 15
         }}
-        className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 ${
-          isSticky ? 'block' : 'hidden'
-        }`}
+        className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 ${isSticky ? 'block' : 'hidden'
+          }`}
       >
         <motion.div
           className="bg-black/90 backdrop-blur-2xl border border-[#8B5CF6]/40 rounded-full px-6 py-3 shadow-2xl"
           animate={{
-            boxShadow: isSticky 
+            boxShadow: isSticky
               ? [
-                  "0 20px 40px rgba(139, 92, 246, 0.4), 0 0 0 1px rgba(139, 92, 246, 0.3)",
-                  "0 25px 50px rgba(139, 92, 246, 0.5), 0 0 0 1px rgba(139, 92, 246, 0.4)",
-                  "0 20px 40px rgba(139, 92, 246, 0.4), 0 0 0 1px rgba(139, 92, 246, 0.3)"
-                ]
+                "0 20px 40px rgba(139, 92, 246, 0.4), 0 0 0 1px rgba(139, 92, 246, 0.3)",
+                "0 25px 50px rgba(139, 92, 246, 0.5), 0 0 0 1px rgba(139, 92, 246, 0.4)",
+                "0 20px 40px rgba(139, 92, 246, 0.4), 0 0 0 1px rgba(139, 92, 246, 0.3)"
+              ]
               : "0 10px 30px rgba(0, 0, 0, 0.3)"
           }}
           transition={{
@@ -895,12 +872,12 @@ integrations.configure({
             repeat: isSticky ? Infinity : 0,
             ease: "easeInOut"
           }}
-          whileHover={{ 
+          whileHover={{
             scale: 1.02,
             boxShadow: "0 30px 60px rgba(139, 92, 246, 0.6), 0 0 0 1px rgba(139, 92, 246, 0.5)"
           }}
         >
-          <div className="flex items-center gap-2 md:gap-3">
+          <div className="flex items-center gap-2 md:gap-3 relative">
             {miniNavSections.map((section, index) => {
               const Icon = section.icon
               const isActive = activeSection === section.id
@@ -908,27 +885,27 @@ integrations.configure({
                 <motion.button
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
-                  className={`flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 md:py-2.5 rounded-full transition-all duration-300 font-['Urbanist'] ${
-                    isActive
-                      ? 'bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] text-white shadow-lg'
-                      : 'text-white/70 hover:text-white hover:bg-white/10'
-                  }`}
-                  whileHover={{ 
+                  className={`relative flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 md:py-2.5 rounded-full transition-colors duration-300 font-['Urbanist'] ${isActive
+                    ? 'text-white'
+                    : 'text-white/70 hover:text-white hover:bg-white/10'
+                    }`}
+                  whileHover={{
                     scale: 1.05,
                     transition: { duration: 0.2 }
                   }}
                   whileTap={{ scale: 0.95 }}
-                  animate={{
-                    scale: isActive ? 1.05 : 1,
-                    boxShadow: isActive 
-                      ? "0 8px 25px rgba(0, 128, 255, 0.4)" 
-                      : "0 0 0 rgba(0, 128, 255, 0)"
-                  }}
-                  transition={{ duration: 0.3 }}
                 >
-                  <Icon className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                  <span className="text-xs md:text-sm font-medium hidden sm:inline">{section.title}</span>
-                  <span className="text-xs font-medium sm:hidden">{section.title.split(' ')[0]}</span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="stickyNavIndicator"
+                      className="absolute inset-0 bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-full"
+                      style={{ boxShadow: '0 8px 25px rgba(0, 128, 255, 0.4)' }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    />
+                  )}
+                  <Icon className="w-3.5 h-3.5 md:w-4 md:h-4 relative z-10" />
+                  <span className="text-xs md:text-sm font-medium hidden sm:inline relative z-10">{section.title}</span>
+                  <span className="text-xs font-medium sm:hidden relative z-10">{section.title.split(' ')[0]}</span>
                 </motion.button>
               )
             })}
@@ -937,8 +914,16 @@ integrations.configure({
       </motion.div>
 
       {/* Receptionist AI Section */}
-      <section id="receptionist-section" className="py-20 px-4 bg-black">
-        <div className="container mx-auto max-w-7xl">
+      <section id="receptionist-section" className="py-24 px-4 bg-black relative overflow-hidden">
+        {/* Background gradient orb */}
+        <div className="absolute top-1/2 right-0 w-96 h-96 bg-[#0080FF]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
+        {/* Dot grid texture */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.02]"
+          style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+        />
+
+        <div className="container mx-auto max-w-7xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Side - Description */}
             <motion.div
@@ -948,528 +933,598 @@ integrations.configure({
               viewport={{ once: true, amount: 0.3 }}
               className="space-y-6"
             >
+              {/* Pill badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20"
+              >
+                <Phone className="w-4 h-4 text-[#0080FF]" />
+                <span className="text-sm text-[#0080FF] font-medium font-['Urbanist']">Core Feature</span>
+              </motion.div>
+
+              {/* Glass icon + title */}
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] flex items-center justify-center">
-                  <Phone className="w-4 h-4 text-white" />
+                <div className="w-10 h-10 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                  <Phone className="w-5 h-5 text-[#0080FF]" />
                 </div>
                 <h3 className="text-lg font-semibold text-white font-['Urbanist']">Receptionist AI</h3>
               </div>
-              
-              <h4 className="text-4xl font-bold text-white font-['Urbanist']">Never miss a call</h4>
-              
-              <p className="text-lg text-white leading-relaxed font-['Urbanist']">
+
+              {/* Gradient headline */}
+              <h4 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent font-['Urbanist']">
+                Never miss a call
+              </h4>
+
+              <p className="text-lg text-white/80 leading-relaxed font-['Urbanist']">
                 AI handles incoming calls with human-like conversations, understanding context and providing accurate responses.
               </p>
 
+              {/* Glass check bullets */}
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">24/7 automated reception with natural language understanding</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0">
+                    <Check className="w-3 h-3 text-[#0080FF]" />
+                  </div>
+                  <p className="text-white/80 font-['Urbanist']">24/7 automated reception with natural language understanding</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">Intelligent call routing to the right department or agent</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0">
+                    <Check className="w-3 h-3 text-[#0080FF]" />
+                  </div>
+                  <p className="text-white/80 font-['Urbanist']">Intelligent call routing to the right department or agent</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">Multilingual support for diverse client base</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0">
+                    <Check className="w-3 h-3 text-[#0080FF]" />
+                  </div>
+                  <p className="text-white/80 font-['Urbanist']">Multilingual support for diverse client base</p>
                 </div>
               </div>
-              
-              {/* Listen Button */}
-              <div className="flex items-center gap-4">
-                <motion.button
-                  className="w-16 h-16 rounded-full bg-gray-900 flex items-center justify-center hover:shadow-lg transition-all duration-300"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Play className="w-6 h-6 text-white ml-1" />
-                </motion.button>
-                <div>
-                  <p className="text-white font-semibold font-['Urbanist']">Listen to Title Voice</p>
-                  <p className="text-white/70 text-sm font-['Urbanist']">Receptionist AI</p>
-                </div>
+
+              {/* Premium play button with pulsing rings */}
+              <div className="w-full max-w-md mt-6">
+                <AudioPlayer
+                  src="/audio/never-miss-a-call.m4a"
+                  title="Receptionist AI"
+                />
               </div>
             </motion.div>
 
-            {/* Right Side - Call Transcript Animation */}
+            {/* Right Side - Call Transcript Animation with GlowCard */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               viewport={{ once: true, amount: 0.3 }}
-              className="bg-white/5 rounded-2xl p-6 border border-white/10 min-h-[400px]"
             >
-              <div className="space-y-4">
-                {/* Call Header */}
-                <div className="flex items-center gap-3 pb-4 border-b border-white/10">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-semibold font-['Urbanist']">Live Call</h4>
-                    <p className="text-white/70 text-sm font-['Urbanist']">In Progress</p>
+              <GlowCard className="rounded-2xl">
+                <div className="group bg-[#080808] rounded-2xl p-6 border border-white/10 min-h-[400px] hover:border-white/20 transition-all duration-300 relative overflow-hidden">
+                  {/* Gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#0080FF]/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                  <div className="space-y-4 relative z-10">
+                    {/* Call Header with LIVE indicator */}
+                    <div className="flex items-center gap-3 pb-4 border-b border-white/10">
+                      <div className="relative">
+                        <div className="w-10 h-10 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                          <Phone className="w-5 h-5 text-[#0080FF]" />
+                        </div>
+                        {/* Glow behind icon */}
+                        <div className="absolute inset-0 bg-[#0080FF]/20 rounded-full blur-lg -z-10" />
+                      </div>
+                      <div>
+                        <h4 className="text-white font-semibold font-['Urbanist']">Live Call</h4>
+                        <div className="flex items-center gap-2">
+                          <motion.div
+                            className="w-2 h-2 rounded-full bg-emerald-400"
+                            animate={{ opacity: [1, 0.4, 1] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                          />
+                          <span className="text-emerald-400 text-xs font-medium font-['Urbanist']">LIVE</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Call Transcript with Seamless Loop Animation */}
+                    <div className="space-y-3 max-h-80 overflow-hidden relative">
+                      <motion.div
+                        className="space-y-3"
+                        animate={{ y: [0, -360] }}
+                        transition={{
+                          duration: 12,
+                          ease: "linear",
+                          repeat: Infinity,
+                          repeatDelay: 0
+                        }}
+                      >
+                        {/* First set of messages */}
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 0.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">Hi, I'm calling about the status of my closing at 123 Main St.</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 1 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">Thank you for calling Title Voice. I can help you with that. Can you please provide the property address or file number?</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 1.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">The address is 123 Main Street, file number 25-9783-PET</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 2 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">Perfect! I can see your Foreman Avenue deal is currently in underwriting. Would you like me to email your processor's contact details?</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 2.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">Yes, that would be great. Thank you!</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 3 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">I've sent the details to your email. Is there anything else I can help you with today?</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        {/* Duplicate set of messages for seamless loop */}
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 0.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">Hi, I'm calling about the status of my closing at 123 Main St.</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 1 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">Thank you for calling Title Voice. I can help you with that. Can you please provide the property address or file number?</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 1.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">The address is 123 Main Street, file number 25-9783-PET</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 2 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">Perfect! I can see your Foreman Avenue deal is currently in underwriting. Would you like me to email your processor's contact details?</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 2.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">Yes, that would be great. Thank you!</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 3 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">I've sent the details to your email. Is there anything else I can help you with today?</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+                      </motion.div>
+                    </div>
                   </div>
                 </div>
-
-                {/* Call Transcript with Seamless Loop Animation */}
-                <div className="space-y-3 max-h-80 overflow-hidden relative">
-                  <motion.div
-                    className="space-y-3"
-                    animate={{ y: [0, -360] }}
-                    transition={{ 
-                      duration: 12, 
-                      ease: "linear",
-                      repeat: Infinity,
-                      repeatDelay: 0
-                    }}
-                  >
-                    {/* First set of messages */}
-                    <motion.div
-                      className="flex items-start gap-3"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.5 }}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                        <Users className="w-4 h-4 text-white" />
-                      </div>
-                      <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                        <p className="text-white text-sm font-['Urbanist']">Hi, I'm calling about the status of my closing at 123 Main St.</p>
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      className="flex items-start gap-3 justify-end"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 1 }}
-                    >
-                      <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                        <p className="text-gray-800 text-sm font-['Urbanist']">Thank you for calling Title Voice. I can help you with that. Can you please provide the property address or file number?</p>
-                      </div>
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                        <Zap className="w-4 h-4 text-white" />
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      className="flex items-start gap-3"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 1.5 }}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                        <Users className="w-4 h-4 text-white" />
-                      </div>
-                      <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                        <p className="text-white text-sm font-['Urbanist']">The address is 123 Main Street, file number 25-9783-PET</p>
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      className="flex items-start gap-3 justify-end"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 2 }}
-                    >
-                      <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                        <p className="text-gray-800 text-sm font-['Urbanist']">Perfect! I can see your Foreman Avenue deal is currently in underwriting. Would you like me to email your processor's contact details?</p>
-                      </div>
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                        <Zap className="w-4 h-4 text-white" />
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      className="flex items-start gap-3"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 2.5 }}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                        <Users className="w-4 h-4 text-white" />
-                      </div>
-                      <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                        <p className="text-white text-sm font-['Urbanist']">Yes, that would be great. Thank you!</p>
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      className="flex items-start gap-3 justify-end"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 3 }}
-                    >
-                      <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                        <p className="text-gray-800 text-sm font-['Urbanist']">I've sent the details to your email. Is there anything else I can help you with today?</p>
-                      </div>
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                        <Zap className="w-4 h-4 text-white" />
-                      </div>
-                    </motion.div>
-
-                    {/* Duplicate set of messages for seamless loop */}
-                    <motion.div
-                      className="flex items-start gap-3"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.5 }}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                        <Users className="w-4 h-4 text-white" />
-                      </div>
-                      <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                        <p className="text-white text-sm font-['Urbanist']">Hi, I'm calling about the status of my closing at 123 Main St.</p>
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      className="flex items-start gap-3 justify-end"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 1 }}
-                    >
-                      <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                        <p className="text-gray-800 text-sm font-['Urbanist']">Thank you for calling Title Voice. I can help you with that. Can you please provide the property address or file number?</p>
-                      </div>
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                        <Zap className="w-4 h-4 text-white" />
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      className="flex items-start gap-3"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 1.5 }}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                        <Users className="w-4 h-4 text-white" />
-                      </div>
-                      <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                        <p className="text-white text-sm font-['Urbanist']">The address is 123 Main Street, file number 25-9783-PET</p>
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      className="flex items-start gap-3 justify-end"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 2 }}
-                    >
-                      <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                        <p className="text-gray-800 text-sm font-['Urbanist']">Perfect! I can see your Foreman Avenue deal is currently in underwriting. Would you like me to email your processor's contact details?</p>
-                      </div>
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                        <Zap className="w-4 h-4 text-white" />
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      className="flex items-start gap-3"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 2.5 }}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                        <Users className="w-4 h-4 text-white" />
-                      </div>
-                      <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                        <p className="text-white text-sm font-['Urbanist']">Yes, that would be great. Thank you!</p>
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      className="flex items-start gap-3 justify-end"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 3 }}
-                    >
-                      <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                        <p className="text-gray-800 text-sm font-['Urbanist']">I've sent the details to your email. Is there anything else I can help you with today?</p>
-                      </div>
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                        <Zap className="w-4 h-4 text-white" />
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                </div>
-              </div>
+              </GlowCard>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Deal Status Section */}
-      <section id="deal-status-section" className="py-20 px-4 bg-black">
-        <div className="container mx-auto max-w-7xl">
+      {/* Deal Status Section - ALTERNATING LAYOUT */}
+      <section id="deal-status-section" className="py-24 px-4 bg-black relative overflow-hidden">
+        {/* Background gradient orb - left side for variation */}
+        <div className="absolute top-1/2 left-0 w-96 h-96 bg-[#4F1AD6]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.02]"
+          style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+        />
+
+        <div className="container mx-auto max-w-7xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Side - Description */}
+            {/* Left Side - Description (lg:order-2 for alternating) */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true, amount: 0.3 }}
-              className="space-y-6"
+              className="space-y-6 lg:order-2"
             >
+              {/* Pill badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20"
+              >
+                <BarChart3 className="w-4 h-4 text-[#4F1AD6]" />
+                <span className="text-sm text-[#4F1AD6] font-medium font-['Urbanist']">Real-time Data</span>
+              </motion.div>
+
+              {/* Glass icon + title */}
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] flex items-center justify-center">
-                  <BarChart3 className="w-4 h-4 text-white" />
+                <div className="w-10 h-10 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                  <BarChart3 className="w-5 h-5 text-[#0080FF]" />
                 </div>
                 <h3 className="text-lg font-semibold text-white font-['Urbanist']">Deal Status</h3>
               </div>
-              
-              <h4 className="text-4xl font-bold text-white font-['Urbanist']">Real-time updates</h4>
-              
-              <p className="text-lg text-white leading-relaxed font-['Urbanist']">
+
+              {/* Gradient headline */}
+              <h4 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent font-['Urbanist']">
+                Real-time updates
+              </h4>
+
+              <p className="text-lg text-white/80 leading-relaxed font-['Urbanist']">
                 Instantly access deal information, closing dates, and status updates from your CRM.
               </p>
 
+              {/* Glass check bullets */}
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">Live deal status tracking and updates</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0">
+                    <Check className="w-3 h-3 text-[#0080FF]" />
+                  </div>
+                  <p className="text-white/80 font-['Urbanist']">Live deal status tracking and updates</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">Automated client notifications</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0">
+                    <Check className="w-3 h-3 text-[#0080FF]" />
+                  </div>
+                  <p className="text-white/80 font-['Urbanist']">Automated client notifications</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">Seamless CRM integration</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0">
+                    <Check className="w-3 h-3 text-[#0080FF]" />
+                  </div>
+                  <p className="text-white/80 font-['Urbanist']">Seamless CRM integration</p>
                 </div>
               </div>
-              
-              {/* Listen Button */}
-              <div className="flex items-center gap-4">
-                <motion.button
-                  className="w-16 h-16 rounded-full bg-gray-900 flex items-center justify-center hover:shadow-lg transition-all duration-300"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Play className="w-6 h-6 text-white ml-1" />
-                </motion.button>
-                <div>
-                  <p className="text-white font-semibold font-['Urbanist']">Listen to Title Voice</p>
-                  <p className="text-white/70 text-sm font-['Urbanist']">Deal Status</p>
-                </div>
+
+              {/* Premium play button with pulsing rings */}
+              <div className="w-full max-w-md mt-6">
+                <AudioPlayer
+                  src="/audio/Real-time-updates.m4a"
+                  title="Deal Status"
+                />
               </div>
             </motion.div>
 
-            {/* Right Side - Deal Status Call Transcript */}
+            {/* Right Side - Deal Status Call Transcript with GlowCard (lg:order-1 for alternating) */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               viewport={{ once: true, amount: 0.3 }}
-              className="bg-white/5 rounded-2xl p-6 border border-white/10 min-h-[400px]"
+              className="lg:order-1"
             >
-              <div className="space-y-4">
-                {/* Call Header */}
-                <div className="flex items-center gap-3 pb-4 border-b border-white/10">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] flex items-center justify-center">
-                    <BarChart3 className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-semibold font-['Urbanist']">Status Update Call</h4>
-                    <p className="text-white/70 text-sm font-['Urbanist']">In Progress</p>
+              <GlowCard className="rounded-2xl">
+                <div className="group bg-[#080808] rounded-2xl p-6 border border-white/10 min-h-[400px] hover:border-white/20 transition-all duration-300 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#4F1AD6]/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                  <div className="space-y-4 relative z-10">
+                    {/* Call Header with LIVE indicator */}
+                    <div className="flex items-center gap-3 pb-4 border-b border-white/10">
+                      <div className="relative">
+                        <div className="w-10 h-10 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                          <BarChart3 className="w-5 h-5 text-[#0080FF]" />
+                        </div>
+                        <div className="absolute inset-0 bg-[#0080FF]/20 rounded-full blur-lg -z-10" />
+                      </div>
+                      <div>
+                        <h4 className="text-white font-semibold font-['Urbanist']">Status Update Call</h4>
+                        <div className="flex items-center gap-2">
+                          <motion.div
+                            className="w-2 h-2 rounded-full bg-emerald-400"
+                            animate={{ opacity: [1, 0.4, 1] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                          />
+                          <span className="text-emerald-400 text-xs font-medium font-['Urbanist']">LIVE</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Call Transcript with Auto-scroll Animation */}
+                    <div className="space-y-3 max-h-80 overflow-hidden relative">
+                      <motion.div
+                        className="space-y-3"
+                        animate={{ y: [0, -360] }}
+                        transition={{
+                          duration: 12,
+                          ease: "linear",
+                          repeat: Infinity,
+                          repeatDelay: 0
+                        }}
+                      >
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 0.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">What's the current status of my closing?</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 1 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">Your closing is scheduled for Friday, March 15th at 2:00 PM at 123 Main Street. I'll send you a reminder 24 hours before.</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 1.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">What documents do I need to bring?</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 2 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">You'll need a valid photo ID and proof of funds. I can also send you a detailed checklist via email.</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 2.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">Perfect, please send that checklist. Thank you!</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 3 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">Done! I've sent the checklist to your email. You're all set for Friday at 2 PM.</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        {/* Duplicate messages for seamless loop */}
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 0.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">What's the current status of my closing?</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 1 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">Your closing is scheduled for Friday, March 15th at 2:00 PM at 123 Main Street. I'll send you a reminder 24 hours before.</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 1.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">What documents do I need to bring?</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 2 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">You'll need a valid photo ID and proof of funds. I can also send you a detailed checklist via email.</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 2.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">Perfect, please send that checklist. Thank you!</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 3 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">Done! I've sent the checklist to your email. You're all set for Friday at 2 PM.</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+                      </motion.div>
+                    </div>
                   </div>
                 </div>
-
-                {/* Call Transcript with Auto-scroll Animation */}
-                <div className="space-y-3 max-h-80 overflow-hidden relative">
-                  <motion.div
-                    className="space-y-3"
-                    animate={{ y: [0, -360] }}
-                    transition={{ 
-                      duration: 12, 
-                      ease: "linear",
-                      repeat: Infinity,
-                      repeatDelay: 0
-                    }}
-                  >
-                    <motion.div
-                      className="flex items-start gap-3"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.5 }}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                        <Users className="w-4 h-4 text-white" />
-                      </div>
-                      <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                        <p className="text-white text-sm font-['Urbanist']">What's the current status of my closing?</p>
-                      </div>
-                    </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">Your closing is scheduled for Friday, March 15th at 2:00 PM at 123 Main Street. I'll send you a reminder 24 hours before.</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1.5 }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                      <p className="text-white text-sm font-['Urbanist']">What documents do I need to bring?</p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 2 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">You'll need a valid photo ID and proof of funds. I can also send you a detailed checklist via email.</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 2.5 }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                      <p className="text-white text-sm font-['Urbanist']">Perfect, please send that checklist. Thank you!</p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 3 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">Done! I've sent the checklist to your email. You're all set for Friday at 2 PM.</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
-
-                  {/* Duplicate messages for seamless loop */}
-                  <motion.div
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.5 }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                      <p className="text-white text-sm font-['Urbanist']">What's the current status of my closing?</p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">Your closing is scheduled for Friday, March 15th at 2:00 PM at 123 Main Street. I'll send you a reminder 24 hours before.</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1.5 }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                      <p className="text-white text-sm font-['Urbanist']">What documents do I need to bring?</p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 2 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">You'll need a valid photo ID and proof of funds. I can also send you a detailed checklist via email.</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 2.5 }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                      <p className="text-white text-sm font-['Urbanist']">Perfect, please send that checklist. Thank you!</p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 3 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">Done! I've sent the checklist to your email. You're all set for Friday at 2 PM.</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
-                  </motion.div>
-                </div>
-              </div>
+              </GlowCard>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* Scheduler Section */}
-      <section id="scheduler-section" className="py-20 px-4 bg-black">
-        <div className="container mx-auto max-w-7xl">
+      <section id="scheduler-section" className="py-24 px-4 bg-black relative overflow-hidden">
+        <div className="absolute top-1/2 right-0 w-96 h-96 bg-[#0080FF]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
+        <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+
+        <div className="container mx-auto max-w-7xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Side - Description */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -1477,357 +1532,361 @@ integrations.configure({
               viewport={{ once: true, amount: 0.3 }}
               className="space-y-6"
             >
+              <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20">
+                <Calendar className="w-4 h-4 text-[#0080FF]" />
+                <span className="text-sm text-[#0080FF] font-medium font-['Urbanist']">Smart Automation</span>
+              </motion.div>
+
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] flex items-center justify-center">
-                  <Calendar className="w-4 h-4 text-white" />
+                <div className="w-10 h-10 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-[#0080FF]" />
                 </div>
                 <h3 className="text-lg font-semibold text-white font-['Urbanist']">Scheduler</h3>
               </div>
-              
-              <h4 className="text-4xl font-bold text-white font-['Urbanist']">Smart scheduling</h4>
-              
-              <p className="text-lg text-white leading-relaxed font-['Urbanist']">
+
+              <h4 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent font-['Urbanist']">Smart scheduling</h4>
+
+              <p className="text-lg text-white/80 leading-relaxed font-['Urbanist']">
                 Automatically schedule appointments, send reminders, and manage your calendar.
               </p>
 
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">Automated appointment booking</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0"><Check className="w-3 h-3 text-[#0080FF]" /></div>
+                  <p className="text-white/80 font-['Urbanist']">Automated appointment booking</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">Smart reminder notifications</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0"><Check className="w-3 h-3 text-[#0080FF]" /></div>
+                  <p className="text-white/80 font-['Urbanist']">Smart reminder notifications</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">Calendar integration and management</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0"><Check className="w-3 h-3 text-[#0080FF]" /></div>
+                  <p className="text-white/80 font-['Urbanist']">Calendar integration and management</p>
                 </div>
               </div>
-              
-              {/* Listen Button */}
-              <div className="flex items-center gap-4">
-                <motion.button
-                  className="w-16 h-16 rounded-full bg-gray-900 flex items-center justify-center hover:shadow-lg transition-all duration-300"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Play className="w-6 h-6 text-white ml-1" />
-                </motion.button>
-                <div>
-                  <p className="text-white font-semibold font-['Urbanist']">Listen to Title Voice</p>
-                  <p className="text-white/70 text-sm font-['Urbanist']">Scheduler</p>
-                </div>
+
+              <div className="w-full max-w-md mt-6">
+                <AudioPlayer
+                  src="/audio/Smart-scheduling.m4a"
+                  title="Scheduler"
+                />
               </div>
             </motion.div>
 
-            {/* Right Side - Scheduler Call Transcript */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true, amount: 0.3 }}
-              className="bg-white/5 rounded-2xl p-6 border border-white/10 min-h-[400px]"
-            >
-              <div className="space-y-4">
-                {/* Call Header */}
-                <div className="flex items-center gap-3 pb-4 border-b border-white/10">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] flex items-center justify-center">
-                    <Calendar className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-semibold font-['Urbanist']">Scheduling Call</h4>
-                    <p className="text-white/70 text-sm font-['Urbanist']">In Progress</p>
+            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} viewport={{ once: true, amount: 0.3 }}>
+              <GlowCard className="rounded-2xl">
+                <div className="group bg-[#080808] rounded-2xl p-6 border border-white/10 min-h-[400px] hover:border-white/20 transition-all duration-300 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#0080FF]/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  <div className="space-y-4 relative z-10">
+                    <div className="flex items-center gap-3 pb-4 border-b border-white/10">
+                      <div className="relative">
+                        <div className="w-10 h-10 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                          <Calendar className="w-5 h-5 text-[#0080FF]" />
+                        </div>
+                        <div className="absolute inset-0 bg-[#0080FF]/20 rounded-full blur-lg -z-10" />
+                      </div>
+                      <div>
+                        <h4 className="text-white font-semibold font-['Urbanist']">Scheduling Call</h4>
+                        <div className="flex items-center gap-2">
+                          <motion.div className="w-2 h-2 rounded-full bg-emerald-400" animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }} />
+                          <span className="text-emerald-400 text-xs font-medium font-['Urbanist']">LIVE</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Call Transcript with Auto-scroll Animation */}
+                    <div className="space-y-3 max-h-80 overflow-hidden relative">
+                      <motion.div
+                        className="space-y-3"
+                        animate={{ y: [0, -360] }}
+                        transition={{
+                          duration: 12,
+                          ease: "linear",
+                          repeat: Infinity,
+                          repeatDelay: 0
+                        }}
+                      >
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 0.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">I need to schedule a time to sign my closing documents.</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 1 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">I can help you with that. What's your preferred date and time? I'll check availability and update your appointment.</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 1.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">How about Tuesday at 10 AM or Wednesday at 2 PM?</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 2 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">Perfect! I can see available slots on Tuesday at 10 AM or Wednesday at 2 PM. Which one works best for you?</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 2.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">Tuesday at 10 AM works perfect for me.</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 3 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">Excellent! I've scheduled your closing for Tuesday at 10 AM. I'll send you a confirmation email and reminder.</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+                      </motion.div>
+                    </div>
                   </div>
                 </div>
-
-                {/* Call Transcript with Auto-scroll Animation */}
-                <div className="space-y-3 max-h-80 overflow-hidden relative">
-                  <motion.div
-                    className="space-y-3"
-                    animate={{ y: [0, -360] }}
-                    transition={{ 
-                      duration: 12, 
-                      ease: "linear",
-                      repeat: Infinity,
-                      repeatDelay: 0
-                    }}
-                  >
-                    <motion.div
-                      className="flex items-start gap-3"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.5 }}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                        <Users className="w-4 h-4 text-white" />
-                      </div>
-                      <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                        <p className="text-white text-sm font-['Urbanist']">I need to schedule a time to sign my closing documents.</p>
-                      </div>
-                    </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">I can help you with that. What's your preferred date and time? I'll check availability and update your appointment.</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1.5 }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                      <p className="text-white text-sm font-['Urbanist']">How about Tuesday at 10 AM or Wednesday at 2 PM?</p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 2 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">Perfect! I can see available slots on Tuesday at 10 AM or Wednesday at 2 PM. Which one works best for you?</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 2.5 }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                      <p className="text-white text-sm font-['Urbanist']">Tuesday at 10 AM works perfect for me.</p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 3 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">Excellent! I've scheduled your closing for Tuesday at 10 AM. I'll send you a confirmation email and reminder.</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
-                  </motion.div>
-                </div>
-              </div>
+              </GlowCard>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Warm Transfers Section */}
-      <section id="warm-transfers-section" className="py-20 px-4 bg-black">
-        <div className="container mx-auto max-w-7xl">
+      {/* Warm Transfers Section - ALTERNATING LAYOUT */}
+      <section id="warm-transfers-section" className="py-24 px-4 bg-black relative overflow-hidden">
+        <div className="absolute top-1/2 left-0 w-96 h-96 bg-[#4F1AD6]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
+        <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+
+        <div className="container mx-auto max-w-7xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Side - Description */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true, amount: 0.3 }}
-              className="space-y-6"
+              className="space-y-6 lg:order-2"
             >
+              <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20">
+                <Users className="w-4 h-4 text-[#4F1AD6]" />
+                <span className="text-sm text-[#4F1AD6] font-medium font-['Urbanist']">Human + AI</span>
+              </motion.div>
+
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] flex items-center justify-center">
-                  <Users className="w-4 h-4 text-white" />
+                <div className="w-10 h-10 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                  <Users className="w-5 h-5 text-[#0080FF]" />
                 </div>
                 <h3 className="text-lg font-semibold text-white font-['Urbanist']">Warm Transfers</h3>
               </div>
-              
-              <h4 className="text-4xl font-bold text-white font-['Urbanist']">Seamless handoffs</h4>
-              
-              <p className="text-lg text-white leading-relaxed font-['Urbanist']">
+
+              <h4 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent font-['Urbanist']">Seamless handoffs</h4>
+
+              <p className="text-lg text-white/80 leading-relaxed font-['Urbanist']">
                 Transfer complex inquiries to the right team member with full context and notes.
               </p>
 
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">Intelligent call routing to specialists</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0"><Check className="w-3 h-3 text-[#0080FF]" /></div>
+                  <p className="text-white/80 font-['Urbanist']">Intelligent call routing to specialists</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">Full context transfer with conversation history</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0"><Check className="w-3 h-3 text-[#0080FF]" /></div>
+                  <p className="text-white/80 font-['Urbanist']">Full context transfer with conversation history</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">Seamless handoff experience</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0"><Check className="w-3 h-3 text-[#0080FF]" /></div>
+                  <p className="text-white/80 font-['Urbanist']">Seamless handoff experience</p>
                 </div>
               </div>
-              
-              {/* Listen Button */}
-              <div className="flex items-center gap-4">
-                <motion.button
-                  className="w-16 h-16 rounded-full bg-gray-900 flex items-center justify-center hover:shadow-lg transition-all duration-300"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Play className="w-6 h-6 text-white ml-1" />
-                </motion.button>
-                <div>
-                  <p className="text-white font-semibold font-['Urbanist']">Listen to Title Voice</p>
-                  <p className="text-white/70 text-sm font-['Urbanist']">Warm Transfers</p>
-                </div>
+
+              <div className="w-full max-w-md mt-6">
+                <AudioPlayer
+                  src="/audio/Seamless-handoffs.m4a"
+                  title="Warm Transfers"
+                />
               </div>
             </motion.div>
 
-            {/* Right Side - Warm Transfer Call Transcript */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true, amount: 0.3 }}
-              className="bg-white/5 rounded-2xl p-6 border border-white/10 min-h-[400px]"
-            >
-              <div className="space-y-4">
-                {/* Call Header */}
-                <div className="flex items-center gap-3 pb-4 border-b border-white/10">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] flex items-center justify-center">
-                    <Users className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-semibold font-['Urbanist']">Transfer Call</h4>
-                    <p className="text-white/70 text-sm font-['Urbanist']">In Progress</p>
+            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} viewport={{ once: true, amount: 0.3 }} className="lg:order-1">
+              <GlowCard className="rounded-2xl">
+                <div className="group bg-[#080808] rounded-2xl p-6 border border-white/10 min-h-[400px] hover:border-white/20 transition-all duration-300 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#4F1AD6]/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  <div className="space-y-4 relative z-10">
+                    <div className="flex items-center gap-3 pb-4 border-b border-white/10">
+                      <div className="relative">
+                        <div className="w-10 h-10 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                          <Users className="w-5 h-5 text-[#0080FF]" />
+                        </div>
+                        <div className="absolute inset-0 bg-[#0080FF]/20 rounded-full blur-lg -z-10" />
+                      </div>
+                      <div>
+                        <h4 className="text-white font-semibold font-['Urbanist']">Transfer Call</h4>
+                        <div className="flex items-center gap-2">
+                          <motion.div className="w-2 h-2 rounded-full bg-emerald-400" animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }} />
+                          <span className="text-emerald-400 text-xs font-medium font-['Urbanist']">LIVE</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Call Transcript with Auto-scroll Animation */}
+                    <div className="space-y-3 max-h-80 overflow-hidden relative">
+                      <motion.div
+                        className="space-y-3"
+                        animate={{ y: [0, -360] }}
+                        transition={{
+                          duration: 12,
+                          ease: "linear",
+                          repeat: Infinity,
+                          repeatDelay: 0
+                        }}
+                      >
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 0.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">I have a complex title issue that needs human attention.</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 1 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">I understand this requires specialized attention. Let me transfer you to our senior title officer, Sarah, who can help with this specific situation.</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 1.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">That would be great, thank you.</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 2 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">Perfect! I'm connecting you now. Sarah has all the context from our conversation and will be able to help you immediately.</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 2.5 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                            <Users className="w-4 h-4 text-[#4F1AD6]" />
+                          </div>
+                          <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                            <p className="text-white text-sm font-['Urbanist']">Hello Sarah, I was just transferred from the AI assistant about my title issue...</p>
+                          </div>
+                        </motion.div>
+
+                        <motion.div
+                          className="flex items-start gap-3 justify-end"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: 3 }}
+                        >
+                          <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                            <p className="text-gray-800 text-sm font-['Urbanist']">Hi! I'm Sarah, your senior title officer. I can see from the AI's notes that you have a complex title issue. How can I help you today?</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-[#0080FF]" />
+                          </div>
+                        </motion.div>
+                      </motion.div>
+                    </div>
                   </div>
                 </div>
-
-                {/* Call Transcript with Auto-scroll Animation */}
-                <div className="space-y-3 max-h-80 overflow-hidden relative">
-                  <motion.div
-                    className="space-y-3"
-                    animate={{ y: [0, -360] }}
-                    transition={{ 
-                      duration: 12, 
-                      ease: "linear",
-                      repeat: Infinity,
-                      repeatDelay: 0
-                    }}
-                  >
-                    <motion.div
-                      className="flex items-start gap-3"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.5 }}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                        <Users className="w-4 h-4 text-white" />
-                      </div>
-                      <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                        <p className="text-white text-sm font-['Urbanist']">I have a complex title issue that needs human attention.</p>
-                      </div>
-                    </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">I understand this requires specialized attention. Let me transfer you to our senior title officer, Sarah, who can help with this specific situation.</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1.5 }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                      <p className="text-white text-sm font-['Urbanist']">That would be great, thank you.</p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 2 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">Perfect! I'm connecting you now. Sarah has all the context from our conversation and will be able to help you immediately.</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 2.5 }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                      <p className="text-white text-sm font-['Urbanist']">Hello Sarah, I was just transferred from the AI assistant about my title issue...</p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 3 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">Hi! I'm Sarah, your senior title officer. I can see from the AI's notes that you have a complex title issue. How can I help you today?</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
-                  </motion.div>
-                </div>
-              </div>
+              </GlowCard>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* Outbound Campaigns Section */}
-      <section id="outbound-campaigns-section" className="py-20 px-4 bg-black">
-        <div className="container mx-auto max-w-7xl">
+      <section id="outbound-campaigns-section" className="py-24 px-4 bg-black relative overflow-hidden">
+        <div className="absolute top-1/2 right-0 w-96 h-96 bg-[#0080FF]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
+        <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+
+        <div className="container mx-auto max-w-7xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Side - Description */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -1835,47 +1894,51 @@ integrations.configure({
               viewport={{ once: true, amount: 0.3 }}
               className="space-y-6"
             >
+              <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20">
+                <Target className="w-4 h-4 text-[#0080FF]" />
+                <span className="text-sm text-[#0080FF] font-medium font-['Urbanist']">Outreach Engine</span>
+              </motion.div>
+
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] flex items-center justify-center">
-                  <Target className="w-4 h-4 text-white" />
+                <div className="w-10 h-10 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                  <Target className="w-5 h-5 text-[#0080FF]" />
                 </div>
                 <h3 className="text-lg font-semibold text-white font-['Urbanist']">Outbound Campaigns</h3>
               </div>
-              
-              <h4 className="text-4xl font-bold text-white font-['Urbanist']">Reach more clients</h4>
-              
-              <p className="text-lg text-white leading-relaxed font-['Urbanist']">
+
+              <h4 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent font-['Urbanist']">Reach more clients</h4>
+
+              <p className="text-lg text-white/80 leading-relaxed font-['Urbanist']">
                 Title Voice runs outbound campaigns that keep clients engaged and closings on track.
               </p>
 
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">Automated follow-up and retention campaigns</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0">
+                    <Check className="w-3 h-3 text-[#0080FF]" />
+                  </div>
+                  <p className="text-white/80 font-['Urbanist']">Automated follow-up and retention campaigns</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">24/7 proactive client outreach</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0">
+                    <Check className="w-3 h-3 text-[#0080FF]" />
+                  </div>
+                  <p className="text-white/80 font-['Urbanist']">24/7 proactive client outreach</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#0080FF] mt-2"></div>
-                  <p className="text-white font-['Urbanist']">Targeted marketing and appointment booking</p>
+                  <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mt-0.5 flex-shrink-0">
+                    <Check className="w-3 h-3 text-[#0080FF]" />
+                  </div>
+                  <p className="text-white/80 font-['Urbanist']">Targeted marketing and appointment booking</p>
                 </div>
               </div>
-              
-              {/* Listen Button */}
-              <div className="flex items-center gap-4">
-                <motion.button
-                  className="w-16 h-16 rounded-full bg-gray-900 flex items-center justify-center hover:shadow-lg transition-all duration-300"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Play className="w-6 h-6 text-white ml-1" />
-                </motion.button>
-                <div>
-                  <p className="text-white font-semibold font-['Urbanist']">Listen to Title Voice</p>
-                  <p className="text-white/70 text-sm font-['Urbanist']">Outbound Service</p>
-                </div>
+
+              {/* Premium play button with pulsing rings */}
+              <div className="w-full max-w-md mt-6">
+                <AudioPlayer
+                  src="/audio/Reachmoreclients.m4a"
+                  title="Outbound Service"
+                />
               </div>
             </motion.div>
 
@@ -1890,8 +1953,8 @@ integrations.configure({
               <div className="space-y-4">
                 {/* Call Header */}
                 <div className="flex items-center gap-3 pb-4 border-b border-white/10">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] flex items-center justify-center">
-                    <Target className="w-5 h-5 text-white" />
+                  <div className="w-10 h-10 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                    <Target className="w-5 h-5 text-[#0080FF]" />
                   </div>
                   <div>
                     <h4 className="text-white font-semibold font-['Urbanist']">Outbound Call</h4>
@@ -1904,8 +1967,8 @@ integrations.configure({
                   <motion.div
                     className="space-y-3"
                     animate={{ y: [0, -360] }}
-                    transition={{ 
-                      duration: 12, 
+                    transition={{
+                      duration: 12,
                       ease: "linear",
                       repeat: Infinity,
                       repeatDelay: 0
@@ -1920,110 +1983,110 @@ integrations.configure({
                       <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
                         <p className="text-gray-800 text-sm font-['Urbanist']">Hello! This is Title Voice calling about your upcoming closing. Is this a good time to discuss your closing details?</p>
                       </div>
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                        <Zap className="w-4 h-4 text-white" />
+                      <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                        <Zap className="w-4 h-4 text-[#0080FF]" />
                       </div>
                     </motion.div>
 
-                  <motion.div
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1 }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                      <p className="text-white text-sm font-['Urbanist']">Yes, I have a few questions about my closing next week.</p>
-                    </div>
-                  </motion.div>
+                    <motion.div
+                      className="flex items-start gap-3"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 1 }}
+                    >
+                      <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                        <Users className="w-4 h-4 text-[#4F1AD6]" />
+                      </div>
+                      <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                        <p className="text-white text-sm font-['Urbanist']">Yes, I have a few questions about my closing next week.</p>
+                      </div>
+                    </motion.div>
 
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1.5 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">Perfect! I'm here to help. Your closing is scheduled for Friday at 2 PM. What specific questions do you have?</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
+                    <motion.div
+                      className="flex items-start gap-3 justify-end"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 1.5 }}
+                    >
+                      <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                        <p className="text-gray-800 text-sm font-['Urbanist']">Perfect! I'm here to help. Your closing is scheduled for Friday at 2 PM. What specific questions do you have?</p>
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                        <Zap className="w-4 h-4 text-[#0080FF]" />
+                      </div>
+                    </motion.div>
 
-                  <motion.div
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 2 }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                      <p className="text-white text-sm font-['Urbanist']">What documents do I need to bring and is there anything I should prepare?</p>
-                    </div>
-                  </motion.div>
+                    <motion.div
+                      className="flex items-start gap-3"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 2 }}
+                    >
+                      <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                        <Users className="w-4 h-4 text-[#4F1AD6]" />
+                      </div>
+                      <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                        <p className="text-white text-sm font-['Urbanist']">What documents do I need to bring and is there anything I should prepare?</p>
+                      </div>
+                    </motion.div>
 
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 2.5 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">You'll need a valid photo ID and proof of funds. I can send you a detailed checklist and also set up a reminder call for Thursday.</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
+                    <motion.div
+                      className="flex items-start gap-3 justify-end"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 2.5 }}
+                    >
+                      <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                        <p className="text-gray-800 text-sm font-['Urbanist']">You'll need a valid photo ID and proof of funds. I can send you a detailed checklist and also set up a reminder call for Thursday.</p>
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                        <Zap className="w-4 h-4 text-[#0080FF]" />
+                      </div>
+                    </motion.div>
 
-                  <motion.div
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 3 }}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                      <p className="text-white text-sm font-['Urbanist']">That would be very helpful, thank you!</p>
-                    </div>
-                  </motion.div>
+                    <motion.div
+                      className="flex items-start gap-3"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 3 }}
+                    >
+                      <div className="w-8 h-8 rounded-full bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 flex items-center justify-center">
+                        <Users className="w-4 h-4 text-[#4F1AD6]" />
+                      </div>
+                      <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-2xl rounded-tl-sm p-3 max-w-xs">
+                        <p className="text-white text-sm font-['Urbanist']">That would be very helpful, thank you!</p>
+                      </div>
+                    </motion.div>
 
-                  <motion.div
-                    className="flex items-start gap-3 justify-end"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 3.5 }}
-                  >
-                    <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                      <p className="text-gray-800 text-sm font-['Urbanist']">Excellent! I've sent the checklist to your email and scheduled a reminder call for Thursday. You're all set for Friday at 2 PM!</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00F6FF] to-[#0080FF] flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                  </motion.div>
+                    <motion.div
+                      className="flex items-start gap-3 justify-end"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 3.5 }}
+                    >
+                      <div className="bg-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
+                        <p className="text-gray-800 text-sm font-['Urbanist']">Excellent! I've sent the checklist to your email and scheduled a reminder call for Thursday. You're all set for Friday at 2 PM!</p>
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                        <Zap className="w-4 h-4 text-[#0080FF]" />
+                      </div>
+                    </motion.div>
                   </motion.div>
                 </div>
               </div>
             </motion.div>
           </div>
         </div>
-      </section>
+      </section >
 
 
       {/* How It Works Section - Dark Minimalist Grid */}
-      <section className="py-20 px-4 bg-black">
+      < section className="py-20 px-4 bg-black" >
         <div className="container mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ 
+            transition={{
               duration: 0.8,
               type: "spring",
               stiffness: 100
@@ -2046,8 +2109,8 @@ integrations.configure({
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ 
-                  duration: 0.6, 
+                transition={{
+                  duration: 0.6,
                   delay: index * 0.2,
                   type: "spring",
                   stiffness: 100
@@ -2057,7 +2120,7 @@ integrations.configure({
                 {/* Main Card */}
                 <motion.div
                   className="bg-black/80 backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center relative overflow-hidden"
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.02,
                     borderColor: "rgba(0, 128, 255, 0.3)",
                     boxShadow: "0 20px 40px rgba(0, 128, 255, 0.1)"
@@ -2072,8 +2135,8 @@ integrations.configure({
 
                   {/* Icon Container */}
                   <motion.div
-                    className="w-20 h-20 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] flex items-center justify-center mx-auto mb-6 relative z-10"
-                    whileHover={{ 
+                    className="w-20 h-20 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/25 flex items-center justify-center mx-auto mb-6 relative z-10"
+                    whileHover={{
                       rotate: 360,
                       scale: 1.1,
                       boxShadow: "0 0 30px rgba(0, 128, 255, 0.4)"
@@ -2087,9 +2150,9 @@ integrations.configure({
                       ]
                     }}
                   >
-                    <step.icon className="w-10 h-10 text-white" />
+                    <step.icon className="w-8 h-8 text-[#0080FF]" />
                   </motion.div>
-                  
+
                   <h3 className="text-2xl font-bold mb-4 font-['Urbanist'] text-white relative z-10">{step.title}</h3>
                   <p className="text-white/80 font-['Urbanist'] leading-relaxed relative z-10">{step.description}</p>
                 </motion.div>
@@ -2097,130 +2160,486 @@ integrations.configure({
             ))}
           </div>
         </div>
+      </section >
+
+      {/* Gradient Divider */}
+
+      {/* Trust Stats Bar */}
+      <section className="py-16 px-4 bg-black relative z-10">
+        <div className="container mx-auto max-w-5xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="bg-white/5 border border-white/10 backdrop-blur rounded-2xl p-8"
+          >
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              {[
+                { value: '500+', label: 'Title Companies' },
+                { value: '1M+', label: 'Calls Handled' },
+                { value: '99.9%', label: 'Uptime' },
+                { value: '4.9/5', label: 'Rating' }
+              ].map((stat, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent font-['Urbanist']">
+                    {stat.value}
+                  </div>
+                  <div className="text-white/60 text-sm mt-1 font-['Urbanist']">{stat.label}</div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
       </section>
 
+      {/* Gradient Divider */}
 
-
-      {/* Book a Demo Section - Enhanced with Calendly */}
-      <section className="py-20 px-4 bg-black">
-        <div className="container mx-auto max-w-7xl">
+      {/* Testimonials Section */}
+      <section className="py-20 px-4 bg-black relative z-10">
+        <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ 
-              duration: 0.8,
-              type: "spring",
-              stiffness: 100
-            }}
+            transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
             <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                What Our Clients Say
+              </span>
+            </h2>
+            <div className="flex items-center justify-center gap-2 mb-4">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
+              ))}
+              <span className="text-white font-semibold ml-2 font-['Urbanist']">4.9/5</span>
+            </div>
+            <p className="text-xl text-white/70 max-w-3xl mx-auto font-['Urbanist']">
+              Trusted by title companies across the country
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                name: 'Sarah Mitchell',
+                role: 'CEO, Premier Title Group',
+                text: 'Title Voice reduced our missed calls by 95% and saved us over $4,000/month in staffing costs. The AI handles complex inquiries with ease.',
+                metric: '95% fewer missed calls',
+                rating: 5
+              },
+              {
+                name: 'James Rodriguez',
+                role: 'Operations Manager, Apex Title',
+                text: 'The scheduling automation alone saved our team 20 hours per week. Clients love the instant responses and 24/7 availability.',
+                metric: '20 hrs saved weekly',
+                rating: 5
+              },
+              {
+                name: 'Emily Chen',
+                role: 'VP Operations, National Title Co',
+                text: 'We saw ROI within the first month. The warm transfer feature ensures complex issues get to the right person with full context.',
+                metric: 'ROI in 30 days',
+                rating: 5
+              },
+              {
+                name: 'Michael Davis',
+                role: 'Owner, Davis Title Services',
+                text: "As a small shop, Title Voice gave us enterprise-level phone coverage. Our clients can't tell the difference from a human receptionist.",
+                metric: '4.9/5 client rating',
+                rating: 5
+              },
+              {
+                name: 'Lisa Thompson',
+                role: 'Director, Summit Title Agency',
+                text: "The CRM integration is seamless. Every call is logged, every deal status is updated in real-time. It's transformed our operations.",
+                metric: '100% call logging',
+                rating: 5
+              },
+              {
+                name: 'Robert Kim',
+                role: 'Managing Partner, Pacific Title',
+                text: 'We expanded to 3 new locations without hiring additional reception staff. Title Voice scales effortlessly with our growth.',
+                metric: '3x growth, 0 new hires',
+                rating: 5
+              }
+            ].map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <GlowCard className="h-full rounded-2xl">
+                  <div className="relative p-6 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/20 transition-all duration-300 h-full group">
+                    <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-[#0080FF]/0 group-hover:bg-[#0080FF]/50 transition-all duration-300 rounded-full" />
+                    <Quote className="w-8 h-8 text-white/10 group-hover:text-white/20 transition-colors mb-4" />
+                    <p className="text-white/70 mb-6 leading-relaxed font-['Urbanist'] text-sm">{testimonial.text}</p>
+                    <motion.div
+                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 mb-6"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <TrendingUp className="w-3.5 h-3.5 text-[#0080FF]" />
+                      <span className="text-xs text-[#0080FF] font-semibold font-['Urbanist']">{testimonial.metric}</span>
+                    </motion.div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center text-[#0080FF] font-bold text-sm font-['Urbanist']">
+                        {testimonial.name.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div>
+                        <p className="text-white font-semibold text-sm font-['Urbanist']">{testimonial.name}</p>
+                        <p className="text-white/50 text-xs font-['Urbanist']">{testimonial.role}</p>
+                      </div>
+                      <div className="ml-auto flex gap-0.5">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star key={i} className="w-3 h-3 text-amber-400 fill-amber-400" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </GlowCard>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Gradient Divider */}
+
+      {/* Book a Demo Section - Premium Enhanced */}
+      <section className="relative py-20 px-4 bg-black overflow-hidden">
+        {/* Ambient Background Effects */}
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div
+            animate={{
+              opacity: [0.08, 0.12, 0.08],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="absolute top-0 left-1/4 w-96 h-96 bg-[#0080FF]/15 rounded-full blur-[120px]"
+          />
+          <motion.div
+            animate={{
+              opacity: [0.06, 0.1, 0.06],
+              scale: [1, 1.3, 1],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 2
+            }}
+            className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#4F1AD6]/15 rounded-full blur-[120px]"
+          />
+        </div>
+
+        <div className="container mx-auto max-w-7xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.8,
+              type: "spring",
+              stiffness: 100
+            }}
+            className="text-center mb-20"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+              className="inline-block mb-6"
+            >
+              <div className="px-6 py-2 rounded-full bg-[#0080FF]/5 border border-[#0080FF]/20 backdrop-blur-sm">
+                <span className="text-sm font-semibold text-[#0080FF]/70 font-['Urbanist']">
+                  EXPERIENCE THE DIFFERENCE
+                </span>
+              </div>
+            </motion.div>
+
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+              <span className="text-white">
                 See Title Voice in action
               </span>
             </h2>
-            <p className="text-xl text-white mb-12 max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white/50 mb-4 max-w-3xl mx-auto font-['Urbanist']">
               Book a personalized demo and see how Title Voice can transform your title company operations.
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 items-stretch">
             {/* Left Side - Demo Benefits */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="space-y-8"
+              className="relative"
             >
-              <div className="space-y-6">
-                <motion.div
-                  className="flex items-start gap-4 p-6 rounded-2xl bg-white/5 border border-white/10"
-                  whileHover={{ scale: 1.02, y: -2 }}
-                >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] flex items-center justify-center flex-shrink-0">
-                    <Play className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-2 font-['Urbanist']">Live Demo</h3>
-                    <p className="text-white/80 font-['Urbanist']">Watch Title Voice handle real calls and see the AI in action with your specific use cases.</p>
-                  </div>
-                </motion.div>
+              {/* Connecting Line Between Cards */}
+              <div className="absolute left-10 top-20 bottom-20 w-0.5 bg-gradient-to-b from-transparent via-[#0080FF]/20 to-transparent hidden lg:block" />
 
-                <motion.div
-                  className="flex items-start gap-4 p-6 rounded-2xl bg-white/5 border border-white/10"
-                  whileHover={{ scale: 1.02, y: -2 }}
-                >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#4F1AD6] to-[#0080FF] flex items-center justify-center flex-shrink-0">
-                    <Users className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-2 font-['Urbanist']">Personalized Setup</h3>
-                    <p className="text-white/80 font-['Urbanist']">Get a custom integration plan tailored to your title company's specific needs and workflows.</p>
-                  </div>
-                </motion.div>
+              <div className="space-y-6 relative">
+                {[
+                  {
+                    number: "01",
+                    icon: Play,
+                    title: "Live Demo",
+                    description: "Watch Title Voice handle real calls and see the AI in action with your specific use cases.",
+                    delay: 0.2
+                  },
+                  {
+                    number: "02",
+                    icon: Users,
+                    title: "Personalized Setup",
+                    description: "Get a custom integration plan tailored to your title company's specific needs and workflows.",
+                    delay: 0.3
+                  },
+                  {
+                    number: "03",
+                    icon: CheckCircle,
+                    title: "ROI Analysis",
+                    description: "Understand the potential savings and efficiency gains for your specific operation.",
+                    delay: 0.4
+                  }
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: item.delay }}
+                    className="relative group"
+                  >
+                    <motion.div
+                      className="relative p-8 rounded-2xl bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-sm border border-white/10 overflow-hidden"
+                      whileHover={{
+                        scale: 1.02,
+                        y: -4,
+                        borderColor: "rgba(0, 128, 255, 0.3)"
+                      }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      {/* Animated background glow on hover */}
+                      <motion.div
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        style={{
+                          background: "radial-gradient(circle at 50% 50%, rgba(0, 128, 255, 0.08), transparent 70%)"
+                        }}
+                      />
 
-                <motion.div
-                  className="flex items-start gap-4 p-6 rounded-2xl bg-white/5 border border-white/10"
-                  whileHover={{ scale: 1.02, y: -2 }}
-                >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] flex items-center justify-center flex-shrink-0">
-                    <CheckCircle className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-2 font-['Urbanist']">ROI Analysis</h3>
-                    <p className="text-white/80 font-['Urbanist']">Understand the potential savings and efficiency gains for your specific operation.</p>
-                  </div>
-                </motion.div>
+                      {/* Shimmer effect on hover */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0080FF]/10 to-transparent"
+                          animate={{
+                            x: ['-200%', '200%']
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        />
+                      </div>
+
+                      <div className="relative z-10 flex items-start gap-5">
+                        {/* Number Badge */}
+                        <div className="relative flex-shrink-0">
+                          <motion.div
+                            className="absolute inset-0 bg-[#0080FF]/15 rounded-2xl blur-xl"
+                            animate={{
+                              scale: [1, 1.2, 1],
+                              opacity: [0.3, 0.5, 0.3]
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              delay: index * 0.3
+                            }}
+                          />
+                          <div className="relative w-16 h-16 rounded-2xl bg-[#0080FF]/10 flex items-center justify-center border border-[#0080FF]/20 shadow-lg shadow-[#0080FF]/10">
+                            <span className="text-2xl font-bold text-[#0080FF] font-['Urbanist']">{item.number}</span>
+                          </div>
+                        </div>
+
+                        {/* Icon */}
+                        <div className="relative flex-shrink-0">
+                          <motion.div
+                            className="w-14 h-14 rounded-xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center group-hover:bg-[#0080FF]/20 transition-colors"
+                            whileHover={{ rotate: 360 }}
+                            transition={{ duration: 0.6 }}
+                          >
+                            <item.icon className="w-7 h-7 text-[#0080FF]" />
+                          </motion.div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 pt-1">
+                          <h3 className="text-2xl font-bold text-white mb-3 font-['Urbanist'] group-hover:text-white transition-all">
+                            {item.title}
+                          </h3>
+                          <p className="text-white/60 font-['Urbanist'] leading-relaxed text-base">
+                            {item.description}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Corner accent */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#0080FF]/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </motion.div>
+                  </motion.div>
+                ))}
               </div>
             </motion.div>
 
-            {/* Right Side - Calendly Integration */}
+            {/* Right Side - Premium CTA Card */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-white/5 rounded-2xl p-8 border border-white/10"
+              className="relative lg:sticky lg:top-24 h-fit"
             >
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-white mb-4 font-['Urbanist']">Schedule Your Demo</h3>
-                <p className="text-white/80 font-['Urbanist']">Choose a time that works for you</p>
-              </div>
-
-              {/* Cal.com Widget Container */}
-              <div className="bg-white rounded-xl p-4 shadow-lg">
-                <iframe
-                  src="https://cal.com/title-voice-ai-tsigyx/30min?embed=true&embedType=inline"
-                  style={{
-                    width: '100%',
-                    height: '630px',
-                    border: 'none',
-                    borderRadius: '8px'
+              <div className="relative bg-gradient-to-br from-[#0d1117] to-[#0a0d12] rounded-3xl p-10 border border-[#0080FF]/20 overflow-hidden group backdrop-blur-sm">
+                {/* Animated gradient orbs */}
+                <motion.div
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.1, 0.18, 0.1],
+                    x: [0, 50, 0],
+                    y: [0, 30, 0],
                   }}
-                  title="Cal.com Booking Widget"
-                  loading="lazy"
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="absolute top-0 right-0 w-64 h-64 bg-[#0080FF]/20 rounded-full blur-[80px]"
                 />
-              </div>
-
-              {/* Fallback Button if Cal.com doesn't load */}
-              <motion.div className="mt-6 text-center">
-                <motion.button
-                  className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 justify-center mx-auto font-['Urbanist']"
-                  whileHover={{ 
-                    scale: 1.05,
-                    boxShadow: "0 20px 40px rgba(0, 128, 255, 0.3)"
+                <motion.div
+                  animate={{
+                    scale: [1, 1.3, 1],
+                    opacity: [0.08, 0.15, 0.08],
+                    x: [0, -30, 0],
+                    y: [0, 50, 0],
                   }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}
-                >
-                  <Calendar className="w-5 h-5" />
-                  Book Demo on Cal.com
-                </motion.button>
-              </motion.div>
+                  transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2
+                  }}
+                  className="absolute bottom-0 left-0 w-64 h-64 bg-[#4F1AD6]/20 rounded-full blur-[80px]"
+                />
+
+                {/* Sparkles effect - subtle */}
+                <div className="absolute inset-0 opacity-15">
+                  <Sparkles particleColor="#0080FF" particleDensity={30} speed={0.3} />
+                </div>
+
+                <div className="relative z-10">
+                  {/* Top Badge */}
+                  <motion.div
+                    className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 backdrop-blur-sm mb-8"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3 }}
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <Calendar className="w-5 h-5 text-[#0080FF]" />
+                    <span className="text-sm font-bold text-[#0080FF] font-['Urbanist']">
+                      Book Your Evaluation
+                    </span>
+                  </motion.div>
+
+                  {/* Main Title */}
+                  <h3 className="text-4xl md:text-5xl font-bold text-white mb-4 font-['Urbanist'] leading-tight">
+                    Ready to Get{" "}
+                    <span className="text-white">
+                      Started?
+                    </span>
+                  </h3>
+
+                  <p className="text-white/60 mb-10 text-lg font-['Urbanist'] leading-relaxed">
+                    Schedule a personalized demo and see Title Voice in action
+                  </p>
+
+                  {/* Benefits checklist */}
+                  <div className="space-y-3 mb-10">
+                    {[
+                      "Live AI demonstration",
+                      "Custom integration planning",
+                      "ROI calculation for your operation"
+                    ].map((benefit, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.4 + i * 0.1 }}
+                        className="flex items-center gap-3"
+                      >
+                        <div className="w-5 h-5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-3 h-3 text-[#0080FF]" />
+                        </div>
+                        <span className="text-white/70 font-['Urbanist']">{benefit}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Main CTA Button */}
+                  <motion.button
+                    onClick={openModal}
+                    className="relative w-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] text-white px-10 py-6 rounded-2xl font-bold text-xl transition-all duration-300 flex items-center gap-3 justify-center mx-auto font-['Urbanist'] group/btn overflow-hidden shadow-2xl shadow-[#0080FF]/20"
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow: "0 20px 60px rgba(0, 128, 255, 0.4)"
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {/* Animated shimmer */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                      animate={{
+                        x: ['-200%', '200%']
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    />
+
+                    <Calendar className="w-6 h-6 group-hover/btn:rotate-12 transition-transform relative z-10" />
+                    <span className="relative z-10">Schedule Your Demo</span>
+                    <ArrowRight className="w-6 h-6 group-hover/btn:translate-x-1 transition-transform relative z-10" />
+                  </motion.button>
+
+                  {/* Bottom info */}
+                  <div className="mt-6 flex items-center justify-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-[#0080FF]/70" />
+                      <span className="text-white/50 text-sm font-['Urbanist']">Free consultation</span>
+                    </div>
+                    <div className="w-1 h-1 bg-white/30 rounded-full" />
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-[#0080FF]/70" />
+                      <span className="text-white/50 text-sm font-['Urbanist']">No commitment required</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>
       </section>
-    </div>
+    </div >
   )
 }
 

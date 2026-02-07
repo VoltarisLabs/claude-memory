@@ -1,14 +1,30 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
-import { ArrowRight, CheckCircle, Clock, Users, Database, Shield, Zap } from 'lucide-react'
+import {
+  ArrowRight,
+  CheckCircle,
+  Clock,
+  Users,
+  Database,
+  Shield,
+  Zap,
+  Check,
+  Building2,
+  ClipboardList,
+  Mail,
+  UserCog,
+  Send,
+  MessageSquare,
+  Calendar,
+  Play
+} from 'lucide-react'
+import Sparkles from '../components/Sparkles'
+import VoiceWaves from '../components/VoiceWaves'
+import GlowCard from '../components/GlowCard'
+import BorderBeam from '../components/BorderBeam'
+import { PrimaryButton, OutlineButton } from '../components/Buttons'
 
 const WorkflowIntegration = () => {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1
-  })
-
   const [activeStep, setActiveStep] = useState(0)
 
   const workflowSteps = [
@@ -16,36 +32,31 @@ const WorkflowIntegration = () => {
       id: 'call',
       title: 'Incoming Call',
       description: 'Customer calls your title company',
-      icon: Users,
-      color: 'from-blue-500 to-blue-600'
+      icon: Users
     },
     {
       id: 'ai',
       title: 'AI Assistant',
       description: 'Title Voice AI answers and identifies needs',
-      icon: Zap,
-      color: 'from-purple-500 to-purple-600'
+      icon: Zap
     },
     {
       id: 'data',
       title: 'Data Sync',
       description: 'Pulls customer data from your title software',
-      icon: Database,
-      color: 'from-green-500 to-green-600'
+      icon: Database
     },
     {
       id: 'action',
       title: 'Smart Action',
       description: 'Schedules closing or routes to specialist',
-      icon: CheckCircle,
-      color: 'from-orange-500 to-orange-600'
+      icon: CheckCircle
     },
     {
       id: 'confirm',
       title: 'Confirmation',
       description: 'Sends confirmation and updates systems',
-      icon: Clock,
-      color: 'from-red-500 to-red-600'
+      icon: Clock
     }
   ]
 
@@ -54,158 +65,149 @@ const WorkflowIntegration = () => {
       name: 'ResWare',
       description: 'Full integration with ResWare title production software',
       features: ['Real-time data sync', 'Customer profile access', 'Closing status updates'],
-      logo: '🏢'
+      icon: Building2
     },
     {
       name: 'RamQuest',
       description: 'Seamless RamQuest integration for title workflows',
       features: ['Order management', 'Status tracking', 'Document handling'],
-      logo: '📋'
+      icon: ClipboardList
     },
     {
       name: 'CRM Systems',
       description: 'Connect with any CRM or customer management system',
       features: ['Customer profiles', 'Interaction history', 'Lead management'],
-      logo: '👥'
+      icon: UserCog
     },
     {
       name: 'Email Systems',
       description: 'Automated email confirmations and notifications',
       features: ['Closing confirmations', 'Status updates', 'Document delivery'],
-      logo: '📧'
+      icon: Mail
     }
   ]
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  }
-
-  const itemVariants = {
-    hidden: { y: 50, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    }
-  }
-
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen"
-    >
+    <div className="min-h-screen bg-black text-white relative">
+      {/* Background Canvas Layers */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <Sparkles particleColor="#38bdf8" particleDensity={60} speed={0.3} />
+      </div>
+      <VoiceWaves />
+
       {/* Hero Section */}
-      <section className="pt-20 pb-16 bg-gradient-to-br from-[#1B262C] via-[#0F4C75] to-[#3282B8] text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
-        
-        <div className="container mx-auto px-4 relative z-10">
+      <section className="relative min-h-screen flex items-center justify-center px-4 py-20">
+        {/* Spheremotion Background */}
+        <div className="absolute inset-0">
+          <img
+            src="/spheremotion.gif"
+            alt=""
+            className="w-full h-full object-cover opacity-60"
+          />
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
+
+        {/* Blurred gradient orbs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#0080FF]/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#4F1AD6]/20 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="container mx-auto text-center relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-              Workflow Integration for{' '}
-              <span className="text-[#BBE1FA]">Title Companies</span>
-            </h1>
-            <p className="text-xl lg:text-2xl text-gray-300 mb-8 leading-relaxed">
-              Seamlessly integrate Title Voice with your existing title company software. 
-              ResWare, RamQuest, and custom systems - we connect with everything.
-            </p>
+            {/* Glass pill badge */}
             <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-8"
+            >
+              <Zap className="w-4 h-4 text-[#0080FF]" />
+              <span className="text-sm text-white/80 font-['Urbanist']">Seamless Integrations</span>
+            </motion.div>
+
+            <h1 className="text-6xl md:text-8xl font-bold text-white font-['Urbanist'] mb-6 leading-tight">
+              Workflow Integration for{' '}
+              <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                Title Companies
+              </span>
+            </h1>
+            <p className="text-xl md:text-2xl text-white/80 mb-8 max-w-4xl mx-auto font-['Urbanist'] leading-relaxed">
+              Seamlessly integrate Title Voice with your existing title company software.
+              ResWare, RamQuest, and custom systems — we connect with everything.
+            </p>
+
+            {/* Gradient divider */}
+            <div className="w-32 h-px mx-auto mb-10 bg-gradient-to-r from-transparent via-[#0080FF] to-transparent" />
+
+            <motion.div
+              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
             >
-              <motion.button
-                className="bg-white text-[#1B262C] px-8 py-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-200"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
+              <PrimaryButton size="lg">
                 View Integration Demo
-              </motion.button>
-              <motion.button
-                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-[#1B262C] transition-all duration-200"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
+                <Play className="w-5 h-5" />
+              </PrimaryButton>
+              <OutlineButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
+                <Calendar className="w-5 h-5" />
                 Get Custom Quote
-              </motion.button>
+              </OutlineButton>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
       {/* Interactive Workflow */}
-      <section ref={ref} className="py-20 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-20 px-4">
+        <div className="container mx-auto">
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <motion.h2
-              variants={itemVariants}
-              className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6"
-            >
-              How Our{' '}
-              <span className="text-[#0F4C75]">Workflow Integration</span>{' '}
-              Works
-            </motion.h2>
-            <motion.p
-              variants={itemVariants}
-              className="text-xl text-gray-600 max-w-3xl mx-auto"
-            >
-              See how Title Voice integrates with your title company software 
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+              <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                How Our Workflow Integration Works
+              </span>
+            </h2>
+            <p className="text-xl text-white/80 max-w-3xl mx-auto font-['Urbanist']">
+              See how Title Voice integrates with your title company software
               to create a seamless, automated workflow.
-            </motion.p>
+            </p>
           </motion.div>
 
           {/* Interactive Workflow Steps */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            className="max-w-6xl mx-auto"
-          >
-            <div className="flex flex-col lg:flex-row items-center gap-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex flex-col lg:flex-row items-start gap-8">
               {/* Steps List */}
               <div className="w-full lg:w-1/3 space-y-4">
                 {workflowSteps.map((step, index) => (
                   <motion.button
                     key={step.id}
                     onClick={() => setActiveStep(index)}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
                     className={`w-full p-4 rounded-xl text-left transition-all duration-300 ${
                       activeStep === index
-                        ? 'bg-[#0F4C75] text-white shadow-lg'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        ? 'bg-[#0080FF]/10 border border-[#0080FF]/30'
+                        : 'bg-white/5 border border-white/5 hover:bg-white/10'
                     }`}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <div className="flex items-center gap-4">
-                      <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${step.color} flex items-center justify-center`}>
-                        <step.icon className="w-6 h-6 text-white" />
+                      <div className="w-12 h-12 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                        {React.createElement(step.icon, { className: "w-6 h-6 text-[#0080FF]" })}
                       </div>
                       <div>
-                        <h3 className="font-semibold">{step.title}</h3>
-                        <p className="text-sm opacity-80">{step.description}</p>
+                        <h3 className="font-semibold text-white font-['Urbanist']">{step.title}</h3>
+                        <p className="text-sm text-white/60 font-['Urbanist']">{step.description}</p>
                       </div>
                     </div>
                   </motion.button>
@@ -221,107 +223,126 @@ const WorkflowIntegration = () => {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -50 }}
                     transition={{ duration: 0.5 }}
-                    className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8"
+                    className="bg-[#080808] rounded-2xl p-8 border border-white/10"
                   >
                     <div className="text-center mb-8">
-                      <div className={`w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r ${workflowSteps[activeStep].color} flex items-center justify-center mb-4`}>
-                        <workflowSteps[activeStep].icon className="w-10 h-10 text-white" />
+                      {/* Step icon with pulsing ring */}
+                      <div className="relative w-20 h-20 mx-auto mb-4">
+                        <div className="absolute inset-0 rounded-2xl bg-[#0080FF]/10 border border-[#0080FF]/20 animate-pulse" />
+                        <div className="relative w-20 h-20 rounded-2xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                          {React.createElement(workflowSteps[activeStep].icon, { className: "w-10 h-10 text-[#0080FF]" })}
+                        </div>
                       </div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                      <h3 className="text-2xl font-bold text-white mb-2 font-['Urbanist']">
                         {workflowSteps[activeStep].title}
                       </h3>
-                      <p className="text-gray-600">
+                      <p className="text-white/60 font-['Urbanist']">
                         {workflowSteps[activeStep].description}
                       </p>
                     </div>
 
                     {/* Step-specific content */}
                     {activeStep === 0 && (
-                      <div className="bg-white rounded-xl p-6 shadow-sm">
-                        <h4 className="font-semibold mb-4">Customer Call Example</h4>
+                      <div className="bg-black/30 rounded-xl p-6 border border-white/10">
+                        <h4 className="font-semibold mb-4 text-white font-['Urbanist']">Customer Call Example</h4>
                         <div className="space-y-3">
-                          <div className="bg-blue-100 p-3 rounded-lg">
-                            <p className="text-sm">"Hi, I need to check on my closing status for 123 Main Street."</p>
+                          <div className="bg-[#0080FF]/10 p-3 rounded-lg border border-[#0080FF]/20">
+                            <p className="text-sm text-white/90 font-['Urbanist']">"Hi, I need to check on my closing status for 123 Main Street."</p>
                           </div>
-                          <div className="bg-green-100 p-3 rounded-lg">
-                            <p className="text-sm">"I can help you with that. Let me look up your information..."</p>
+                          <div className="bg-[#4F1AD6]/10 p-3 rounded-lg border border-[#4F1AD6]/20">
+                            <p className="text-sm text-white/90 font-['Urbanist']">"I can help you with that. Let me look up your information..."</p>
                           </div>
                         </div>
                       </div>
                     )}
 
                     {activeStep === 1 && (
-                      <div className="bg-white rounded-xl p-6 shadow-sm">
-                        <h4 className="font-semibold mb-4">AI Processing</h4>
+                      <div className="bg-black/30 rounded-xl p-6 border border-white/10">
+                        <h4 className="font-semibold mb-4 text-white font-['Urbanist']">AI Processing</h4>
                         <div className="space-y-3">
                           <div className="flex items-center gap-3">
-                            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                            <span className="text-sm">Natural language processing</span>
+                            <div className="w-3 h-3 bg-[#0080FF] rounded-full animate-pulse"></div>
+                            <span className="text-sm text-white/80 font-['Urbanist']">Natural language processing</span>
                           </div>
                           <div className="flex items-center gap-3">
-                            <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-                            <span className="text-sm">Intent recognition</span>
+                            <div className="w-3 h-3 bg-[#4F1AD6] rounded-full animate-pulse"></div>
+                            <span className="text-sm text-white/80 font-['Urbanist']">Intent recognition</span>
                           </div>
                           <div className="flex items-center gap-3">
-                            <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse"></div>
-                            <span className="text-sm">Context understanding</span>
+                            <div className="w-3 h-3 bg-[#0080FF] rounded-full animate-pulse"></div>
+                            <span className="text-sm text-white/80 font-['Urbanist']">Context understanding</span>
                           </div>
                         </div>
                       </div>
                     )}
 
                     {activeStep === 2 && (
-                      <div className="bg-white rounded-xl p-6 shadow-sm">
-                        <h4 className="font-semibold mb-4">Data Integration</h4>
+                      <div className="bg-black/30 rounded-xl p-6 border border-white/10">
+                        <h4 className="font-semibold mb-4 text-white font-['Urbanist']">Data Integration</h4>
                         <div className="grid grid-cols-2 gap-4">
                           <div className="text-center">
-                            <div className="w-12 h-12 bg-blue-500 rounded-lg mx-auto mb-2 flex items-center justify-center">
-                              <Database className="w-6 h-6 text-white" />
+                            <div className="w-12 h-12 bg-[#0080FF]/10 border border-[#0080FF]/20 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                              <Database className="w-6 h-6 text-[#0080FF]" />
                             </div>
-                            <p className="text-xs">ResWare</p>
+                            <p className="text-xs text-white/70 font-['Urbanist']">ResWare</p>
                           </div>
                           <div className="text-center">
-                            <div className="w-12 h-12 bg-green-500 rounded-lg mx-auto mb-2 flex items-center justify-center">
-                              <Database className="w-6 h-6 text-white" />
+                            <div className="w-12 h-12 bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                              <Database className="w-6 h-6 text-[#4F1AD6]" />
                             </div>
-                            <p className="text-xs">RamQuest</p>
+                            <p className="text-xs text-white/70 font-['Urbanist']">RamQuest</p>
                           </div>
                         </div>
                       </div>
                     )}
 
                     {activeStep === 3 && (
-                      <div className="bg-white rounded-xl p-6 shadow-sm">
-                        <h4 className="font-semibold mb-4">Smart Actions</h4>
+                      <div className="bg-black/30 rounded-xl p-6 border border-white/10">
+                        <h4 className="font-semibold mb-4 text-white font-['Urbanist']">Smart Actions</h4>
                         <div className="space-y-2">
                           <div className="flex items-center gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                            <span className="text-sm">Schedule closing appointment</span>
+                            <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
+                              <Check className="w-3 h-3 text-[#0080FF]" />
+                            </div>
+                            <span className="text-sm text-white/80 font-['Urbanist']">Schedule closing appointment</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                            <span className="text-sm">Update closing status</span>
+                            <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
+                              <Check className="w-3 h-3 text-[#0080FF]" />
+                            </div>
+                            <span className="text-sm text-white/80 font-['Urbanist']">Update closing status</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                            <span className="text-sm">Route to specialist</span>
+                            <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
+                              <Check className="w-3 h-3 text-[#0080FF]" />
+                            </div>
+                            <span className="text-sm text-white/80 font-['Urbanist']">Route to specialist</span>
                           </div>
                         </div>
                       </div>
                     )}
 
                     {activeStep === 4 && (
-                      <div className="bg-white rounded-xl p-6 shadow-sm">
-                        <h4 className="font-semibold mb-4">Confirmation & Updates</h4>
+                      <div className="bg-black/30 rounded-xl p-6 border border-white/10">
+                        <h4 className="font-semibold mb-4 text-white font-['Urbanist']">Confirmation & Updates</h4>
                         <div className="space-y-3">
-                          <div className="bg-green-50 p-3 rounded-lg">
-                            <p className="text-sm">✅ Email confirmation sent</p>
+                          <div className="bg-[#0080FF]/10 p-3 rounded-lg border border-[#0080FF]/20 flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
+                              <Mail className="w-4 h-4 text-[#0080FF]" />
+                            </div>
+                            <p className="text-sm text-white/90 font-['Urbanist']">Email confirmation sent</p>
                           </div>
-                          <div className="bg-blue-50 p-3 rounded-lg">
-                            <p className="text-sm">📱 SMS notification delivered</p>
+                          <div className="bg-[#4F1AD6]/10 p-3 rounded-lg border border-[#4F1AD6]/20 flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-[#4F1AD6]/15 border border-[#4F1AD6]/25 flex items-center justify-center">
+                              <MessageSquare className="w-4 h-4 text-[#4F1AD6]" />
+                            </div>
+                            <p className="text-sm text-white/90 font-['Urbanist']">SMS notification delivered</p>
                           </div>
-                          <div className="bg-purple-50 p-3 rounded-lg">
-                            <p className="text-sm">🔄 CRM system updated</p>
+                          <div className="bg-[#0080FF]/10 p-3 rounded-lg border border-[#0080FF]/20 flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
+                              <Database className="w-4 h-4 text-[#0080FF]" />
+                            </div>
+                            <p className="text-sm text-white/90 font-['Urbanist']">CRM system updated</p>
                           </div>
                         </div>
                       </div>
@@ -330,56 +351,116 @@ const WorkflowIntegration = () => {
                 </AnimatePresence>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Integration Partners */}
-      <section className="py-20 bg-gradient-to-br from-[#1B262C] to-[#0F4C75] text-white">
-        <div className="container mx-auto px-4">
+      <section className="py-20 px-4">
+        <div className="container mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto"
+            className="text-center mb-16"
           >
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Integrates with Your{' '}
-              <span className="text-[#BBE1FA]">Title Software</span>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+              <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                Integrates with Your Title Software
+              </span>
             </h2>
-            <p className="text-xl text-gray-300 mb-12">
-              Connect Title Voice with your existing title company software 
+            <p className="text-xl text-white/80 max-w-3xl mx-auto font-['Urbanist']">
+              Connect Title Voice with your existing title company software
               for a unified, automated workflow.
             </p>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {integrations.map((integration, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.6 }}
-                  className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <div className="text-4xl mb-4">{integration.logo}</div>
-                  <h3 className="text-xl font-bold mb-2">{integration.name}</h3>
-                  <p className="text-gray-300 text-sm mb-4">{integration.description}</p>
-                  <ul className="space-y-1">
-                    {integration.features.map((feature, idx) => (
-                      <li key={idx} className="text-xs text-gray-400 flex items-center gap-2">
-                        <CheckCircle className="w-3 h-3" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              ))}
-            </div>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            {integrations.map((integration, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1, type: "spring", stiffness: 100 }}
+                whileHover={{ y: -6 }}
+              >
+                <GlowCard className="h-full rounded-2xl">
+                  <div className="group relative p-8 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/30 transition-all duration-500 h-full flex flex-col overflow-hidden">
+                    <BorderBeam
+                      size={150}
+                      duration={10}
+                      delay={index * 2}
+                      colorFrom="#0080FF"
+                      colorTo="#4F1AD6"
+                    />
+
+                    {/* Gradient overlay on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#0080FF]/[0.03] to-[#4F1AD6]/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" />
+
+                    {/* Glass icon box */}
+                    <div className="relative z-10 w-16 h-16 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-6 group-hover:bg-[#0080FF]/20 group-hover:border-[#0080FF]/40 transition-all duration-300">
+                      {React.createElement(integration.icon, { className: "w-8 h-8 text-[#0080FF]" })}
+                    </div>
+
+                    <h3 className="relative z-10 text-xl font-bold text-white mb-2 font-['Urbanist']">{integration.name}</h3>
+                    <p className="relative z-10 text-white/70 text-sm mb-4 leading-relaxed font-['Urbanist']">{integration.description}</p>
+
+                    <div className="relative z-10 space-y-3 mt-auto">
+                      {integration.features.map((feature, idx) => (
+                        <div key={idx} className="flex items-center gap-3">
+                          <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
+                            <Check className="w-3 h-3 text-[#0080FF]" />
+                          </div>
+                          <span className="text-white/80 text-sm font-['Urbanist']">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </GlowCard>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-4 relative">
+        {/* Breathing orb */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#0080FF]/10 rounded-full blur-[120px] animate-pulse pointer-events-none" />
+
+        <div className="container mx-auto text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-4xl mx-auto"
+          >
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+              <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                Ready to Integrate?
+              </span>
+            </h2>
+            <p className="text-xl text-white/80 mb-12 max-w-3xl mx-auto font-['Urbanist']">
+              Connect Title Voice with your existing systems and start automating your workflows today.
+            </p>
+
+            <motion.div
+              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <PrimaryButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
+                Get Started <ArrowRight className="w-5 h-5" />
+              </PrimaryButton>
+              <OutlineButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
+                <Calendar className="w-5 h-5" /> Schedule Demo
+              </OutlineButton>
+            </motion.div>
           </motion.div>
         </div>
       </section>
-    </motion.div>
+    </div>
   )
 }
 
