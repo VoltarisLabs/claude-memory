@@ -101,12 +101,13 @@ const Contact = () => {
 
             <h1 className="text-display-sm sm:text-display font-bold mb-6">
               <motion.span
-                className="gradient-text-hero"
+                className="block"
                 initial={{ opacity: 0, y: 60 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 1, ease: [0.16, 1, 0.3, 1] }}
               >
-                Let's Talk
+                <span className="text-white">Let's </span>
+                <span className="gradient-text-hero">Talk</span>
               </motion.span>
             </h1>
 

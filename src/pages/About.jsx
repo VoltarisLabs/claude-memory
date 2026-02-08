@@ -393,7 +393,8 @@ const About = () => {
               What We Do
             </span>
             <h2 className="text-display-sm font-bold mb-6">
-              <span className="gradient-text">Your AI Receptionist</span>
+              <span className="text-white">Your AI </span>
+              <span className="gradient-text">Receptionist</span>
             </h2>
             <p className="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">
               An AI voice agent built specifically for title companies. It sounds human,
@@ -443,7 +444,8 @@ const About = () => {
               How It Works
             </span>
             <h2 className="text-display-sm font-bold mb-6">
-              <span className="gradient-text">Live in 48 Hours</span>
+              <span className="text-white">Live in </span>
+              <span className="gradient-text">48 Hours</span>
             </h2>
             <p className="text-lg text-white/40 max-w-xl mx-auto">
               No months of setup. No complex onboarding. Just results.
