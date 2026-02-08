@@ -75,10 +75,15 @@
 
   /* ─── Section Badges ─── */
   .section-badge {
-    @apply inline-flex items-center gap-2 px-4 py-1.5 text-sm font-medium uppercase tracking-widest rounded-full backdrop-blur-sm;
+    @apply inline-flex items-center gap-2 px-4 py-1.5 text-sm font-medium uppercase tracking-widest rounded-full backdrop-blur-sm transition-all duration-300;
     color: #0080FF;
-    background: linear-gradient(135deg, rgba(0, 128, 255, 0.08), rgba(79, 26, 214, 0.08));
-    border: 1px solid rgba(0, 128, 255, 0.2);
+    background: linear-gradient(135deg, rgba(0, 128, 255, 0.15), rgba(79, 26, 214, 0.15));
+    border: 1px solid rgba(0, 128, 255, 0.3);
+  }
+
+  .section-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(0, 128, 255, 0.2);
   }
 
   .section-badge-dot {

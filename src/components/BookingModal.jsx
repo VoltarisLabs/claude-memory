@@ -64,10 +64,10 @@ const BookingModal = () => {
 
               {/* Header */}
               <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] px-8 py-6">
-                <h2 className="text-2xl md:text-3xl font-bold text-white font-['Urbanist']">
+                <h2 className="text-2xl md:text-3xl font-bold text-white">
                   Schedule Your Demo
                 </h2>
-                <p className="text-white/90 mt-2 font-['Urbanist']">
+                <p className="text-white/90 mt-2">
                   Choose a time that works for you
                 </p>
               </div>
@@ -90,11 +90,11 @@ const BookingModal = () => {
 
                 {/* Fallback Button */}
                 <div className="p-6 text-center border-t border-gray-100 bg-gray-50">
-                  <p className="text-sm text-gray-600 mb-3 font-['Urbanist']">
+                  <p className="text-sm text-gray-600 mb-3">
                     Having trouble with the calendar?
                   </p>
                   <motion.button
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300 font-['Urbanist']"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}

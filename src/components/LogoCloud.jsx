@@ -22,7 +22,7 @@ const LogoCloud = ({ heading = 'Trusted by leading title companies' }) => {
       className="py-12"
     >
       {heading && (
-        <p className="text-center text-white/30 text-sm uppercase tracking-[0.2em] mb-8 font-['Urbanist']">
+        <p className="text-center text-white/30 text-sm uppercase tracking-[0.2em] mb-8">
           {heading}
         </p>
       )}
@@ -32,7 +32,7 @@ const LogoCloud = ({ heading = 'Trusted by leading title companies' }) => {
             key={idx}
             className="flex items-center justify-center px-8 py-4 mx-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#0080FF]/20 transition-colors duration-300 flex-shrink-0"
           >
-            <span className="text-white/30 hover:text-white/60 transition-colors duration-300 font-bold text-lg font-['Urbanist'] whitespace-nowrap">
+            <span className="text-white/30 hover:text-white/60 transition-colors duration-300 font-bold text-lg whitespace-nowrap">
               {logo.text}
             </span>
           </div>

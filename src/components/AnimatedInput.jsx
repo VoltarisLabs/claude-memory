@@ -28,13 +28,13 @@ export const AnimatedInput = ({
         name={name}
         required={required}
         value={value}
-        className="peer w-full bg-transparent border-b-2 border-white/20 py-2 text-white outline-none focus:border-[#0080FF] transition-colors font-['Urbanist']"
+        className="peer w-full bg-transparent border-b-2 border-white/20 py-2 text-white outline-none focus:border-[#0080FF] transition-colors"
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onChange={handleChange}
       />
       <motion.label
-        className="absolute left-0 text-white/40 pointer-events-none font-['Urbanist']"
+        className="absolute left-0 text-white/50 pointer-events-none"
         animate={{
           y: isFocused || hasValue ? -20 : 8,
           scale: isFocused || hasValue ? 0.85 : 1,
@@ -80,13 +80,13 @@ export const AnimatedTextarea = ({
         required={required}
         value={value}
         rows={rows}
-        className="peer w-full bg-transparent border-b-2 border-white/20 py-2 text-white outline-none focus:border-[#0080FF] transition-colors resize-none font-['Urbanist']"
+        className="peer w-full bg-transparent border-b-2 border-white/20 py-2 text-white outline-none focus:border-[#0080FF] transition-colors resize-none"
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onChange={handleChange}
       />
       <motion.label
-        className="absolute left-0 text-white/40 pointer-events-none font-['Urbanist']"
+        className="absolute left-0 text-white/50 pointer-events-none"
         animate={{
           y: isFocused || hasValue ? -20 : 8,
           scale: isFocused || hasValue ? 0.85 : 1,
@@ -126,12 +126,12 @@ export const AnimatedSelect = ({
         name={name}
         required={required}
         value={value}
-        className={`peer w-full bg-transparent border-b-2 border-white/20 py-2 outline-none focus:border-[#0080FF] transition-colors font-['Urbanist'] appearance-none cursor-pointer ${hasValue ? 'text-white' : 'text-transparent'}`}
+        className={`peer w-full bg-transparent border-b-2 border-white/20 py-2 outline-none focus:border-[#0080FF] transition-colors appearance-none cursor-pointer ${hasValue ? 'text-white' : 'text-transparent'}`}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onChange={onChange}
       >
-        <option value="" disabled className="bg-black text-white/40">
+        <option value="" disabled className="bg-black text-white/50">
         </option>
         {options.map((opt) => (
           <option key={opt.value} value={opt.value} className="bg-black text-white">
@@ -140,7 +140,7 @@ export const AnimatedSelect = ({
         ))}
       </select>
       <motion.label
-        className="absolute left-0 text-white/40 pointer-events-none font-['Urbanist']"
+        className="absolute left-0 text-white/50 pointer-events-none"
         animate={{
           y: isFocused || hasValue ? -20 : 8,
           scale: isFocused || hasValue ? 0.85 : 1,

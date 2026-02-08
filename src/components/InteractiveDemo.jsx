@@ -75,15 +75,15 @@ const InteractiveDemo = () => {
               <Phone className="w-4 h-4 text-[#0080FF]" />
             </div>
             <div>
-              <p className="text-white text-sm font-semibold font-['Urbanist']">Title Voice AI</p>
-              <p className="text-white/40 text-xs font-['Urbanist']">Live Demo</p>
+              <p className="text-white text-sm font-semibold">Title Voice AI</p>
+              <p className="text-white/50 text-xs">Live Demo</p>
             </div>
           </div>
           <div className="flex gap-2">
             {!isPlaying && visibleMessages.length === 0 && (
               <button
                 onClick={startDemo}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#0080FF] text-white text-sm font-semibold font-['Urbanist'] hover:bg-[#0080FF]/80 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#0080FF] text-white text-sm font-semibold hover:bg-[#0080FF]/80 transition-colors"
               >
                 <Play className="w-4 h-4" />
                 Play Demo
@@ -92,7 +92,7 @@ const InteractiveDemo = () => {
             {visibleMessages.length > 0 && (
               <button
                 onClick={reset}
-                className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/[0.04] text-white/60 text-sm font-['Urbanist'] hover:bg-white/[0.04] transition-colors"
+                className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/[0.04] text-white/60 text-sm hover:bg-white/[0.04] transition-colors"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 Reset
@@ -105,7 +105,7 @@ const InteractiveDemo = () => {
         <div className="p-6 min-h-[350px] max-h-[450px] overflow-y-auto space-y-4">
           {visibleMessages.length === 0 && !isPlaying && (
             <div className="flex items-center justify-center h-[300px]">
-              <p className="text-white/20 text-sm font-['Urbanist']">Press Play to start the demo call</p>
+              <p className="text-white/20 text-sm">Press Play to start the demo call</p>
             </div>
           )}
 
@@ -119,7 +119,7 @@ const InteractiveDemo = () => {
                 className={`flex ${msg.role === 'caller' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm font-['Urbanist'] leading-relaxed ${
+                  className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                     msg.role === 'caller'
                       ? 'bg-[#0080FF] text-white rounded-br-md'
                       : 'bg-white/[0.04] text-white/60 border border-white/10 rounded-bl-md'

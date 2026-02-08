@@ -76,9 +76,9 @@ const VirtualAssistant = () => {
       <VoiceWaves />
 
       {/* Hero Section */}
-      <section className="relative min-h-[70vh] flex items-center justify-center px-4 py-20 overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center px-4 py-20">
         <div className="absolute inset-0">
-          <img src="/spheremotion.gif" alt="" className="w-full h-full object-cover opacity-60 scale-75" />
+          <img src="/spheremotion.gif" alt="Animated sphere motion background" className="w-full h-full object-cover opacity-60 scale-75" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -87,38 +87,54 @@ const VirtualAssistant = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
+            className="mb-8"
           >
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 text-sm font-semibold text-white bg-white/[0.04] border border-white/20 rounded-full font-['Urbanist'] backdrop-blur-md mb-8">
-              <Brain className="w-4 h-4" />
-              AI Virtual Assistant
-            </span>
-
-            <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold font-['Urbanist'] mb-6">
-              <WordReveal text="AI Virtual Assistant for Title Companies" delay={0.3} />
-            </h1>
-
-            <FadeUpText delay={0.8} blur={6}>
-              <p className="text-xl sm:text-2xl text-white/60 max-w-3xl mx-auto font-['Urbanist']">
-                Never miss a call again. Our title company virtual assistant handles calls 24/7,
-                schedules closings, and manages customer inquiries with AI-powered intelligence.
-              </p>
-            </FadeUpText>
-
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 0.6 }}
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-10"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold text-[#0080FF] bg-[#0080FF]/20 border border-[#0080FF]/40 rounded-full backdrop-blur-md shadow-lg shadow-[#0080FF]/20 mb-8 hover:bg-[#0080FF]/25 hover:border-[#0080FF]/50 transition-all duration-300"
             >
-              <PrimaryButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
-                Schedule Demo
-                <ArrowRight className="w-5 h-5" />
-              </PrimaryButton>
-              <OutlineButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
-                <Calendar className="w-5 h-5" />
-                Learn More
-              </OutlineButton>
+              <Brain className="w-4 h-4 text-[#0080FF]" />
+              AI Virtual Assistant
             </motion.div>
+
+            <div className="mb-6">
+              <h1 className="text-6xl md:text-8xl font-bold text-white">
+                <WordReveal text="AI Virtual Assistant for Title Companies" delay={0.3} />
+              </h1>
+            </div>
+
+            <div className="mb-8">
+              <h2 className="text-2xl md:text-4xl font-medium text-white">
+                Never miss a call again with 24/7 AI assistance.
+              </h2>
+            </div>
+
+            <motion.p
+              className="text-xl text-white/80 mb-12 max-w-4xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              Our title company virtual assistant handles calls 24/7, schedules closings, and manages customer inquiries with AI-powered intelligence.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+          >
+            <PrimaryButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
+              Schedule Demo
+              <ArrowRight className="w-5 h-5" />
+            </PrimaryButton>
+            <OutlineButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
+              <Calendar className="w-5 h-5" />
+              Learn More
+            </OutlineButton>
           </motion.div>
         </div>
       </section>
@@ -134,16 +150,16 @@ const VirtualAssistant = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 text-sm font-medium text-[#0080FF] uppercase tracking-[0.15em] mb-4 font-['Urbanist'] bg-gradient-to-r from-[#0080FF]/[0.08] to-[#4F1AD6]/[0.08] border border-[#0080FF]/20 rounded-full backdrop-blur-sm">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 text-sm font-medium text-[#0080FF] uppercase tracking-[0.15em] mb-4 bg-gradient-to-r from-[#0080FF]/[0.08] to-[#4F1AD6]/[0.08] border border-[#0080FF]/20 rounded-full backdrop-blur-sm">
               <span className="w-2 h-2 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6]" />
               Features
             </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Why Title Companies Choose Our Virtual Assistant
               </span>
             </h2>
-            <p className="text-xl text-white/60 max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white/60 max-w-3xl mx-auto">
               Our AI virtual assistant is specifically designed for title companies,
               integrating seamlessly with your existing workflow and software.
             </p>
@@ -163,10 +179,10 @@ const VirtualAssistant = () => {
                     <div className="w-14 h-14 rounded-2xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-6 group-hover:bg-[#0080FF]/20 transition-colors duration-300">
                       <feature.icon className="w-7 h-7 text-[#0080FF]" />
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-3 font-['Urbanist']">
+                    <h3 className="text-xl font-bold text-white mb-3">
                       {feature.title}
                     </h3>
-                    <p className="text-white/60 leading-relaxed font-['Urbanist']">
+                    <p className="text-white/60 leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
@@ -188,16 +204,16 @@ const VirtualAssistant = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 text-sm font-medium text-[#0080FF] uppercase tracking-[0.15em] mb-4 font-['Urbanist'] bg-gradient-to-r from-[#0080FF]/[0.08] to-[#4F1AD6]/[0.08] border border-[#0080FF]/20 rounded-full backdrop-blur-sm">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 text-sm font-medium text-[#0080FF] uppercase tracking-[0.15em] mb-4 bg-gradient-to-r from-[#0080FF]/[0.08] to-[#4F1AD6]/[0.08] border border-[#0080FF]/20 rounded-full backdrop-blur-sm">
               <span className="w-2 h-2 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6]" />
               Integrations
             </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Seamless Integration with Your Title Software
               </span>
             </h2>
-            <p className="text-xl text-white/60 max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white/60 max-w-3xl mx-auto">
               Our virtual assistant integrates with ResWare, RamQuest, and all major
               title company software for a unified workflow experience.
             </p>
@@ -215,8 +231,8 @@ const VirtualAssistant = () => {
                 <div className="w-12 h-12 rounded-xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-5 group-hover:bg-[#0080FF]/20 transition-colors duration-300">
                   <item.icon className="w-6 h-6 text-[#0080FF]" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3 font-['Urbanist']">{item.title}</h3>
-                <p className="text-white/60 leading-relaxed font-['Urbanist']">{item.description}</p>
+                <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                <p className="text-white/60 leading-relaxed">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -244,14 +260,14 @@ const VirtualAssistant = () => {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 font-['Urbanist'] leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
               <span className="text-white">Ready for Your Own</span>
               <br />
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 AI Virtual Assistant?
               </span>
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-white/60 mb-14 max-w-2xl mx-auto font-['Urbanist'] leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-white/60 mb-14 max-w-2xl mx-auto leading-relaxed">
               See how Title Voice can handle your calls 24/7, schedule closings, and keep your clients informed — all on autopilot.
             </p>
 

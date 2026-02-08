@@ -1,197 +1,347 @@
-
-import React, { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { Play, Pause } from 'lucide-react'
-import { motion } from 'framer-motion'
 
 // Global reference to track currently playing audio
 let currentlyPlayingAudio = null
 
-const AudioPlayer = ({
-    src,
-    title = "Voice Demo",
-    initialDuration = "0:00"
-}) => {
-    const [isPlaying, setIsPlaying] = useState(false)
-    const [currentTime, setCurrentTime] = useState(0)
-    const [duration, setDuration] = useState(0)
-    const audioRef = useRef(null)
-    const progressBarRef = useRef(null)
+const BAR_COUNT = 120
 
-    const formatTime = (time) => {
-        if (!time) return "0:00"
-        const minutes = Math.floor(time / 60)
-        const seconds = Math.floor(time % 60)
-        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
-    }
+const AudioPlayer = ({ src, title }) => {
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [waveformData, setWaveformData] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-    const togglePlay = async () => {
-        if (audioRef.current) {
-            if (isPlaying) {
-                audioRef.current.pause()
-            } else {
-                // Pause any other currently playing audio
-                if (currentlyPlayingAudio && currentlyPlayingAudio !== audioRef.current) {
-                    currentlyPlayingAudio.pause()
-                }
-                currentlyPlayingAudio = audioRef.current
-                await audioRef.current.play()
-            }
-            setIsPlaying(!isPlaying)
+  const audioRef = useRef(null)
+  const canvasRef = useRef(null)
+  const containerRef = useRef(null)
+  const animationFrameRef = useRef(null)
+  const isDraggingRef = useRef(false)
+
+  const formatTime = (time) => {
+    if (!time || isNaN(time)) return '0:00'
+    const minutes = Math.floor(time / 60)
+    const seconds = Math.floor(time % 60)
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+  }
+
+  // Extract static waveform shape from audio file
+  const extractWaveformData = useCallback(async (audioSrc) => {
+    try {
+      setIsLoading(true)
+
+      // Fetch with error handling
+      const response = await fetch(audioSrc)
+      if (!response.ok) {
+        throw new Error(`Failed to fetch audio: ${response.status}`)
+      }
+      const arrayBuffer = await response.arrayBuffer()
+
+      // Create offline context for decoding only
+      const AudioCtx = window.AudioContext || window.webkitAudioContext
+      const offlineCtx = new AudioCtx()
+
+      let audioBuffer
+      try {
+        audioBuffer = await offlineCtx.decodeAudioData(arrayBuffer)
+      } catch (decodeError) {
+        console.error('Decode error:', decodeError)
+        throw decodeError
+      }
+
+      const rawData = audioBuffer.getChannelData(0)
+      const totalSamples = rawData.length
+      const samplesPerBar = Math.floor(totalSamples / BAR_COUNT)
+
+      const bars = []
+      for (let i = 0; i < BAR_COUNT; i++) {
+        let sum = 0
+        const start = i * samplesPerBar
+        const end = Math.min(start + samplesPerBar, totalSamples)
+        for (let j = start; j < end; j++) {
+          sum += Math.abs(rawData[j])
         }
+        bars.push(sum / (end - start))
+      }
+
+      // Normalize to 0-1
+      const maxAmplitude = Math.max(...bars)
+      const normalized = bars.map(val =>
+        maxAmplitude > 0 ? val / maxAmplitude : 0
+      )
+
+      setWaveformData(normalized)
+
+      // Close the offline context
+      if (offlineCtx.state !== 'closed') {
+        await offlineCtx.close()
+      }
+    } catch (err) {
+      console.error(`Failed to extract waveform from ${audioSrc}:`, err)
+      // Fallback waveform
+      const fallback = Array.from({ length: BAR_COUNT }, (_, i) =>
+        0.15 + Math.abs(Math.sin(i * 0.2)) * 0.5 + Math.random() * 0.2
+      )
+      setWaveformData(fallback)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  // Draw the waveform on canvas
+  const drawWaveform = useCallback((overrideTime) => {
+    const canvas = canvasRef.current
+    const container = containerRef.current
+    if (!canvas || !container || !waveformData) return
+
+    const ctx = canvas.getContext('2d')
+    const dpr = window.devicePixelRatio || 1
+
+    const cssWidth = container.clientWidth
+    const cssHeight = container.clientHeight
+
+    canvas.width = cssWidth * dpr
+    canvas.height = cssHeight * dpr
+    canvas.style.width = `${cssWidth}px`
+    canvas.style.height = `${cssHeight}px`
+    ctx.scale(dpr, dpr)
+
+    ctx.clearRect(0, 0, cssWidth, cssHeight)
+
+    const totalBarWidth = cssWidth / BAR_COUNT
+    const barWidth = Math.max(2, totalBarWidth * 0.55)
+    const gap = totalBarWidth - barWidth
+    const centerY = cssHeight / 2
+    const maxBarHeight = (cssHeight / 2) - 4
+
+    const time = overrideTime !== undefined ? overrideTime : currentTime
+    const progress = duration > 0 ? time / duration : 0
+    const progressX = progress * cssWidth
+
+    for (let i = 0; i < BAR_COUNT; i++) {
+      const amplitude = waveformData[i]
+      const barHeight = Math.max(2, amplitude * maxBarHeight)
+      const x = i * totalBarWidth + (gap / 2)
+      const barMidX = x + barWidth / 2
+
+      // Played = blue, unplayed = dim white
+      ctx.fillStyle = barMidX <= progressX
+        ? '#0080FF'
+        : 'rgba(255, 255, 255, 0.2)'
+
+      // Bar up from center
+      ctx.beginPath()
+      ctx.roundRect(x, centerY - barHeight, barWidth, barHeight, 1.5)
+      ctx.fill()
+
+      // Mirror bar down from center
+      ctx.beginPath()
+      ctx.roundRect(x, centerY + 1, barWidth, barHeight, 1.5)
+      ctx.fill()
     }
 
-    const handleTimeUpdate = () => {
-        if (audioRef.current) {
-            setCurrentTime(audioRef.current.currentTime)
-        }
+    // Subtle center line
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.06)'
+    ctx.fillRect(0, centerY - 0.5, cssWidth, 1)
+  }, [waveformData, currentTime, duration])
+
+  // Render loop for smooth playhead
+  const startRenderLoop = useCallback(() => {
+    const render = () => {
+      if (audioRef.current) {
+        const time = audioRef.current.currentTime
+        setCurrentTime(time)
+        drawWaveform(time)
+      }
+      animationFrameRef.current = requestAnimationFrame(render)
+    }
+    render()
+  }, [drawWaveform])
+
+  const stopRenderLoop = useCallback(() => {
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current)
+      animationFrameRef.current = null
+    }
+  }, [])
+
+  // Play/pause toggle
+  const togglePlay = async () => {
+    if (!audioRef.current) return
+
+    if (isPlaying) {
+      audioRef.current.pause()
+    } else {
+      if (currentlyPlayingAudio && currentlyPlayingAudio !== audioRef.current) {
+        currentlyPlayingAudio.pause()
+      }
+      currentlyPlayingAudio = audioRef.current
+      await audioRef.current.play()
+    }
+  }
+
+  // Seek helpers
+  const getSeekFraction = (e) => {
+    const canvas = canvasRef.current
+    if (!canvas) return 0
+    const rect = canvas.getBoundingClientRect()
+    const x = (e.clientX || e.touches?.[0]?.clientX || 0) - rect.left
+    return Math.max(0, Math.min(1, x / rect.width))
+  }
+
+  const seekTo = (fraction) => {
+    if (!audioRef.current || !duration) return
+    audioRef.current.currentTime = fraction * duration
+    setCurrentTime(fraction * duration)
+    drawWaveform(fraction * duration)
+  }
+
+  const handlePointerDown = (e) => {
+    isDraggingRef.current = true
+    seekTo(getSeekFraction(e))
+    canvasRef.current?.setPointerCapture(e.pointerId)
+  }
+
+  const handlePointerMove = (e) => {
+    if (!isDraggingRef.current) return
+    seekTo(getSeekFraction(e))
+  }
+
+  const handlePointerUp = () => {
+    isDraggingRef.current = false
+  }
+
+  // Extract waveform on mount
+  useEffect(() => {
+    if (src) extractWaveformData(src)
+  }, [src, extractWaveformData])
+
+  // Audio event listeners
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    const onPlay = () => {
+      setIsPlaying(true)
+      startRenderLoop()
     }
 
-    const handleLoadedMetadata = () => {
-        if (audioRef.current) {
-            setDuration(audioRef.current.duration)
-        }
+    const onPause = () => {
+      setIsPlaying(false)
+      stopRenderLoop()
+      drawWaveform()
     }
 
-    const handleEnded = () => {
-        setIsPlaying(false)
-        setCurrentTime(0)
-        if (audioRef.current) {
-            audioRef.current.currentTime = 0
-            if (currentlyPlayingAudio === audioRef.current) {
-                currentlyPlayingAudio = null
-            }
-        }
+    const onLoadedMetadata = () => {
+      setDuration(audio.duration || 0)
     }
 
-    const handlePause = () => {
-        setIsPlaying(false)
+    const onEnded = () => {
+      setIsPlaying(false)
+      setCurrentTime(0)
+      stopRenderLoop()
+      audio.currentTime = 0
+      drawWaveform(0)
     }
 
-    const handleProgressClick = (e) => {
-        if (!audioRef.current || !progressBarRef.current) return
-        const rect = progressBarRef.current.getBoundingClientRect()
-        const x = e.clientX - rect.left
-        const percentage = Math.max(0, Math.min(1, x / rect.width))
-        audioRef.current.currentTime = percentage * (duration || 0)
-        setCurrentTime(audioRef.current.currentTime)
+    audio.addEventListener('play', onPlay)
+    audio.addEventListener('pause', onPause)
+    audio.addEventListener('loadedmetadata', onLoadedMetadata)
+    audio.addEventListener('ended', onEnded)
+
+    return () => {
+      audio.removeEventListener('play', onPlay)
+      audio.removeEventListener('pause', onPause)
+      audio.removeEventListener('loadedmetadata', onLoadedMetadata)
+      audio.removeEventListener('ended', onEnded)
     }
+  }, [startRenderLoop, stopRenderLoop, drawWaveform])
 
-    // Listen for external pause events
-    useEffect(() => {
-        const audio = audioRef.current
-        if (audio) {
-            audio.addEventListener('pause', handlePause)
-            return () => {
-                audio.removeEventListener('pause', handlePause)
-            }
-        }
-    }, [])
+  // Redraw on data load
+  useEffect(() => {
+    drawWaveform()
+  }, [drawWaveform])
 
-    const progress = duration ? (currentTime / duration) * 100 : 0
+  // Resize handler
+  useEffect(() => {
+    const handleResize = () => drawWaveform()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [drawWaveform])
 
-    return (
-        <div className="w-full max-w-3xl bg-black/40 backdrop-blur-md border border-white/[0.08] rounded-xl px-5 py-2.5 relative overflow-hidden shadow-2xl shadow-blue-500/10 hover:border-white/[0.12] transition-all duration-300 group">
-            {/* Glossy glass effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] via-transparent to-transparent pointer-events-none rounded-xl" />
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => stopRenderLoop()
+  }, [stopRenderLoop])
 
-            {/* Subtle glow on hover */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/[0.02] to-purple-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-xl blur-xl" />
+  return (
+    <div className="group relative">
+      <audio ref={audioRef} src={src} preload="metadata" crossOrigin="anonymous" />
 
-            <audio
-                ref={audioRef}
-                src={src}
-                onTimeUpdate={handleTimeUpdate}
-                onLoadedMetadata={handleLoadedMetadata}
-                onEnded={handleEnded}
-                className="hidden"
-            />
+      {/* Minimal card */}
+      <div className="relative flex items-center gap-3 px-4 py-3
+                    bg-white/[0.04] border border-white/[0.08] rounded-xl
+                    transition-colors duration-300 hover:bg-white/[0.06]">
 
-            {/* Header: Title + Duration */}
-            <div className="flex items-center justify-between mb-2 relative z-10">
-                <span className="text-white/90 text-[13px] font-medium font-['Urbanist'] tracking-wide">
-                    {title}
-                </span>
-                <span className="text-white/40 font-mono text-[11px]">
-                    {formatTime(duration || 0)}
-                </span>
-            </div>
+        {/* Play/Pause */}
+        <button
+          onClick={togglePlay}
+          disabled={isLoading}
+          className="w-10 h-10 rounded-full flex items-center justify-center
+                   bg-[#0080FF] hover:bg-[#0073e6] active:scale-95
+                   transition-all duration-200 flex-shrink-0
+                   disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          {isPlaying ? (
+            <Pause className="w-4 h-4 fill-white text-white" />
+          ) : (
+            <Play className="w-4 h-4 fill-white text-white ml-0.5" />
+          )}
+        </button>
 
-            {/* Controls & Waveform */}
-            <div className="flex items-center gap-3 relative z-10">
-                {/* Play/Pause Button */}
-                <motion.button
-                    onClick={togglePlay}
-                    className="relative w-9 h-9 flex-shrink-0 rounded-full bg-gradient-to-br from-[#0088ff] to-[#0066cc] flex items-center justify-center text-white hover:from-[#0099ff] hover:to-[#0077dd] transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50"
-                    whileHover={{ scale: 1.08 }}
-                    whileTap={{ scale: 0.92 }}
-                >
-                    {/* Inner glossy highlight */}
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/30 via-white/10 to-transparent" />
-
-                    {/* Subtle outer ring */}
-                    <div className="absolute inset-0 rounded-full ring-1 ring-white/20" />
-
-                    {isPlaying ? (
-                        <Pause className="w-3.5 h-3.5 fill-white relative z-10" />
-                    ) : (
-                        <Play className="w-3.5 h-3.5 fill-white ml-0.5 relative z-10" />
-                    )}
-                </motion.button>
-
-                {/* Static Waveform Visualization */}
-                <div className="flex-1 relative h-6 cursor-pointer" onClick={handleProgressClick} ref={progressBarRef}>
-                    {/* Dashed waveform lines */}
-                    <svg className="w-full h-full" viewBox="0 0 800 40" preserveAspectRatio="none">
-                        <defs>
-                            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stopColor="#0080FF" stopOpacity={progress > 0 ? "0.9" : "0.15"} />
-                                <stop offset={`${progress}%`} stopColor="#0080FF" stopOpacity="0.9" />
-                                <stop offset={`${progress}%`} stopColor="rgba(255,255,255,0.15)" stopOpacity="0.15" />
-                                <stop offset="100%" stopColor="rgba(255,255,255,0.15)" stopOpacity="0.15" />
-                            </linearGradient>
-                        </defs>
-
-                        {/* Generate waveform pattern */}
-                        {Array.from({ length: 120 }).map((_, i) => {
-                            const x = (i / 120) * 800
-                            // Create varied heights for visual interest
-                            const baseHeight = 15 + Math.sin(i * 0.3) * 5 + Math.cos(i * 0.7) * 3
-                            const height = Math.abs(baseHeight)
-                            const y = 20 - height / 2
-
-                            return (
-                                <rect
-                                    key={i}
-                                    x={x}
-                                    y={y}
-                                    width="3"
-                                    height={height}
-                                    fill="url(#waveGradient)"
-                                    rx="1"
-                                />
-                            )
-                        })}
-                    </svg>
-                </div>
-            </div>
-
-            {/* Progress Bar */}
-            <div className="mt-2 relative h-[3px] bg-white/[0.08] rounded-full overflow-hidden cursor-pointer"
-                onClick={handleProgressClick}
-            >
+        {/* Canvas Waveform */}
+        <div ref={containerRef} className="flex-1 h-12 relative cursor-pointer">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-full gap-[3px]">
+              {Array.from({ length: 30 }).map((_, i) => (
                 <div
-                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#0080FF] via-[#0090ff] to-[#00a0ff] rounded-full transition-[width] duration-100"
-                    style={{
-                        width: `${progress}%`,
-                        boxShadow: '0 0 8px rgba(0, 128, 255, 0.6), 0 0 16px rgba(0, 128, 255, 0.3)'
-                    }}
-                >
-                    {/* Glossy top highlight on progress bar */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-transparent rounded-full" />
-                </div>
+                  key={i}
+                  className="w-[3px] bg-white/10 rounded-full animate-pulse"
+                  style={{
+                    height: `${6 + Math.abs(Math.sin(i * 0.4)) * 24}px`,
+                    animationDelay: `${i * 0.05}s`
+                  }}
+                />
+              ))}
             </div>
+          ) : (
+            <canvas
+              ref={canvasRef}
+              className="w-full h-full touch-none"
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+            />
+          )}
         </div>
-    )
+
+        {/* Time */}
+        <div className="text-[11px] font-mono text-white/50 tabular-nums flex-shrink-0 min-w-[65px] text-right">
+          <span className="text-white/70">{formatTime(currentTime)}</span>
+          <span className="text-white/30"> / </span>
+          <span>{formatTime(duration)}</span>
+        </div>
+      </div>
+
+      {/* Title caption */}
+      {title && (
+        <p className="text-white/40 text-[11px] mt-1.5 ml-1 tracking-wide font-medium">
+          {title}
+        </p>
+      )}
+    </div>
+  )
 }
 
 export default AudioPlayer

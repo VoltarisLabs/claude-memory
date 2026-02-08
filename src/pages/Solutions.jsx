@@ -35,6 +35,7 @@ import AnimatedCounter from '../components/AnimatedCounter'
 import { WordReveal } from '../components/TextAnimations'
 import { PrimaryButton, OutlineButton } from '../components/Buttons'
 import EnhancedCTA from '../components/EnhancedCTA'
+import SEO from '../components/SEO'
 
 const Solutions = () => {
   const [activeDeepDive, setActiveDeepDive] = useState(0)
@@ -103,6 +104,11 @@ const Solutions = () => {
 
   return (
     <div className="min-h-screen bg-black text-white relative">
+      <SEO
+        title="Solutions"
+        description="AI voice receptionist solutions for title companies. Automate call handling, deal updates, scheduling, and customer support."
+        canonical="/solutions"
+      />
       {/* Background Canvas Layers */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <Sparkles particleColor="#38bdf8" particleDensity={60} speed={0.3} />
@@ -110,10 +116,10 @@ const Solutions = () => {
       <VoiceWaves />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 py-20">
+      <section className="relative min-h-screen px-4 pt-32 pb-20">
         {/* Spheremotion Background */}
         <div className="absolute inset-0">
-          <img src="/spheremotion.gif" alt="" className="w-full h-full object-cover opacity-60" />
+          <img src="/spheremotion.gif" alt="Animated sphere motion background" className="w-full h-full object-cover opacity-60" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -133,35 +139,27 @@ const Solutions = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 mb-8"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#0080FF]/20 border border-[#0080FF]/40 backdrop-blur-md shadow-lg shadow-[#0080FF]/20 mb-8 hover:bg-[#0080FF]/25 hover:border-[#0080FF]/50 transition-all duration-300"
             >
               <SparklesIcon className="w-4 h-4 text-[#0080FF]" />
-              <span className="text-sm text-[#0080FF] font-medium font-['Urbanist']">AI-Powered Solutions</span>
+              <span className="text-sm text-[#0080FF] font-semibold">AI-Powered Solutions</span>
             </motion.div>
 
             <div className="mb-6">
               <WordReveal
                 text="AI Solutions for Title Companies"
-                className="text-6xl md:text-8xl font-bold text-white font-['Urbanist']"
+                className="text-6xl md:text-8xl font-bold text-white"
                 trigger="mount"
               />
             </div>
             <div className="mb-8">
-              <h2 className="text-2xl md:text-4xl font-medium text-white font-['Urbanist']">
+              <h1 className="text-2xl md:text-4xl font-medium text-white">
                 Transform your title operations with intelligent automation.
-              </h2>
+              </h1>
             </div>
 
-            {/* Animated gradient divider */}
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 1, delay: 0.8 }}
-              className="w-24 h-0.5 mx-auto mb-8 bg-gradient-to-r from-[#0080FF] to-[#4F1AD6]"
-            />
-
             <motion.p
-              className="text-xl text-white mb-12 max-w-4xl mx-auto font-['Urbanist']"
+              className="text-xl text-white mb-12 max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -210,10 +208,10 @@ const Solutions = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
-                  <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent font-['Urbanist']">
+                  <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                     {stat.value}
                   </div>
-                  <div className="text-white/60 text-sm mt-1 font-['Urbanist']">{stat.label}</div>
+                  <div className="text-white/60 text-sm mt-1">{stat.label}</div>
                 </motion.div>
               ))}
             </div>
@@ -232,12 +230,12 @@ const Solutions = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Our Solutions
               </span>
             </h2>
-            <p className="text-xl text-white max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white max-w-3xl mx-auto">
               Comprehensive AI solutions designed specifically for title companies
             </p>
           </motion.div>
@@ -265,8 +263,8 @@ const Solutions = () => {
                       <solution.icon className="w-8 h-8 text-[#0080FF]" />
                     </div>
 
-                    <h3 className="relative z-10 text-2xl font-bold text-white mb-4 font-['Urbanist']">{solution.title}</h3>
-                    <p className="relative z-10 text-white/70 mb-6 leading-relaxed font-['Urbanist']">{solution.description}</p>
+                    <h3 className="relative z-10 text-2xl font-bold text-white mb-4">{solution.title}</h3>
+                    <p className="relative z-10 text-white/70 mb-6 leading-relaxed">{solution.description}</p>
 
                     <div className="relative z-10 space-y-3 mt-auto">
                       {solution.features.map((feature, idx) => (
@@ -274,7 +272,7 @@ const Solutions = () => {
                           <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
                             <Check className="w-3 h-3 text-[#0080FF]" />
                           </div>
-                          <span className="text-white/80 text-sm font-['Urbanist']">{feature}</span>
+                          <span className="text-white/80 text-sm">{feature}</span>
                         </div>
                       ))}
                     </div>
@@ -308,14 +306,14 @@ const Solutions = () => {
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 mb-6"
             >
               <Target className="w-4 h-4 text-[#0080FF]" />
-              <span className="text-sm text-[#0080FF] font-medium font-['Urbanist']">Solution Explorer</span>
+              <span className="text-sm text-[#0080FF] font-medium">Solution Explorer</span>
             </motion.div>
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Deep Dive
               </span>
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white/80 max-w-3xl mx-auto">
               Explore each solution in detail
             </p>
           </motion.div>
@@ -327,7 +325,7 @@ const Solutions = () => {
                 <div key={gIdx}>
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#0080FF]" />
-                    <h4 className="text-xs uppercase tracking-widest text-[#0080FF] font-semibold font-['Urbanist']">{group.group}</h4>
+                    <h4 className="text-xs uppercase tracking-widest text-[#0080FF] font-semibold">{group.group}</h4>
                     <div className="flex-1 h-px bg-gradient-to-r from-[#0080FF]/20 to-transparent" />
                   </div>
                   <div className="space-y-2">
@@ -339,7 +337,7 @@ const Solutions = () => {
                         <motion.button
                           key={iIdx}
                           onClick={() => setActiveDeepDive(globalIdx)}
-                          className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-300 text-left font-['Urbanist'] relative overflow-hidden ${
+                          className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-300 text-left relative overflow-hidden ${
                             isActive
                               ? 'bg-gradient-to-r from-[#0080FF]/15 to-[#4F1AD6]/10 border border-[#0080FF]/30 text-white shadow-[0_0_20px_rgba(0,128,255,0.1)]'
                               : 'bg-white/[0.03] border border-white/[0.06] text-white/50 hover:text-white hover:bg-white/[0.06] hover:border-white/10'
@@ -360,7 +358,7 @@ const Solutions = () => {
                               ? 'bg-[#0080FF]/20 border border-[#0080FF]/30'
                               : 'bg-white/[0.06] border border-white/[0.06]'
                           }`}>
-                            <Icon className={`w-4 h-4 transition-colors duration-300 ${isActive ? 'text-[#0080FF]' : 'text-white/40'}`} />
+                            <Icon className={`w-4 h-4 transition-colors duration-300 ${isActive ? 'text-[#0080FF]' : 'text-white/50'}`} />
                           </div>
                           <div className="flex-1">
                             <span className="font-medium text-[15px]">{item.title}</span>
@@ -368,7 +366,7 @@ const Solutions = () => {
                               <motion.p
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
-                                className="text-xs text-white/40 mt-0.5 line-clamp-1"
+                                className="text-xs text-white/50 mt-0.5 line-clamp-1"
                               >
                                 {item.description.split('.')[0]}
                               </motion.p>
@@ -427,11 +425,11 @@ const Solutions = () => {
                             />
                           </div>
                           <div>
-                            <h3 className="text-2xl font-bold text-white font-['Urbanist'] mb-1">{currentDeepDive.title}</h3>
+                            <h3 className="text-2xl font-bold text-white mb-1">{currentDeepDive.title}</h3>
                             {/* Status pill */}
                             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/15">
                               <div className="w-1.5 h-1.5 rounded-full bg-[#00CC88] animate-pulse" />
-                              <span className="text-[11px] text-white/50 font-['Urbanist'] font-medium uppercase tracking-wider">Active</span>
+                              <span className="text-[11px] text-white/50 font-medium uppercase tracking-wider">Active</span>
                             </div>
                           </div>
                         </div>
@@ -439,7 +437,7 @@ const Solutions = () => {
 
                       {/* Description */}
                       <div className="px-8 pb-6">
-                        <p className="text-white/60 leading-relaxed font-['Urbanist']">{currentDeepDive.description}</p>
+                        <p className="text-white/60 leading-relaxed">{currentDeepDive.description}</p>
                       </div>
 
                       {/* Capabilities grid */}
@@ -457,7 +455,7 @@ const Solutions = () => {
                                 <div className="w-6 h-6 rounded-md bg-[#0080FF]/15 border border-[#0080FF]/20 flex items-center justify-center shrink-0 group-hover/cap:bg-[#0080FF]/25 group-hover/cap:border-[#0080FF]/35 transition-all duration-300">
                                   <Check className="w-3 h-3 text-[#0080FF]" />
                                 </div>
-                                <span className="text-white/70 text-sm font-['Urbanist'] group-hover/cap:text-white/90 transition-colors duration-300">{cap}</span>
+                                <span className="text-white/70 text-sm group-hover/cap:text-white/90 transition-colors duration-300">{cap}</span>
                               </div>
                             </motion.div>
                           ))}
@@ -470,15 +468,15 @@ const Solutions = () => {
                           <div className="flex items-center gap-4">
                             <div className="flex items-center gap-1.5">
                               <div className="w-2 h-2 rounded-full bg-[#0080FF]" />
-                              <span className="text-xs text-white/40 font-['Urbanist']">AI-Powered</span>
+                              <span className="text-xs text-white/50">AI-Powered</span>
                             </div>
                             <div className="flex items-center gap-1.5">
                               <div className="w-2 h-2 rounded-full bg-[#4F1AD6]" />
-                              <span className="text-xs text-white/40 font-['Urbanist']">Real-time</span>
+                              <span className="text-xs text-white/50">Real-time</span>
                             </div>
                             <div className="flex items-center gap-1.5">
                               <div className="w-2 h-2 rounded-full bg-[#00CC88]" />
-                              <span className="text-xs text-white/40 font-['Urbanist']">Enterprise Ready</span>
+                              <span className="text-xs text-white/50">Enterprise Ready</span>
                             </div>
                           </div>
                         </div>
@@ -503,12 +501,12 @@ const Solutions = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Proven Results
               </span>
             </h2>
-            <p className="text-xl text-white max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white max-w-3xl mx-auto">
               See the measurable impact Title Voice has on title company operations
             </p>
           </motion.div>
@@ -528,11 +526,11 @@ const Solutions = () => {
                   <div className="w-12 h-12 rounded-xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mx-auto mb-4">
                     <Icon className="w-6 h-6 text-[#0080FF]" />
                   </div>
-                  <div className="text-5xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent mb-4 font-['Urbanist']">
+                  <div className="text-5xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent mb-4">
                     <AnimatedCounter value={benefit.value} suffix={benefit.suffix} />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2 font-['Urbanist']">{benefit.title}</h3>
-                  <p className="text-white/70 font-['Urbanist']">{benefit.description}</p>
+                  <h3 className="text-xl font-bold text-white mb-2">{benefit.title}</h3>
+                  <p className="text-white/70">{benefit.description}</p>
                 </motion.div>
               )
             })}

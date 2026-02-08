@@ -84,7 +84,7 @@ const EnhancedCTA = ({
           {/* Content */}
           <div className="relative z-10">
             <motion.h2
-              className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 font-['Urbanist']"
+              className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
@@ -111,7 +111,7 @@ const EnhancedCTA = ({
             </motion.h2>
 
             <motion.p
-              className="text-xl md:text-2xl text-white/70 mb-12 max-w-3xl mx-auto font-['Urbanist'] leading-relaxed"
+              className="text-xl md:text-2xl text-white/70 mb-12 max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}

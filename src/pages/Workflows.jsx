@@ -30,7 +30,8 @@ import {
   ArrowUp,
   RotateCcw,
   Send,
-  UserCheck
+  UserCheck,
+  Workflow
 } from 'lucide-react'
 import { WordReveal } from '../components/TextAnimations'
 import Sparkles from '../components/Sparkles'
@@ -39,6 +40,7 @@ import GlowCard from '../components/GlowCard'
 import BorderBeam from '../components/BorderBeam'
 import { PrimaryButton, OutlineButton } from '../components/Buttons'
 import EnhancedCTA from '../components/EnhancedCTA'
+import SEO from '../components/SEO'
 
 const Workflows = () => {
   const [activeJourneyStep, setActiveJourneyStep] = useState(0)
@@ -192,6 +194,11 @@ const Workflows = () => {
 
   return (
     <div className="min-h-screen bg-black text-white relative">
+      <SEO
+        title="Workflows"
+        description="See how Title Voice automates title company workflows — from incoming calls to deal updates, scheduling, and warm transfers."
+        canonical="/workflows"
+      />
       {/* Background Canvas Layers */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <Sparkles particleColor="#38bdf8" particleDensity={60} speed={0.3} />
@@ -199,12 +206,12 @@ const Workflows = () => {
       <VoiceWaves />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 py-20">
+      <section className="relative min-h-screen px-4 pt-32 pb-20">
         {/* Spheremotion Background */}
         <div className="absolute inset-0">
           <img
             src="/spheremotion.gif"
-            alt=""
+            alt="Animated sphere motion background"
             className="w-full h-full object-cover opacity-60"
           />
         </div>
@@ -217,18 +224,29 @@ const Workflows = () => {
             transition={{ duration: 0.8 }}
             className="mb-8"
           >
+            {/* Pill Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#0080FF]/20 border border-[#0080FF]/40 backdrop-blur-md shadow-lg shadow-[#0080FF]/20 mb-8 hover:bg-[#0080FF]/25 hover:border-[#0080FF]/50 transition-all duration-300"
+            >
+              <Workflow className="w-4 h-4 text-[#0080FF]" />
+              <span className="text-sm text-[#0080FF] font-semibold">Intelligent Workflows</span>
+            </motion.div>
+
             <div className="mb-6">
-              <h1 className="text-6xl md:text-8xl font-bold text-white font-['Urbanist']">
+              <h1 className="text-6xl md:text-8xl font-bold text-white">
                 <WordReveal text="Intelligent Workflows for Title Companies" />
               </h1>
             </div>
             <div className="mb-8">
-              <h2 className="text-2xl md:text-4xl font-medium text-white font-['Urbanist']">
+              <h2 className="text-2xl md:text-4xl font-medium text-white">
                 Streamline operations with AI-powered automation.
               </h2>
             </div>
             <motion.p
-              className="text-xl text-white mb-12 max-w-4xl mx-auto font-['Urbanist']"
+              className="text-xl text-white mb-12 max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -279,10 +297,10 @@ const Workflows = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
-                  <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent font-['Urbanist']">
+                  <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                     {stat.value}
                   </div>
-                  <div className="text-white/60 text-sm mt-1 font-['Urbanist']">{stat.label}</div>
+                  <div className="text-white/60 text-sm mt-1">{stat.label}</div>
                 </motion.div>
               ))}
             </div>
@@ -312,14 +330,14 @@ const Workflows = () => {
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 mb-6"
             >
               <Zap className="w-4 h-4 text-[#0080FF]" />
-              <span className="text-sm text-[#0080FF] font-medium font-['Urbanist']">Step-by-Step</span>
+              <span className="text-sm text-[#0080FF] font-medium">Step-by-Step</span>
             </motion.div>
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 The Complete Journey
               </span>
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white/80 max-w-3xl mx-auto">
               Follow a call from start to finish — every step handled by Title Voice AI
             </p>
           </motion.div>
@@ -347,7 +365,7 @@ const Workflows = () => {
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.4, delay: index * 0.06 }}
-                    className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-300 text-left font-['Urbanist'] relative overflow-hidden ${
+                    className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-300 text-left relative overflow-hidden ${
                       isActive
                         ? 'bg-gradient-to-r from-[#0080FF]/15 to-[#4F1AD6]/10 border border-[#0080FF]/30 text-white shadow-[0_0_20px_rgba(0,128,255,0.1)]'
                         : 'bg-white/[0.03] border border-white/[0.06] text-white/50 hover:text-white hover:bg-white/[0.06] hover:border-white/10'
@@ -379,7 +397,7 @@ const Workflows = () => {
                         ? 'bg-[#0080FF]/20 border border-[#0080FF]/30'
                         : 'bg-white/[0.06] border border-white/[0.06]'
                     }`}>
-                      <Icon className={`w-4 h-4 transition-colors duration-300 ${isActive ? 'text-[#0080FF]' : 'text-white/40'}`} />
+                      <Icon className={`w-4 h-4 transition-colors duration-300 ${isActive ? 'text-[#0080FF]' : 'text-white/50'}`} />
                     </div>
 
                     <div className="flex-1 min-w-0">
@@ -388,7 +406,7 @@ const Workflows = () => {
                         <motion.p
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
-                          className="text-xs text-white/40 mt-0.5 line-clamp-1"
+                          className="text-xs text-white/50 mt-0.5 line-clamp-1"
                         >
                           {step.description.split('.')[0]}
                         </motion.p>
@@ -444,16 +462,16 @@ const Workflows = () => {
                             />
                           </div>
                           <div>
-                            <h3 className="text-2xl font-bold text-white font-['Urbanist'] mb-1">{productWorkflowSteps[activeJourneyStep].title}</h3>
+                            <h3 className="text-2xl font-bold text-white mb-1">{productWorkflowSteps[activeJourneyStep].title}</h3>
                             <div className="flex items-center gap-3">
                               {/* Step badge */}
-                              <span className="inline-flex items-center gap-1 text-xs font-bold text-[#0080FF] bg-[#0080FF]/10 px-2.5 py-0.5 rounded-full border border-[#0080FF]/20 font-['Urbanist']">
+                              <span className="inline-flex items-center gap-1 text-xs font-bold text-[#0080FF] bg-[#0080FF]/10 px-2.5 py-0.5 rounded-full border border-[#0080FF]/20">
                                 Step {productWorkflowSteps[activeJourneyStep].number}
                               </span>
                               {/* Status pill */}
                               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/15">
                                 <div className="w-1.5 h-1.5 rounded-full bg-[#00CC88] animate-pulse" />
-                                <span className="text-[11px] text-white/50 font-['Urbanist'] font-medium uppercase tracking-wider">Active</span>
+                                <span className="text-[11px] text-white/50 font-medium uppercase tracking-wider">Active</span>
                               </div>
                             </div>
                           </div>
@@ -462,7 +480,7 @@ const Workflows = () => {
 
                       {/* Description */}
                       <div className="px-8 pb-6">
-                        <p className="text-white/60 leading-relaxed font-['Urbanist']">{productWorkflowSteps[activeJourneyStep].description}</p>
+                        <p className="text-white/60 leading-relaxed">{productWorkflowSteps[activeJourneyStep].description}</p>
                       </div>
 
                       {/* Capabilities grid */}
@@ -480,7 +498,7 @@ const Workflows = () => {
                                 <div className="w-6 h-6 rounded-md bg-[#0080FF]/15 border border-[#0080FF]/20 flex items-center justify-center shrink-0 group-hover/cap:bg-[#0080FF]/25 group-hover/cap:border-[#0080FF]/35 transition-all duration-300">
                                   <Check className="w-3 h-3 text-[#0080FF]" />
                                 </div>
-                                <span className="text-white/70 text-sm font-['Urbanist'] group-hover/cap:text-white/90 transition-colors duration-300">{detail}</span>
+                                <span className="text-white/70 text-sm group-hover/cap:text-white/90 transition-colors duration-300">{detail}</span>
                               </div>
                             </motion.div>
                           ))}
@@ -493,15 +511,15 @@ const Workflows = () => {
                           <div className="flex items-center gap-4">
                             <div className="flex items-center gap-1.5">
                               <div className="w-2 h-2 rounded-full bg-[#0080FF]" />
-                              <span className="text-xs text-white/40 font-['Urbanist']">AI-Powered</span>
+                              <span className="text-xs text-white/50">AI-Powered</span>
                             </div>
                             <div className="flex items-center gap-1.5">
                               <div className="w-2 h-2 rounded-full bg-[#4F1AD6]" />
-                              <span className="text-xs text-white/40 font-['Urbanist']">Real-time</span>
+                              <span className="text-xs text-white/50">Real-time</span>
                             </div>
                             <div className="flex items-center gap-1.5">
                               <div className="w-2 h-2 rounded-full bg-[#00CC88]" />
-                              <span className="text-xs text-white/40 font-['Urbanist']">24/7</span>
+                              <span className="text-xs text-white/50">24/7</span>
                             </div>
                           </div>
                         </div>
@@ -526,12 +544,12 @@ const Workflows = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Workflow Types
               </span>
             </h2>
-            <p className="text-xl text-white max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white max-w-3xl mx-auto">
               Specialized workflows for every aspect of title operations
             </p>
           </motion.div>
@@ -548,48 +566,46 @@ const Workflows = () => {
                   type: "spring",
                   stiffness: 100
                 }}
-                className="p-8 rounded-2xl bg-[#080808] border border-white/10 hover:border-[#0080FF]/50 transition-all duration-300"
-                style={{
-                  boxSizing: 'border-box',
-                  width: '100%',
-                  flex: 1,
-                  height: 'min-content',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'flex-start',
-                  padding: '20px',
-                  backgroundColor: '#080808',
-                  overflow: 'hidden',
-                  alignContent: 'center',
-                  flexWrap: 'nowrap',
-                  gap: '0px',
-                  position: 'relative',
-                  borderRadius: '12px'
-                }}
-                whileHover={{
-                  scale: 1.02,
-                  y: -5,
-                  boxShadow: "0 20px 40px rgba(0, 128, 255, 0.1)"
-                }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5 }}
               >
-                <div className="w-16 h-16 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-6">
-                  <type.icon className="w-8 h-8 text-[#0080FF]" />
-                </div>
+                <GlowCard className="h-full rounded-2xl">
+                  <div className="group relative p-6 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/30 transition-all duration-500 h-full flex flex-col overflow-hidden">
 
-                <h3 className="text-xl font-bold text-white mb-4 font-['Urbanist']">{type.title}</h3>
-                <p className="text-white mb-6 leading-relaxed font-['Urbanist']">{type.description}</p>
+                    {/* BorderBeam animated border */}
+                    <BorderBeam
+                      size={120}
+                      duration={12}
+                      delay={index * 3}
+                      colorFrom="#0080FF"
+                      colorTo="#4F1AD6"
+                    />
 
-                <div className="space-y-3">
-                  {type.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-center gap-3">
-                      <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
-                        <Check className="w-3 h-3 text-[#0080FF]" />
-                      </div>
-                      <span className="text-white text-sm font-['Urbanist']">{feature}</span>
+                    {/* Subtle gradient overlay on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#0080FF]/[0.03] to-[#4F1AD6]/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" />
+
+                    {/* Icon with glow effect */}
+                    <div className="relative z-10 w-14 h-14 rounded-xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-5 group-hover:bg-[#0080FF]/15 group-hover:border-[#0080FF]/35 transition-all duration-300">
+                      <type.icon className="w-7 h-7 text-[#0080FF]" />
+                      {/* Icon glow backdrop */}
+                      <div className="absolute inset-0 bg-[#0080FF]/15 rounded-xl blur-lg -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
-                  ))}
-                </div>
+
+                    <h3 className="relative z-10 text-lg font-bold text-white mb-3">{type.title}</h3>
+                    <p className="relative z-10 text-white/70 text-sm mb-5 leading-relaxed">{type.description}</p>
+
+                    <div className="relative z-10 space-y-2.5 mt-auto">
+                      {type.features.map((feature, idx) => (
+                        <div key={idx} className="flex items-center gap-2.5">
+                          <div className="w-5 h-5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center flex-shrink-0">
+                            <Check className="w-3 h-3 text-[#0080FF]" />
+                          </div>
+                          <span className="text-white/60 text-sm">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </GlowCard>
               </motion.div>
             ))}
           </div>
@@ -620,15 +636,15 @@ const Workflows = () => {
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 mb-6"
             >
               <Database className="w-4 h-4 text-[#0080FF]" />
-              <span className="text-sm text-[#0080FF] font-medium font-['Urbanist']">Seamless Integrations</span>
+              <span className="text-sm text-[#0080FF] font-medium">Seamless Integrations</span>
             </motion.div>
 
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Integration Ecosystem
               </span>
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white/80 max-w-3xl mx-auto">
               Title Voice connects seamlessly with your existing tools and platforms
             </p>
           </motion.div>
@@ -649,31 +665,44 @@ const Workflows = () => {
                 whileHover={{ y: -5, scale: 1.02 }}
               >
                 <GlowCard className="h-full rounded-2xl">
-                  <div className="relative p-6 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/30 transition-all duration-300 h-full flex flex-col">
-                    {/* Icon with gradient background */}
-                    <div className="mb-4">
-                      <div className="w-16 h-16 rounded-xl bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center mb-3 relative group-hover:bg-[#0080FF]/20 transition-all duration-300">
-                        <integration.icon className="w-8 h-8 text-[#0080FF]" />
-                        {/* Glow effect */}
-                        <div className="absolute inset-0 bg-[#0080FF]/20 rounded-xl blur-md -z-10 group-hover:bg-[#0080FF]/30 transition-all duration-300" />
+                  <div className="group relative p-6 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/30 transition-all duration-300 h-full flex flex-col overflow-hidden">
+
+                    {/* BorderBeam animated border */}
+                    <BorderBeam
+                      size={120}
+                      duration={14}
+                      delay={index * 2}
+                      colorFrom="#0080FF"
+                      colorTo="#60a5fa"
+                    />
+
+                    {/* Subtle gradient overlay on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#0080FF]/[0.02] to-[#4F1AD6]/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" />
+
+                    {/* Enhanced icon container with animated glow */}
+                    <div className="mb-4 relative z-10">
+                      <div className="w-14 h-14 rounded-xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-3 group-hover:bg-[#0080FF]/15 group-hover:border-[#0080FF]/30 transition-all duration-300 relative">
+                        <integration.icon className="w-7 h-7 text-[#0080FF]" />
+                        {/* Enhanced glow behind icon */}
+                        <div className="absolute inset-0 bg-[#0080FF]/20 rounded-xl blur-xl -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       </div>
-                      <span className="inline-block text-xs font-semibold text-[#0080FF] bg-[#0080FF]/10 px-2.5 py-1 rounded-full border border-[#0080FF]/20 font-['Urbanist']">
+                      <span className="inline-block text-xs font-semibold text-[#0080FF] bg-[#0080FF]/10 px-2.5 py-1 rounded-full border border-[#0080FF]/20">
                         {integration.category}
                       </span>
                     </div>
 
                     {/* Title and description */}
-                    <h3 className="text-xl font-bold text-white mb-3 font-['Urbanist']">
+                    <h3 className="relative z-10 text-xl font-bold text-white mb-3">
                       {integration.title}
                     </h3>
-                    <p className="text-white/70 text-sm leading-relaxed font-['Urbanist'] flex-grow">
+                    <p className="relative z-10 text-white/70 text-sm leading-relaxed flex-grow">
                       {integration.description}
                     </p>
 
                     {/* Status indicator */}
-                    <div className="mt-4 pt-4 border-t border-white/10 flex items-center gap-2">
+                    <div className="relative z-10 mt-4 pt-4 border-t border-white/10 flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      <span className="text-xs text-white/50 font-['Urbanist'] font-medium">Available Now</span>
+                      <span className="text-xs text-white/50 font-medium">Available Now</span>
                     </div>
                   </div>
                 </GlowCard>

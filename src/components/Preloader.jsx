@@ -45,38 +45,140 @@ export function PreloaderProvider({ children, minDuration = 1500 }) {
         {isLoading && (
           <motion.div
             key="preloader"
-            className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden"
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
           >
-            <div className="text-center">
-              {/* Logo text */}
+            {/* Ambient glow orbs */}
+            <motion.div
+              className="absolute w-[400px] h-[400px] rounded-full pointer-events-none"
+              style={{
+                background: 'radial-gradient(circle, rgba(0,128,255,0.12) 0%, transparent 70%)',
+                filter: 'blur(60px)',
+              }}
+              animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute w-[300px] h-[300px] rounded-full pointer-events-none"
+              style={{
+                background: 'radial-gradient(circle, rgba(79,26,214,0.1) 0%, transparent 70%)',
+                filter: 'blur(50px)',
+                transform: 'translate(100px, -50px)',
+              }}
+              animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.5, 0.2] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            />
+
+            {/* Pulsing concentric rings */}
+            {[0, 1, 2].map((i) => (
+              <motion.div
+                key={`ring-${i}`}
+                className="absolute rounded-full border border-[#0080FF]/10"
+                style={{ width: 120 + i * 80, height: 120 + i * 80 }}
+                animate={{
+                  scale: [1, 1.15, 1],
+                  opacity: [0.15 - i * 0.03, 0.3 - i * 0.05, 0.15 - i * 0.03],
+                  rotate: [0, i % 2 === 0 ? 90 : -90],
+                }}
+                transition={{
+                  duration: 3 + i * 0.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.3,
+                }}
+              />
+            ))}
+
+            {/* Central content */}
+            <div className="text-center relative z-10">
+              {/* Logo mark - small animated sphere above text */}
+              <motion.div
+                className="w-10 h-10 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#0080FF] to-[#4F1AD6] relative"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
+              >
+                <motion.div
+                  className="absolute inset-0 rounded-full bg-gradient-to-br from-[#0080FF] to-[#4F1AD6]"
+                  animate={{ scale: [1, 1.4, 1], opacity: [0.5, 0, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/30 to-transparent" />
+              </motion.div>
+
+              {/* Brand text */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
                 className="mb-8"
               >
-                <span className="text-2xl font-bold font-['Urbanist'] bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                <span className="text-3xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                   Title Voice
                 </span>
+                <motion.p
+                  className="text-white/30 text-sm mt-2 tracking-wider"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  AI-Powered Voice Agent
+                </motion.p>
               </motion.div>
 
-              {/* Progress bar */}
+              {/* Enhanced progress bar */}
               <motion.div
-                className="w-48 h-[2px] bg-white/10 mx-auto overflow-hidden rounded-full"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
+                className="w-48 h-[2px] bg-white/[0.06] mx-auto overflow-hidden rounded-full relative"
+                initial={{ opacity: 0, scaleX: 0.5 }}
+                animate={{ opacity: 1, scaleX: 1 }}
+                transition={{ delay: 0.3, duration: 0.4 }}
               >
                 <motion.div
-                  className="h-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-full"
+                  className="h-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-full relative"
                   initial={{ width: '0%' }}
                   animate={{ width: `${progress}%` }}
                   transition={{ ease: 'linear' }}
-                />
+                >
+                  {/* Glowing tip */}
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#0080FF] shadow-[0_0_10px_rgba(0,128,255,0.8)]" />
+                </motion.div>
               </motion.div>
+
+              {/* Progress percentage */}
+              <motion.span
+                className="text-white/20 text-xs font-mono mt-3 block tabular-nums"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+              >
+                {Math.round(progress)}%
+              </motion.span>
             </div>
+
+            {/* Floating particles */}
+            {Array.from({ length: 6 }, (_, i) => (
+              <motion.div
+                key={`particle-${i}`}
+                className="absolute w-1 h-1 rounded-full bg-[#0080FF]/40"
+                style={{
+                  left: `${15 + i * 14}%`,
+                  top: `${20 + (i % 3) * 25}%`,
+                }}
+                animate={{
+                  y: [-20, 20, -20],
+                  x: [-10, 10, -10],
+                  opacity: [0.2, 0.6, 0.2],
+                  scale: [0.5, 1, 0.5],
+                }}
+                transition={{
+                  duration: 3 + i * 0.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.4,
+                }}
+              />
+            ))}
           </motion.div>
         )}
       </AnimatePresence>

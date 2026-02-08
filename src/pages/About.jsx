@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom'
 import SparklesBackground from '../components/Sparkles'
 import VoiceWaves from '../components/VoiceWaves'
 import { PrimaryButton, OutlineButton } from '../components/Buttons'
-import { ArrowRight, Calendar, Phone, PhoneOff, Bot, Plug, Shield, Target, TrendingUp, Headphones, Zap, CheckCircle2 } from 'lucide-react'
+import { ArrowRight, Calendar, Phone, PhoneOff, Bot, Plug, Shield, Target, TrendingUp, Headphones, Zap, CheckCircle2, Sparkles as SparklesIcon } from 'lucide-react'
 import SEO from '../components/SEO'
+import { WordReveal } from '../components/TextAnimations'
 
 // ─── Animated Counter ────────────────────────────────
 const AnimatedCounter = ({ value, suffix = '', prefix = '', duration = 2000 }) => {
@@ -91,11 +92,6 @@ const staggerItem = {
 }
 
 const About = () => {
-  const heroRef = useRef(null)
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
-  const heroOpacity = useTransform(scrollYProgress, [0, 1], [1, 0])
-  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.95])
-
   const problemStats = [
     { value: '78', prefix: '$', suffix: 'K', label: 'Lost Per Year', sublabel: 'to missed calls' },
     { value: '47', suffix: '+', label: 'Calls to Voicemail', sublabel: 'every single month' },
@@ -172,77 +168,53 @@ const About = () => {
       <VoiceWaves />
 
       {/* ═══════════════════ HERO ═══════════════════ */}
-      <section ref={heroRef} className="relative min-h-[85vh] flex items-center justify-center px-4 py-20 overflow-hidden">
-        {/* Hero background */}
+      <section className="relative min-h-screen px-4 pt-32 pb-20">
+        {/* Spheremotion Background */}
         <div className="absolute inset-0">
-          <img src="/spheremotion.gif" alt="" className="w-full h-full object-cover opacity-50 scale-75" />
+          <img src="/spheremotion.gif" alt="Animated sphere motion background" className="w-full h-full object-cover opacity-60" />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
-        {/* Floating gradient orbs */}
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full blur-[150px] pointer-events-none"
-          style={{ background: 'rgba(0, 128, 255, 0.08)' }}
-          animate={{ x: [0, 30, 0], y: [0, -20, 0], scale: [1, 1.1, 1] }}
-          transition={{ repeat: Infinity, duration: 8, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full blur-[120px] pointer-events-none"
-          style={{ background: 'rgba(79, 26, 214, 0.06)' }}
-          animate={{ x: [0, -20, 0], y: [0, 30, 0], scale: [1.1, 1, 1.1] }}
-          transition={{ repeat: Infinity, duration: 10, ease: 'easeInOut' }}
-        />
-
-        <motion.div style={{ opacity: heroOpacity, scale: heroScale }} className="container mx-auto text-center relative z-10">
+        <div className="container mx-auto text-center relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8 }}
+            className="mb-8"
           >
-            <motion.span
-              className="section-badge mb-8 inline-flex"
-              initial={{ opacity: 0, scale: 0.8 }}
+            {/* Pill Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3, type: 'spring', stiffness: 200, damping: 15 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#0080FF]/20 border border-[#0080FF]/40 backdrop-blur-md shadow-lg shadow-[#0080FF]/20 mb-8 hover:bg-[#0080FF]/25 hover:border-[#0080FF]/50 transition-all duration-300"
             >
-              <span className="section-badge-dot" />
-              Our Story
-            </motion.span>
+              <SparklesIcon className="w-4 h-4 text-[#0080FF]" />
+              <span className="text-sm text-[#0080FF] font-semibold">Our Story</span>
+            </motion.div>
 
-            <h1 className="text-display font-bold mb-8">
-              <motion.span
-                className="block text-white"
-                initial={{ opacity: 0, y: 60 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              >
-                Never Miss
-              </motion.span>
-              <motion.span
-                className="block gradient-text-hero"
-                initial={{ opacity: 0, y: 60 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              >
-                Another Call
-              </motion.span>
-            </h1>
+            <div className="mb-6">
+              <h1 className="text-6xl md:text-8xl font-bold text-white">
+                <WordReveal text="Never Miss Another Call" delay={0.3} />
+              </h1>
+            </div>
+
+            <div className="mb-8">
+              <h2 className="text-2xl md:text-4xl font-medium text-white">
+                Built for title companies, powered by AI.
+              </h2>
+            </div>
 
             <motion.p
-              className="text-lg sm:text-xl text-white/50 max-w-3xl mx-auto leading-relaxed"
-              initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ delay: 0.9, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="text-xl text-white/80 mb-12 max-w-4xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
             >
-              We built Title Voice because title companies shouldn't lose
-              $78,000 a year to voicemail. When a realtor calls after hours
-              and no one answers, they call your competitor. We fix that.
+              We built Title Voice because title companies shouldn't lose $78,000 a year to voicemail. When a realtor calls after hours and no one answers, they call your competitor. We fix that.
             </motion.p>
           </motion.div>
-        </motion.div>
-
-        {/* Bottom gradient fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent pointer-events-none" />
+        </div>
       </section>
 
       {/* ═══════════════════ THE PROBLEM ═══════════════════ */}
@@ -263,7 +235,7 @@ const About = () => {
               <span className="text-white">The Calls You </span>
               <span className="gradient-text">Never Knew You Missed</span>
             </h2>
-            <p className="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
               When a realtor calls at 6pm and gets voicemail, they don't leave a message.
               They call someone else. You never see the missed call. The deal just disappears.
             </p>
@@ -396,7 +368,7 @@ const About = () => {
               <span className="text-white">Your AI </span>
               <span className="gradient-text">Receptionist</span>
             </h2>
-            <p className="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
               An AI voice agent built specifically for title companies. It sounds human,
               knows your systems, and handles calls your team can't get to.
             </p>
@@ -447,7 +419,7 @@ const About = () => {
               <span className="text-white">Live in </span>
               <span className="gradient-text">48 Hours</span>
             </h2>
-            <p className="text-lg text-white/40 max-w-xl mx-auto">
+            <p className="text-lg text-white/50 max-w-xl mx-auto">
               No months of setup. No complex onboarding. Just results.
             </p>
           </motion.div>
@@ -539,7 +511,7 @@ const About = () => {
                 ].map((item, i) => (
                   <motion.li
                     key={i}
-                    className="flex items-start gap-3 text-white/40"
+                    className="flex items-start gap-3 text-white/50"
                     initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
@@ -638,7 +610,7 @@ const About = () => {
               <br />
               <span className="gradient-text-hero">To Voicemail</span>
             </h2>
-            <p className="text-lg sm:text-xl text-white/40 mb-14 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-white/50 mb-14 max-w-2xl mx-auto leading-relaxed">
               See what happens when every call gets answered. 15-minute demo.
               No pressure. Just the truth about your missed calls.
             </p>

@@ -106,7 +106,7 @@ const Terms = () => {
       <section className="relative pt-32 pb-16 px-4 overflow-hidden">
         {/* Sphere Motion GIF — same as landing page */}
         <div className="absolute inset-0">
-          <img src="/spheremotion.gif" alt="" className="w-full h-full object-cover opacity-60 scale-75" />
+          <img src="/spheremotion.gif" alt="Animated sphere motion background" className="w-full h-full object-cover opacity-60 scale-75" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -115,7 +115,7 @@ const Terms = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-bold font-['Urbanist'] mb-4"
+            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4"
           >
             <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
               Terms of Service
@@ -125,7 +125,7 @@ const Terms = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-white/60 font-['Urbanist']"
+            className="text-white/60"
           >
             Last updated: January 15, 2025
           </motion.p>
@@ -141,7 +141,7 @@ const Terms = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="rounded-2xl bg-white/[0.04] border border-white/10 p-6 sm:p-10 lg:p-12"
           >
-            <p className="text-white/60 mb-10 leading-relaxed font-['Urbanist']">
+            <p className="text-white/60 mb-10 leading-relaxed">
               Please read these Terms of Service carefully before using the Title Voice platform.
               These terms govern your use of our AI voice agent services for title companies.
             </p>
@@ -149,12 +149,12 @@ const Terms = () => {
             <div className="space-y-10">
               {sections.map((section, index) => (
                 <div key={index}>
-                  <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 font-['Urbanist']">
+                  <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">
                     {section.title}
                   </h2>
                   <ul className="space-y-3">
                     {section.content.map((item, idx) => (
-                      <li key={idx} className="text-white/60 leading-relaxed font-['Urbanist'] pl-4 border-l-2 border-[#0080FF]/20">
+                      <li key={idx} className="text-white/60 leading-relaxed pl-4 border-l-2 border-[#0080FF]/20">
                         {item}
                       </li>
                     ))}

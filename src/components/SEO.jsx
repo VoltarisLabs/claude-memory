@@ -4,12 +4,13 @@ const SEO = ({
   title,
   description,
   canonical,
-  ogImage = 'https://titlevoice.com/og-cover.png',
+  ogImage = 'https://titlevoice.ai/og-cover.png',
+  jsonLd,
 }) => {
   const siteTitle = 'Title Voice'
   const fullTitle = title ? `${title} | ${siteTitle}` : `${siteTitle} – AI Voice Agent for Title Companies`
   const fullDescription = description || 'AI-powered voice receptionist for title companies. Title Voice automates calls, retrieves deal info, and keeps your clients updated.'
-  const fullCanonical = canonical ? `https://titlevoice.com${canonical}` : 'https://titlevoice.com'
+  const fullCanonical = canonical ? `https://titlevoice.ai${canonical}` : 'https://titlevoice.ai'
 
   return (
     <Helmet>
@@ -30,6 +31,13 @@ const SEO = ({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={fullDescription} />
       <meta name="twitter:image" content={ogImage} />
+
+      {/* Structured Data */}
+      {jsonLd && (
+        <script type="application/ld+json">
+          {JSON.stringify(jsonLd)}
+        </script>
+      )}
     </Helmet>
   )
 }

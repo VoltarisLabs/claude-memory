@@ -47,7 +47,7 @@ export const PrimaryButton = ({ children, onClick, className = '', size = 'md' }
   return (
     <motion.button
       ref={ref}
-      className={`group relative ${sizeClass} ${roundedClass} font-semibold overflow-hidden font-['Urbanist'] flex items-center justify-center gap-2.5 ${className}`}
+      className={`group relative ${sizeClass} ${roundedClass} font-semibold overflow-hidden flex items-center justify-center gap-2.5 ${className}`}
       style={{ x: springX, y: springY }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
@@ -147,7 +147,7 @@ export const OutlineButton = ({ children, onClick, className = '', size = 'md' }
   return (
     <motion.button
       ref={ref}
-      className={`group relative ${sizeClass} rounded-full font-semibold overflow-hidden font-['Urbanist'] flex items-center justify-center gap-2.5 text-white border transition-all duration-500 ${isHovered ? 'border-white/20 bg-white/[0.04]' : 'border-white/10'} ${className}`}
+      className={`group relative ${sizeClass} rounded-full font-semibold overflow-hidden flex items-center justify-center gap-2.5 text-white border transition-all duration-500 ${isHovered ? 'border-white/20 bg-white/[0.04]' : 'border-white/10'} ${className}`}
       style={{ x: springX, y: springY }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
@@ -182,7 +182,7 @@ export const NavButton = ({ children, onClick, className = '', fullWidth = false
 
   return (
     <motion.button
-      className={`group relative px-6 py-2.5 text-sm rounded-full font-semibold overflow-hidden font-['Urbanist'] flex items-center justify-center gap-2 ${fullWidth ? 'w-full' : ''} ${className}`}
+      className={`group relative px-6 py-2.5 text-sm rounded-full font-semibold overflow-hidden flex items-center justify-center gap-2 ${fullWidth ? 'w-full' : ''} ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(0, 128, 255, 0.3)' }}

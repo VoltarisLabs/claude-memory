@@ -79,17 +79,17 @@ const Footer = () => {
             <div className="mb-6">
               <Logo showText={true} size="default" />
             </div>
-            <p className="text-white/40 mb-8 leading-relaxed max-w-sm">
+            <p className="text-white/50 mb-8 leading-relaxed max-w-sm">
               AI for the Title Industry — Never miss a call again with our 24/7 AI receptionist built specifically for title companies.
             </p>
 
             {/* Contact Info */}
             <div className="space-y-3 mb-8">
-              <a href="mailto:support@titlevoice.ai" className="flex items-center gap-3 text-white/40 hover:text-white/70 transition-colors duration-300 group">
+              <a href="mailto:support@titlevoice.ai" className="flex items-center gap-3 text-white/50 hover:text-white/70 transition-colors duration-300 group">
                 <Mail className="w-4 h-4 group-hover:text-[#0080FF] transition-colors" />
                 <span className="text-sm">support@titlevoice.ai</span>
               </a>
-              <div className="flex items-center gap-3 text-white/40">
+              <div className="flex items-center gap-3 text-white/50">
                 <MapPin className="w-4 h-4" />
                 <span className="text-sm">Akron, OH</span>
               </div>
@@ -103,7 +103,7 @@ const Footer = () => {
                   href={social.href}
                   target={social.href.startsWith('http') ? '_blank' : undefined}
                   rel={social.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  className="w-9 h-9 bg-white/[0.04] hover:bg-[#0080FF]/20 border border-white/[0.06] hover:border-[#0080FF]/30 rounded-lg flex items-center justify-center transition-all duration-300 text-white/40 hover:text-[#0080FF]"
+                  className="w-9 h-9 bg-white/[0.04] hover:bg-[#0080FF]/20 border border-white/[0.06] hover:border-[#0080FF]/30 rounded-lg flex items-center justify-center transition-all duration-300 text-white/50 hover:text-[#0080FF]"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   aria-label={social.label}

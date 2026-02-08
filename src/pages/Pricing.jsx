@@ -39,138 +39,38 @@ import BorderBeam from '../components/BorderBeam'
 import { WordReveal } from '../components/TextAnimations'
 import { PrimaryButton, OutlineButton } from '../components/Buttons'
 import EnhancedCTA from '../components/EnhancedCTA'
+import { prices, pricingPlans as basePricingPlans, testimonials, faqs, calculateSavings } from '../data/pricingData'
+import SEO from '../components/SEO'
 
 const Pricing = () => {
   const [billingCycle, setBillingCycle] = useState('monthly')
   const [openFaq, setOpenFaq] = useState(null)
 
-  const prices = {
-    monthly: { professional: 1500, enterprise: 3500 },
-    yearly: { professional: 1200, enterprise: 2800 }
-  }
-
-  // Calculate yearly savings
-  const calculateSavings = (monthlyPrice, yearlyPrice) => {
-    return (monthlyPrice * 12) - (yearlyPrice * 12)
-  }
-
-  const pricingPlans = [
-    {
-      name: 'Professional',
-      price: prices[billingCycle].professional,
-      monthlyPrice: prices.monthly.professional,
-      yearlyPrice: prices.yearly.professional,
-      period: '/ Month',
-      description: 'Ideal for growing title companies with multiple locations.',
-      badge: 'Most Popular',
-      icon: Bell,
-      projects: '1,500 Free Minutes',
-      revisions: 'Multi-location',
-      features: [
-        'Business Hours AI Title Receptionist',
-        'Deal status inquiries',
-        'Appointment scheduling',
-        'Multi-location team management',
-        'Escalation to live agent (optional)',
-        'Multilingual intake support',
-        'Custom script & workflows',
-        'Advanced CRM integrations',
-        'Priority support (email + phone)',
-        'Volume discounts available'
-      ],
-      highlight: true
-    },
-    {
-      name: 'Enterprise',
-      price: prices[billingCycle].enterprise,
-      monthlyPrice: prices.monthly.enterprise,
-      yearlyPrice: prices.yearly.enterprise,
-      period: '/ Month',
-      description: 'Advanced solutions for large title companies and enterprises.',
-      badge: 'Recommended',
-      icon: Crown,
-      projects: '3,500 Free Minutes',
-      revisions: 'Unlimited Locations',
-      features: [
-        'Everything in Professional',
-        '24/7 AI Title Receptionist',
-        'Dedicated account manager',
-        'Custom integrations',
-        'White-label solution',
-        'Advanced analytics & reporting',
-        'Secure storage + redaction',
-        '24/7 dedicated support'
-      ],
-      highlight: false
-    }
-  ]
-
-  const testimonials = [
-    {
-      name: 'Sarah Mitchell',
-      role: 'CEO, Premier Title Group',
-      text: 'Title Voice reduced our missed calls by 95% and saved us over $4,000/month in staffing costs. The AI handles complex inquiries with ease.',
-      metric: '95% fewer missed calls',
-      rating: 5
-    },
-    {
-      name: 'James Rodriguez',
-      role: 'Operations Manager, Apex Title',
-      text: 'The scheduling automation alone saved our team 20 hours per week. Clients love the instant responses and 24/7 availability.',
-      metric: '20 hrs saved weekly',
-      rating: 5
-    },
-    {
-      name: 'Emily Chen',
-      role: 'VP Operations, National Title Co',
-      text: 'We saw ROI within the first month. The warm transfer feature ensures complex issues get to the right person with full context.',
-      metric: 'ROI in 30 days',
-      rating: 5
-    },
-    {
-      name: 'Michael Davis',
-      role: 'Owner, Davis Title Services',
-      text: 'As a small shop, Title Voice gave us enterprise-level phone coverage. Our clients can\'t tell the difference from a human receptionist.',
-      metric: '4.9/5 client rating',
-      rating: 5
-    },
-    {
-      name: 'Lisa Thompson',
-      role: 'Director, Summit Title Agency',
-      text: 'The CRM integration is seamless. Every call is logged, every deal status is updated in real-time. It\'s transformed our operations.',
-      metric: '100% call logging',
-      rating: 5
-    },
-    {
-      name: 'Robert Kim',
-      role: 'Managing Partner, Pacific Title',
-      text: 'We expanded to 3 new locations without hiring additional reception staff. Title Voice scales effortlessly with our growth.',
-      metric: '3x growth, 0 new hires',
-      rating: 5
-    }
-  ]
-
-  const faqs = [
-    {
-      question: 'How does the pricing work?',
-      answer: 'Our pricing is based on the number of voice agents and features you need. You can start with our Professional plan and upgrade as your business grows.'
-    },
-    {
-      question: 'Can I change my plan anytime?',
-      answer: 'Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately and we\'ll prorate any differences.'
-    },
-    {
-      question: 'What happens if I exceed my limits?',
-      answer: 'We\'ll notify you when you\'re approaching your limits and help you upgrade to a higher plan. No service interruptions.'
-    },
-    {
-      question: 'Do you offer custom pricing?',
-      answer: 'Yes, we offer custom pricing for large enterprises with specific requirements. Contact our sales team for a personalized quote.'
-    }
-  ]
+  // Add dynamic pricing to imported plans
+  const pricingPlans = basePricingPlans.map(plan => ({
+    ...plan,
+    price: prices[billingCycle][plan.name.toLowerCase()]
+  }))
 
   return (
     <div className="min-h-screen bg-black text-white relative">
+      <SEO
+        title="Pricing"
+        description="Transparent pricing for Title Voice AI receptionist. Professional and Enterprise plans with free demo available."
+        canonical="/pricing"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": faqs.map(faq => ({
+            "@type": "Question",
+            "name": faq.question,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": faq.answer
+            }
+          }))
+        }}
+      />
       {/* Background Canvas Layers */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <SparklesCanvas particleColor="#38bdf8" particleDensity={60} speed={0.3} />
@@ -178,10 +78,10 @@ const Pricing = () => {
       <VoiceWaves />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 py-20">
+      <section className="relative min-h-screen px-4 pt-32 pb-20">
         {/* Spheremotion Background */}
         <div className="absolute inset-0">
-          <img src="/spheremotion.gif" alt="" className="w-full h-full object-cover opacity-60" />
+          <img src="/spheremotion.gif" alt="Animated sphere motion background" className="w-full h-full object-cover opacity-60" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -197,35 +97,27 @@ const Pricing = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 mb-8"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#0080FF]/20 border border-[#0080FF]/40 backdrop-blur-md shadow-lg shadow-[#0080FF]/20 mb-8 hover:bg-[#0080FF]/25 hover:border-[#0080FF]/50 transition-all duration-300"
             >
               <SparklesIcon className="w-4 h-4 text-[#0080FF]" />
-              <span className="text-sm text-[#0080FF] font-medium font-['Urbanist']">Transparent Pricing</span>
+              <span className="text-sm text-[#0080FF] font-semibold">Transparent Pricing</span>
             </motion.div>
 
             <div className="mb-6">
               <WordReveal
                 text="Simple, Transparent Pricing"
-                className="text-6xl md:text-8xl font-bold text-white font-['Urbanist']"
+                className="text-6xl md:text-8xl font-bold text-white"
                 trigger="mount"
               />
             </div>
             <div className="mb-8">
-              <h2 className="text-2xl md:text-4xl font-medium text-white font-['Urbanist']">
+              <h1 className="text-2xl md:text-4xl font-medium text-white">
                 Choose the perfect plan for your title company.
-              </h2>
+              </h1>
             </div>
 
-            {/* Animated gradient divider */}
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 1, delay: 0.8 }}
-              className="w-24 h-0.5 mx-auto mb-8 bg-gradient-to-r from-[#0080FF] to-[#4F1AD6]"
-            />
-
             <motion.p
-              className="text-xl text-white mb-12 max-w-4xl mx-auto font-['Urbanist']"
+              className="text-xl text-white/80 mb-12 max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -259,18 +151,28 @@ const Pricing = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Choose Your Plan
               </span>
             </h2>
-            <p className="text-xl text-white max-w-3xl mx-auto font-['Urbanist'] mb-10">
+            <p className="text-xl text-white max-w-3xl mx-auto mb-4">
               All plans include our core AI features
             </p>
 
+            {/* Discount Highlight */}
+            <motion.p
+              className="text-lg text-emerald-400 font-semibold mb-10"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              💰 Save 20% with yearly subscription!
+            </motion.p>
+
             {/* Monthly/Yearly Toggle */}
             <div className="flex items-center justify-center gap-4">
-              <span className={`font-['Urbanist'] font-medium transition-colors ${billingCycle === 'monthly' ? 'text-white' : 'text-white/50'}`}>Monthly</span>
+              <span className={`font-medium transition-colors ${billingCycle === 'monthly' ? 'text-white' : 'text-white/50'}`}>Monthly</span>
               <motion.button
                 className="relative w-16 h-8 rounded-full bg-white/10 border border-white/20 p-1"
                 onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'yearly' : 'monthly')}
@@ -283,7 +185,7 @@ const Pricing = () => {
                   style={{ boxShadow: '0 0 12px rgba(0, 128, 255, 0.6)' }}
                 />
               </motion.button>
-              <span className={`font-['Urbanist'] font-medium transition-colors ${billingCycle === 'yearly' ? 'text-white' : 'text-white/50'}`}>
+              <span className={`font-medium transition-colors ${billingCycle === 'yearly' ? 'text-white' : 'text-white/50'}`}>
                 Yearly
                 {billingCycle === 'yearly' && (
                   <motion.span
@@ -318,22 +220,22 @@ const Pricing = () => {
                         <plan.icon className="w-6 h-6 text-[#0080FF]" />
                       </div>
                       <div className="bg-[#0080FF]/10 border border-[#0080FF]/20 px-3 py-1 rounded-full">
-                        <span className="text-[#0080FF] text-sm font-medium font-['Urbanist']">{plan.badge}</span>
+                        <span className="text-[#0080FF] text-sm font-medium">{plan.badge}</span>
                       </div>
                     </div>
 
-                    <h3 className="text-2xl font-bold text-white mb-2 font-['Urbanist']">{plan.name}</h3>
+                    <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
 
                     <div className="mb-4">
                       <motion.span
                         key={plan.price}
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-4xl font-bold text-white font-['Urbanist']"
+                        className="text-4xl font-bold text-white"
                       >
                         ${plan.price}
                       </motion.span>
-                      <span className="text-white/60 ml-2 font-['Urbanist']">{plan.period}</span>
+                      <span className="text-white/60 ml-2">{plan.period}</span>
 
                       {/* Savings Message */}
                       <AnimatePresence>
@@ -345,7 +247,7 @@ const Pricing = () => {
                             transition={{ duration: 0.3 }}
                             className="mt-2"
                           >
-                            <span className="inline-block text-sm font-semibold text-emerald-400 bg-emerald-400/10 px-3 py-1.5 rounded-full border border-emerald-400/20 font-['Urbanist']">
+                            <span className="inline-block text-sm font-semibold text-emerald-400 bg-emerald-400/10 px-3 py-1.5 rounded-full border border-emerald-400/20">
                               Save ${calculateSavings(plan.monthlyPrice, plan.yearlyPrice).toLocaleString()} per year!
                             </span>
                           </motion.div>
@@ -353,7 +255,7 @@ const Pricing = () => {
                       </AnimatePresence>
                     </div>
 
-                    <p className="text-white/60 mb-6 text-sm leading-relaxed font-['Urbanist']">{plan.description}</p>
+                    <p className="text-white/60 mb-6 text-sm leading-relaxed">{plan.description}</p>
 
                     <div className="space-y-3 mb-8 flex-grow">
                       {plan.features.map((feature, idx) => (
@@ -361,7 +263,7 @@ const Pricing = () => {
                           <div className="w-5 h-5 rounded-full bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center">
                             <Check className="w-3 h-3 text-emerald-400" />
                           </div>
-                          <span className="text-white/80 text-sm font-['Urbanist']">{feature}</span>
+                          <span className="text-white/80 text-sm">{feature}</span>
                         </div>
                       ))}
                     </div>
@@ -389,7 +291,7 @@ const Pricing = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 What Our Clients Say
               </span>
@@ -398,9 +300,9 @@ const Pricing = () => {
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
               ))}
-              <span className="text-white font-semibold ml-2 font-['Urbanist']">4.9/5</span>
+              <span className="text-white font-semibold ml-2">4.9/5</span>
             </div>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
               Trusted by title companies across the country
             </p>
           </motion.div>
@@ -417,21 +319,21 @@ const Pricing = () => {
                   <div className="relative p-6 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/20 transition-all duration-300 h-full group">
                     <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-[#0080FF]/0 group-hover:bg-[#0080FF]/50 transition-all duration-300 rounded-full" />
                     <Quote className="w-8 h-8 text-white/10 group-hover:text-white/20 transition-colors mb-4" />
-                    <p className="text-white/70 mb-6 leading-relaxed font-['Urbanist'] text-sm">{testimonial.text}</p>
+                    <p className="text-white/70 mb-6 leading-relaxed text-sm">{testimonial.text}</p>
                     <motion.div
                       className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 mb-6"
                       whileHover={{ scale: 1.05 }}
                     >
                       <TrendingUp className="w-3.5 h-3.5 text-[#0080FF]" />
-                      <span className="text-xs text-[#0080FF] font-semibold font-['Urbanist']">{testimonial.metric}</span>
+                      <span className="text-xs text-[#0080FF] font-semibold">{testimonial.metric}</span>
                     </motion.div>
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center text-[#0080FF] font-bold text-sm font-['Urbanist']">
+                      <div className="w-10 h-10 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center text-[#0080FF] font-bold text-sm">
                         {testimonial.name.split(' ').map(n => n[0]).join('')}
                       </div>
                       <div>
-                        <p className="text-white font-semibold text-sm font-['Urbanist']">{testimonial.name}</p>
-                        <p className="text-white/50 text-xs font-['Urbanist']">{testimonial.role}</p>
+                        <p className="text-white font-semibold text-sm">{testimonial.name}</p>
+                        <p className="text-white/50 text-xs">{testimonial.role}</p>
                       </div>
                       <div className="ml-auto flex gap-0.5">
                         {[...Array(testimonial.rating)].map((_, i) => (
@@ -456,12 +358,12 @@ const Pricing = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Frequently Asked Questions
               </span>
             </h2>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
               Everything you need to know about our pricing and plans
             </p>
           </motion.div>
@@ -478,8 +380,10 @@ const Pricing = () => {
                 <motion.button
                   className="w-full flex items-center justify-between p-6 text-left"
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                  aria-expanded={openFaq === index}
+                  aria-label={`Toggle ${faq.question}`}
                 >
-                  <h3 className="text-xl font-bold text-white font-['Urbanist'] pr-4">{faq.question}</h3>
+                  <h3 className="text-xl font-bold text-white pr-4">{faq.question}</h3>
                   <motion.div
                     animate={{ rotate: openFaq === index ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
@@ -495,7 +399,7 @@ const Pricing = () => {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <p className="px-6 pb-6 text-white/70 font-['Urbanist']">{faq.answer}</p>
+                      <p className="px-6 pb-6 text-white/70">{faq.answer}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>

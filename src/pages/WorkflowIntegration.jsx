@@ -23,6 +23,7 @@ import VoiceWaves from '../components/VoiceWaves'
 import GlowCard from '../components/GlowCard'
 import BorderBeam from '../components/BorderBeam'
 import { PrimaryButton, OutlineButton } from '../components/Buttons'
+import SEO from '../components/SEO'
 
 const WorkflowIntegration = () => {
   const [activeStep, setActiveStep] = useState(0)
@@ -89,6 +90,11 @@ const WorkflowIntegration = () => {
 
   return (
     <div className="min-h-screen bg-black text-white relative">
+      <SEO
+        title="Workflow Integration"
+        description="Integrate Title Voice with ResWare, RamQuest, CRM systems, and more. Seamless title production software connections."
+        canonical="/workflow-integration"
+      />
       {/* Background Canvas Layers */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <Sparkles particleColor="#38bdf8" particleDensity={60} speed={0.3} />
@@ -101,7 +107,7 @@ const WorkflowIntegration = () => {
         <div className="absolute inset-0">
           <img
             src="/spheremotion.gif"
-            alt=""
+            alt="Animated sphere motion background"
             className="w-full h-full object-cover opacity-60"
           />
         </div>
@@ -116,47 +122,58 @@ const WorkflowIntegration = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
+            className="mb-8"
           >
             {/* Glass pill badge */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-8"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#0080FF]/20 border border-[#0080FF]/40 backdrop-blur-md shadow-lg shadow-[#0080FF]/20 mb-8 hover:bg-[#0080FF]/25 hover:border-[#0080FF]/50 transition-all duration-300"
             >
               <Zap className="w-4 h-4 text-[#0080FF]" />
-              <span className="text-sm text-white/80 font-['Urbanist']">Seamless Integrations</span>
+              <span className="text-sm text-[#0080FF] font-semibold">Seamless Integrations</span>
             </motion.div>
 
-            <h1 className="text-6xl md:text-8xl font-bold text-white font-['Urbanist'] mb-6 leading-tight">
+            <div className="mb-6">
+              <h1 className="text-6xl md:text-8xl font-bold text-white leading-tight">
               Workflow Integration for{' '}
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Title Companies
               </span>
             </h1>
-            <p className="text-xl md:text-2xl text-white/80 mb-8 max-w-4xl mx-auto font-['Urbanist'] leading-relaxed">
-              Seamlessly integrate Title Voice with your existing title company software.
-              ResWare, RamQuest, and custom systems — we connect with everything.
-            </p>
+            </div>
 
-            {/* Gradient divider */}
-            <div className="w-32 h-px mx-auto mb-10 bg-gradient-to-r from-transparent via-[#0080FF] to-transparent" />
+            <div className="mb-8">
+              <h2 className="text-2xl md:text-4xl font-medium text-white">
+                Connect with ResWare, RamQuest, and all major platforms.
+              </h2>
+            </div>
 
-            <motion.div
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+            <motion.p
+              className="text-xl text-white/80 mb-12 max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <PrimaryButton size="lg">
-                View Integration Demo
-                <Play className="w-5 h-5" />
-              </PrimaryButton>
-              <OutlineButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
-                <Calendar className="w-5 h-5" />
-                Get Custom Quote
-              </OutlineButton>
-            </motion.div>
+              Seamlessly integrate Title Voice with your existing title company software and custom systems.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+          >
+            <PrimaryButton size="lg">
+              View Integration Demo
+              <Play className="w-5 h-5" />
+            </PrimaryButton>
+            <OutlineButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
+              <Calendar className="w-5 h-5" />
+              Get Custom Quote
+            </OutlineButton>
           </motion.div>
         </div>
       </section>
@@ -170,12 +187,12 @@ const WorkflowIntegration = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 How Our Workflow Integration Works
               </span>
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white/80 max-w-3xl mx-auto">
               See how Title Voice integrates with your title company software
               to create a seamless, automated workflow.
             </p>
@@ -206,8 +223,8 @@ const WorkflowIntegration = () => {
                         {React.createElement(step.icon, { className: "w-6 h-6 text-[#0080FF]" })}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-white font-['Urbanist']">{step.title}</h3>
-                        <p className="text-sm text-white/60 font-['Urbanist']">{step.description}</p>
+                        <h3 className="font-semibold text-white">{step.title}</h3>
+                        <p className="text-sm text-white/60">{step.description}</p>
                       </div>
                     </div>
                   </motion.button>
@@ -233,10 +250,10 @@ const WorkflowIntegration = () => {
                           {React.createElement(workflowSteps[activeStep].icon, { className: "w-10 h-10 text-[#0080FF]" })}
                         </div>
                       </div>
-                      <h3 className="text-2xl font-bold text-white mb-2 font-['Urbanist']">
+                      <h3 className="text-2xl font-bold text-white mb-2">
                         {workflowSteps[activeStep].title}
                       </h3>
-                      <p className="text-white/60 font-['Urbanist']">
+                      <p className="text-white/60">
                         {workflowSteps[activeStep].description}
                       </p>
                     </div>
@@ -244,13 +261,13 @@ const WorkflowIntegration = () => {
                     {/* Step-specific content */}
                     {activeStep === 0 && (
                       <div className="bg-black/30 rounded-xl p-6 border border-white/10">
-                        <h4 className="font-semibold mb-4 text-white font-['Urbanist']">Customer Call Example</h4>
+                        <h4 className="font-semibold mb-4 text-white">Customer Call Example</h4>
                         <div className="space-y-3">
                           <div className="bg-[#0080FF]/10 p-3 rounded-lg border border-[#0080FF]/20">
-                            <p className="text-sm text-white/90 font-['Urbanist']">"Hi, I need to check on my closing status for 123 Main Street."</p>
+                            <p className="text-sm text-white/90">"Hi, I need to check on my closing status for 123 Main Street."</p>
                           </div>
                           <div className="bg-[#4F1AD6]/10 p-3 rounded-lg border border-[#4F1AD6]/20">
-                            <p className="text-sm text-white/90 font-['Urbanist']">"I can help you with that. Let me look up your information..."</p>
+                            <p className="text-sm text-white/90">"I can help you with that. Let me look up your information..."</p>
                           </div>
                         </div>
                       </div>
@@ -258,19 +275,19 @@ const WorkflowIntegration = () => {
 
                     {activeStep === 1 && (
                       <div className="bg-black/30 rounded-xl p-6 border border-white/10">
-                        <h4 className="font-semibold mb-4 text-white font-['Urbanist']">AI Processing</h4>
+                        <h4 className="font-semibold mb-4 text-white">AI Processing</h4>
                         <div className="space-y-3">
                           <div className="flex items-center gap-3">
                             <div className="w-3 h-3 bg-[#0080FF] rounded-full animate-pulse"></div>
-                            <span className="text-sm text-white/80 font-['Urbanist']">Natural language processing</span>
+                            <span className="text-sm text-white/80">Natural language processing</span>
                           </div>
                           <div className="flex items-center gap-3">
                             <div className="w-3 h-3 bg-[#4F1AD6] rounded-full animate-pulse"></div>
-                            <span className="text-sm text-white/80 font-['Urbanist']">Intent recognition</span>
+                            <span className="text-sm text-white/80">Intent recognition</span>
                           </div>
                           <div className="flex items-center gap-3">
                             <div className="w-3 h-3 bg-[#0080FF] rounded-full animate-pulse"></div>
-                            <span className="text-sm text-white/80 font-['Urbanist']">Context understanding</span>
+                            <span className="text-sm text-white/80">Context understanding</span>
                           </div>
                         </div>
                       </div>
@@ -278,19 +295,19 @@ const WorkflowIntegration = () => {
 
                     {activeStep === 2 && (
                       <div className="bg-black/30 rounded-xl p-6 border border-white/10">
-                        <h4 className="font-semibold mb-4 text-white font-['Urbanist']">Data Integration</h4>
+                        <h4 className="font-semibold mb-4 text-white">Data Integration</h4>
                         <div className="grid grid-cols-2 gap-4">
                           <div className="text-center">
                             <div className="w-12 h-12 bg-[#0080FF]/10 border border-[#0080FF]/20 rounded-lg mx-auto mb-2 flex items-center justify-center">
                               <Database className="w-6 h-6 text-[#0080FF]" />
                             </div>
-                            <p className="text-xs text-white/70 font-['Urbanist']">ResWare</p>
+                            <p className="text-xs text-white/70">ResWare</p>
                           </div>
                           <div className="text-center">
                             <div className="w-12 h-12 bg-[#4F1AD6]/10 border border-[#4F1AD6]/20 rounded-lg mx-auto mb-2 flex items-center justify-center">
                               <Database className="w-6 h-6 text-[#4F1AD6]" />
                             </div>
-                            <p className="text-xs text-white/70 font-['Urbanist']">RamQuest</p>
+                            <p className="text-xs text-white/70">RamQuest</p>
                           </div>
                         </div>
                       </div>
@@ -298,25 +315,25 @@ const WorkflowIntegration = () => {
 
                     {activeStep === 3 && (
                       <div className="bg-black/30 rounded-xl p-6 border border-white/10">
-                        <h4 className="font-semibold mb-4 text-white font-['Urbanist']">Smart Actions</h4>
+                        <h4 className="font-semibold mb-4 text-white">Smart Actions</h4>
                         <div className="space-y-2">
                           <div className="flex items-center gap-2">
                             <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
                               <Check className="w-3 h-3 text-[#0080FF]" />
                             </div>
-                            <span className="text-sm text-white/80 font-['Urbanist']">Schedule closing appointment</span>
+                            <span className="text-sm text-white/80">Schedule closing appointment</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
                               <Check className="w-3 h-3 text-[#0080FF]" />
                             </div>
-                            <span className="text-sm text-white/80 font-['Urbanist']">Update closing status</span>
+                            <span className="text-sm text-white/80">Update closing status</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
                               <Check className="w-3 h-3 text-[#0080FF]" />
                             </div>
-                            <span className="text-sm text-white/80 font-['Urbanist']">Route to specialist</span>
+                            <span className="text-sm text-white/80">Route to specialist</span>
                           </div>
                         </div>
                       </div>
@@ -324,25 +341,25 @@ const WorkflowIntegration = () => {
 
                     {activeStep === 4 && (
                       <div className="bg-black/30 rounded-xl p-6 border border-white/10">
-                        <h4 className="font-semibold mb-4 text-white font-['Urbanist']">Confirmation & Updates</h4>
+                        <h4 className="font-semibold mb-4 text-white">Confirmation & Updates</h4>
                         <div className="space-y-3">
                           <div className="bg-[#0080FF]/10 p-3 rounded-lg border border-[#0080FF]/20 flex items-center gap-3">
                             <div className="w-8 h-8 rounded-lg bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
                               <Mail className="w-4 h-4 text-[#0080FF]" />
                             </div>
-                            <p className="text-sm text-white/90 font-['Urbanist']">Email confirmation sent</p>
+                            <p className="text-sm text-white/90">Email confirmation sent</p>
                           </div>
                           <div className="bg-[#4F1AD6]/10 p-3 rounded-lg border border-[#4F1AD6]/20 flex items-center gap-3">
                             <div className="w-8 h-8 rounded-lg bg-[#4F1AD6]/15 border border-[#4F1AD6]/25 flex items-center justify-center">
                               <MessageSquare className="w-4 h-4 text-[#4F1AD6]" />
                             </div>
-                            <p className="text-sm text-white/90 font-['Urbanist']">SMS notification delivered</p>
+                            <p className="text-sm text-white/90">SMS notification delivered</p>
                           </div>
                           <div className="bg-[#0080FF]/10 p-3 rounded-lg border border-[#0080FF]/20 flex items-center gap-3">
                             <div className="w-8 h-8 rounded-lg bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
                               <Database className="w-4 h-4 text-[#0080FF]" />
                             </div>
-                            <p className="text-sm text-white/90 font-['Urbanist']">CRM system updated</p>
+                            <p className="text-sm text-white/90">CRM system updated</p>
                           </div>
                         </div>
                       </div>
@@ -364,12 +381,12 @@ const WorkflowIntegration = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Integrates with Your Title Software
               </span>
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white/80 max-w-3xl mx-auto">
               Connect Title Voice with your existing title company software
               for a unified, automated workflow.
             </p>
@@ -382,10 +399,10 @@ const WorkflowIntegration = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1, type: "spring", stiffness: 100 }}
-                whileHover={{ y: -6 }}
+                whileHover={{ y: -6, scale: 1.01 }}
               >
                 <GlowCard className="h-full rounded-2xl">
-                  <div className="group relative p-8 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/30 transition-all duration-500 h-full flex flex-col overflow-hidden">
+                  <div className="group relative p-8 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/40 hover:shadow-[0_8px_30px_rgba(0,128,255,0.08)] transition-all duration-500 h-full flex flex-col overflow-hidden">
                     <BorderBeam
                       size={150}
                       duration={10}
@@ -394,16 +411,28 @@ const WorkflowIntegration = () => {
                       colorTo="#4F1AD6"
                     />
 
+                    {/* Shimmer sweep on hover */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-2xl overflow-hidden">
+                      <div
+                        className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"
+                        style={{
+                          background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.03) 45%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 55%, transparent 60%)',
+                        }}
+                      />
+                    </div>
+
                     {/* Gradient overlay on hover */}
                     <div className="absolute inset-0 bg-gradient-to-br from-[#0080FF]/[0.03] to-[#4F1AD6]/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" />
 
-                    {/* Glass icon box */}
+                    {/* Glass icon box with enhanced glow */}
                     <div className="relative z-10 w-16 h-16 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-6 group-hover:bg-[#0080FF]/20 group-hover:border-[#0080FF]/40 transition-all duration-300">
                       {React.createElement(integration.icon, { className: "w-8 h-8 text-[#0080FF]" })}
+                      {/* Pulsing glow */}
+                      <div className="absolute inset-0 bg-[#0080FF]/20 rounded-lg blur-xl -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </div>
 
-                    <h3 className="relative z-10 text-xl font-bold text-white mb-2 font-['Urbanist']">{integration.name}</h3>
-                    <p className="relative z-10 text-white/70 text-sm mb-4 leading-relaxed font-['Urbanist']">{integration.description}</p>
+                    <h3 className="relative z-10 text-xl font-bold text-white mb-2">{integration.name}</h3>
+                    <p className="relative z-10 text-white/70 text-sm mb-4 leading-relaxed">{integration.description}</p>
 
                     <div className="relative z-10 space-y-3 mt-auto">
                       {integration.features.map((feature, idx) => (
@@ -411,7 +440,7 @@ const WorkflowIntegration = () => {
                           <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
                             <Check className="w-3 h-3 text-[#0080FF]" />
                           </div>
-                          <span className="text-white/80 text-sm font-['Urbanist']">{feature}</span>
+                          <span className="text-white/80 text-sm">{feature}</span>
                         </div>
                       ))}
                     </div>
@@ -435,12 +464,12 @@ const WorkflowIntegration = () => {
             transition={{ duration: 0.8 }}
             className="max-w-4xl mx-auto"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-['Urbanist']">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Ready to Integrate?
               </span>
             </h2>
-            <p className="text-xl text-white/80 mb-12 max-w-3xl mx-auto font-['Urbanist']">
+            <p className="text-xl text-white/80 mb-12 max-w-3xl mx-auto">
               Connect Title Voice with your existing systems and start automating your workflows today.
             </p>
 
