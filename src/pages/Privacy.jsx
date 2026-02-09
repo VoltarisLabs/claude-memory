@@ -69,12 +69,12 @@ const Privacy = () => {
       ],
     },
     {
-      title: '7a. Data Export',
+      title: '7a. Data Export & Post-Termination Access',
       content: [
-        'You have the right to export your data at any time during your subscription.',
-        'Standard data exports (CSV format) are provided at no cost through your dashboard.',
-        'Custom data exports requiring engineering support (specialized formats, bulk historical data) incur a $250 service fee.',
-        'Upon account termination, you have 30 days to request a final data export before deletion.',
+        'Active accounts: You have the right to export your data at any time during your subscription at no cost through your dashboard.',
+        'Custom exports: Specialized data exports requiring engineering support (custom formats, bulk historical data) incur a $250 service fee.',
+        'Post-termination: Upon account termination, you have 30 days to request a final data export at no charge. Data exports requested after the 30-day retention period incur a $250 service fee.',
+        'Data ownership: All call recordings, transcripts, and customer data generated through your use of Title Voice remain your property. We claim no ownership rights over your business data.',
       ],
     },
     {
@@ -88,7 +88,7 @@ const Privacy = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-black text-white relative">
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <SEO
         title="Privacy Policy"
         description="Title Voice privacy policy - Learn how we collect, use, and protect your data."
@@ -104,7 +104,7 @@ const Privacy = () => {
       <section className="relative pt-32 pb-16 px-4 overflow-hidden">
         {/* Sphere Motion GIF — same as landing page */}
         <div className="absolute inset-0">
-          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60 scale-75" />
+          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -132,7 +132,7 @@ const Privacy = () => {
 
       {/* Content */}
       <section className="relative pb-24 px-4">
-        <div className="container mx-auto max-w-4xl relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-4xl relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

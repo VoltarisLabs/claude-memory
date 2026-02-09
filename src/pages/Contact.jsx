@@ -9,6 +9,7 @@ import { Mail, MapPin, Phone, Calendar, Send, Loader2, ArrowRight } from 'lucide
 import SEO from '../components/SEO'
 import { WordReveal } from '../components/TextAnimations'
 import GradientMesh from '../components/GradientMesh'
+import SpaceLines from '../components/SpaceLines'
 import { validators, formatPhoneNumber, isFormValid } from '../utils/formValidation'
 
 const Contact = () => {
@@ -92,25 +93,43 @@ const Contact = () => {
 
     setIsSubmitting(true)
 
-    const subject = encodeURIComponent(`New inquiry from ${formData.name}${formData.company ? ` at ${formData.company}` : ''}`)
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\n` +
-      `Email: ${formData.email}\n` +
-      (formData.phone ? `Phone: ${formData.phone}\n` : '') +
-      (formData.company ? `Company: ${formData.company}\n` : '') +
-      (formData.employees ? `Company Size: ${formData.employees}\n` : '') +
-      `\nMessage:\n${formData.message}`
-    )
+    try {
+      // Send email via Web3Forms
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+          subject: `New inquiry from ${formData.name}${formData.company ? ` at ${formData.company}` : ''}`,
+          from_name: formData.name,
+          email: formData.email,
+          phone: formData.phone || 'Not provided',
+          company: formData.company || 'Not provided',
+          company_size: formData.employees || 'Not provided',
+          message: formData.message
+        })
+      })
 
-    window.location.href = `mailto:support@titlevoice.ai?subject=${subject}&body=${body}`
+      const result = await response.json()
 
-    await new Promise(resolve => setTimeout(resolve, 500))
-
-    toast.success('Opening your email client. You can also email us directly at support@titlevoice.ai')
-    setIsSubmitting(false)
-    setFormData({ name: '', email: '', phone: '', company: '', employees: '', message: '' })
-    setErrors({ name: null, email: null, phone: null, company: null, employees: null, message: null })
-    setTouched({ name: false, email: false, phone: false, company: false, employees: false, message: false })
+      if (result.success) {
+        toast.success('Message sent successfully! We\'ll get back to you soon.')
+        // Reset form
+        setFormData({ name: '', email: '', phone: '', company: '', employees: '', message: '' })
+        setErrors({ name: null, email: null, phone: null, company: null, employees: null, message: null })
+        setTouched({ name: false, email: false, phone: false, company: false, employees: false, message: false })
+      } else {
+        throw new Error(result.message || 'Failed to send message')
+      }
+    } catch (error) {
+      console.error('Error sending message:', error)
+      toast.error('Failed to send message. Please try emailing us directly at support@titlevoice.ai')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   // Check if form is valid for submit button
@@ -131,12 +150,13 @@ const Contact = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-black text-white relative">
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <SEO
         title="Contact Us"
         description="Get in touch with Title Voice. Schedule a demo, ask questions, or learn how AI can transform your title company operations."
         canonical="/contact"
       />
+
 
       {/* Background effects */}
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -145,51 +165,52 @@ const Contact = () => {
       <VoiceWaves />
 
       {/* ═══════════════════ HERO ═══════════════════ */}
-      <section className="relative min-h-screen px-4 pt-32 pb-20">
-        {/* Animated Gradient Mesh Background - Minimal for readability */}
+      <section className="relative flex flex-col justify-center items-center text-center min-h-screen overflow-hidden px-4">
+        {/* Animated Gradient Mesh Background */}
         <GradientMesh variant="minimal" intensity="low" />
 
-        {/* Spheremotion Background */}
-        <div className="absolute inset-0">
-          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60" />
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
+        {/* SpaceLines for futuristic depth */}
+        <SpaceLines />
+
+        {/* Blurred gradient orbs */}
+        <div className="absolute top-1/4 left-1/5 w-[26rem] h-[26rem] bg-[#0080FF]/20 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#4F1AD6]/15 rounded-full blur-[110px] pointer-events-none" />
+        <div className="absolute top-1/3 right-1/3 w-64 h-64 bg-cyan-500/10 rounded-full blur-[90px] pointer-events-none" />
+
+        {/* Gradient bottom fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none" />
 
         <div className="container mx-auto text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
             className="mb-8"
           >
-            {/* Pill Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#0080FF]/20 border border-[#0080FF]/40 backdrop-blur-md shadow-lg shadow-[#0080FF]/20 mb-8 hover:bg-[#0080FF]/25 hover:border-[#0080FF]/50 transition-all duration-300"
-            >
-              <Mail className="w-4 h-4 text-[#0080FF]" />
-              <span className="text-sm text-[#0080FF] font-semibold">Get in Touch</span>
-            </motion.div>
-
             <div className="mb-6">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white">
-                <WordReveal text="Let's Talk" delay={0.3} />
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+                <WordReveal text="Let's" delay={0.2} />{' '}
+                <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                  <WordReveal text="Talk" delay={0.35} />
+                </span>
               </h1>
             </div>
-
             <div className="mb-8">
-              <h2 className="text-2xl md:text-4xl font-medium text-white">
+              <motion.h2
+                className="text-2xl md:text-4xl font-medium text-white"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5, type: "spring", stiffness: 100 }}
+              >
                 We're here to help you get started with AI voice automation.
-              </h2>
+              </motion.h2>
             </div>
 
             <motion.p
-              className="text-xl text-white/80 mb-12 max-w-4xl mx-auto"
+              className="text-xl text-white/80 mb-12 max-w-full md:max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              transition={{ duration: 0.8, delay: 0.7, type: "spring", stiffness: 100 }}
             >
               Ready to stop losing deals to voicemail? Reach out and we'll show you exactly how many calls you're missing.
             </motion.p>
@@ -199,7 +220,7 @@ const Contact = () => {
 
       {/* ═══════════════════ TWO-COLUMN LAYOUT ═══════════════════ */}
       <section className="relative pb-32 px-4">
-        <div className="container mx-auto max-w-6xl relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-6xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-10">
 
             {/* Left Column — Contact Info */}

@@ -45,7 +45,7 @@ const EnhancedCTA = ({
 
           {/* Breathing orb */}
           <motion.div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#0080FF]/10 rounded-full blur-[100px] pointer-events-none"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 sm:w-64 md:w-80 lg:w-96 h-48 sm:h-64 md:h-80 lg:h-96 bg-[#0080FF]/10 rounded-full blur-[60px] sm:blur-[80px] md:blur-[100px] pointer-events-none"
             animate={{
               scale: [1, 1.2, 1],
               opacity: [0.3, 0.5, 0.3]
@@ -59,7 +59,7 @@ const EnhancedCTA = ({
 
           {/* Secondary purple orb */}
           <motion.div
-            className="absolute top-1/2 right-0 -translate-y-1/2 w-80 h-80 bg-[#4F1AD6]/10 rounded-full blur-[100px] pointer-events-none"
+            className="absolute top-1/2 right-0 -translate-y-1/2 w-40 sm:w-56 md:w-64 lg:w-80 h-40 sm:h-56 md:h-64 lg:h-80 bg-[#4F1AD6]/10 rounded-full blur-[50px] sm:blur-[80px] md:blur-[100px] pointer-events-none"
             animate={{
               scale: [1, 1.3, 1],
               opacity: [0.2, 0.4, 0.2]
@@ -84,7 +84,7 @@ const EnhancedCTA = ({
           {/* Content */}
           <div className="relative z-10">
             <motion.h2
-              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
@@ -122,7 +122,7 @@ const EnhancedCTA = ({
 
             {/* Buttons */}
             <motion.div
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center items-center"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}

@@ -13,7 +13,7 @@ const NotFound = () => {
 
       {/* Sphere Motion GIF — same as landing page */}
       <div className="absolute inset-0">
-        <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60 scale-75" />
+        <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60" />
       </div>
 
       {/* Background effects */}
@@ -21,13 +21,13 @@ const NotFound = () => {
         <SparklesBackground particleColor="#38bdf8" particleDensity={40} minSize={1} maxSize={2.5} speed={0.8} />
       </div>
 
-      <div className="relative z-10 text-center max-w-2xl mx-auto">
+      <div className="relative z-10 text-center max-w-full md:max-w-2xl mx-auto">
         {/* 404 Heading */}
         <motion.h1
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-          className="text-[6rem] sm:text-[8rem] lg:text-[10rem] font-bold leading-none bg-gradient-to-r from-[#0080FF] via-[#4F1AD6] to-[#00F6FF] bg-clip-text text-transparent"
+          className="text-[4rem] sm:text-[6rem] lg:text-[8rem] font-bold leading-none bg-gradient-to-r from-[#0080FF] via-[#4F1AD6] to-[#00F6FF] bg-clip-text text-transparent"
         >
           404
         </motion.h1>

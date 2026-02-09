@@ -27,7 +27,7 @@ const ScrollToTopButton = () => {
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.3 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full backdrop-blur-md bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-[#0080FF]/20 hover:border-[#0080FF]/40 transition-colors duration-300 shadow-lg"
+          className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 w-12 h-12 rounded-full backdrop-blur-md bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-[#0080FF]/20 hover:border-[#0080FF]/40 transition-colors duration-300 shadow-lg"
           aria-label="Scroll to top"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}

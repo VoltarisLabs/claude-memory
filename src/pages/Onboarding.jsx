@@ -1,13 +1,18 @@
-import React from 'react'
-import { motion } from 'framer-motion'
+import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, Clock, Users, Settings, Rocket } from 'lucide-react'
 import SparklesCanvas from '../components/Sparkles'
 import VoiceWaves from '../components/VoiceWaves'
 import GlowCard from '../components/GlowCard'
 import EnhancedCTA from '../components/EnhancedCTA'
 import SEO from '../components/SEO'
+import BorderBeam from '../components/BorderBeam'
+import GradientText from '../components/GradientText'
 
 const Onboarding = () => {
+  const [activeStep, setActiveStep] = useState(0)
+  const [hoveredStep, setHoveredStep] = useState(null)
+
   const timelineSteps = [
     {
       day: 'Day 0',
@@ -72,8 +77,18 @@ const Onboarding = () => {
     }
   }
 
+  const getColorHex = (color) => {
+    const hexMap = {
+      emerald: '#10b981',
+      blue: '#3b82f6',
+      purple: '#a855f7',
+      amber: '#f59e0b'
+    }
+    return hexMap[color] || '#3b82f6'
+  }
+
   return (
-    <div className="min-h-screen bg-black text-white relative">
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <SEO
         title="Onboarding"
         description="Get started with Title Voice AI. Live in 2 weeks with full setup support."
@@ -105,7 +120,7 @@ const Onboarding = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-xl text-white/80 max-w-3xl mx-auto"
+            className="text-xl text-white/80 max-w-full md:max-w-3xl mx-auto"
           >
             Your AI receptionist will be live in 2 weeks. Here's what to expect.
           </motion.p>
@@ -114,29 +129,184 @@ const Onboarding = () => {
 
       {/* Timeline Section */}
       <section className="py-12 lg:py-16 px-4 relative z-10">
-        <div className="container mx-auto max-w-4xl">
-          <h2 className="text-4xl font-bold text-center mb-12">Onboarding Timeline</h2>
-          <div className="space-y-6">
+        <div className="container mx-auto max-w-full lg:max-w-6xl">
+          {/* Section Header */}
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
+              <GradientText animate>2-Week Onboarding Timeline</GradientText>
+            </h2>
+            <p className="text-white/60 text-xl max-w-full md:max-w-3xl mx-auto">
+              From contract signing to going live with your AI receptionist
+            </p>
+          </div>
+
+          {/* Desktop: Horizontal Stepper */}
+          <div className="hidden lg:block relative max-w-full md:max-w-5xl mx-auto">
+            {/* Background Sparkles */}
+            <div className="absolute inset-0 pointer-events-none opacity-40">
+              <SparklesCanvas particleColor="#38bdf8" particleDensity={40} speed={0.3} />
+            </div>
+
+            {/* Progress Line - SVG */}
+            <svg className="absolute top-[80px] left-0 right-0 h-2" style={{ zIndex: 1 }}>
+              <defs>
+                <linearGradient id="timelineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#10b981" />
+                  <stop offset="33%" stopColor="#3b82f6" />
+                  <stop offset="66%" stopColor="#a855f7" />
+                  <stop offset="100%" stopColor="#f59e0b" />
+                </linearGradient>
+              </defs>
+              <motion.line
+                x1="10%"
+                y1="50%"
+                x2="90%"
+                y2="50%"
+                stroke="url(#timelineGradient)"
+                strokeWidth="3"
+                strokeDasharray="1000"
+                strokeDashoffset="1000"
+                initial={{ strokeDashoffset: 1000 }}
+                whileInView={{ strokeDashoffset: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 2, ease: "easeInOut" }}
+              />
+            </svg>
+
+            {/* Steps */}
+            <div className="relative flex justify-between items-start pt-0" style={{ zIndex: 2 }}>
+              {timelineSteps.map((step, index) => {
+                const colors = colorMap[step.color]
+                const StepIcon = step.icon
+                const isActive = activeStep === index
+                const isHovered = hoveredStep === index
+
+                return (
+                  <motion.div
+                    key={index}
+                    className="flex flex-col items-center relative"
+                    style={{ flex: '1', maxWidth: '200px' }}
+                    initial={{ opacity: 0, y: -20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.2 + 0.5 }}
+                    onMouseEnter={() => setHoveredStep(index)}
+                    onMouseLeave={() => setHoveredStep(null)}
+                  >
+                    {/* Step Circle */}
+                    <motion.div
+                      className={`relative w-20 h-20 rounded-full ${colors.bg} border-4 ${colors.border} flex items-center justify-center cursor-pointer backdrop-blur-sm`}
+                      whileHover={{ scale: 1.15 }}
+                      onClick={() => setActiveStep(index)}
+                    >
+                      {/* BorderBeam on hover/active */}
+                      {(isHovered || isActive) && (
+                        <BorderBeam
+                          size={80}
+                          duration={10}
+                          colorFrom={getColorHex(step.color)}
+                          colorTo={getColorHex(step.color)}
+                        />
+                      )}
+
+                      {/* Icon */}
+                      <StepIcon className={`w-8 h-8 ${colors.text} relative z-10`} />
+
+                      {/* Breathing orb for active step */}
+                      {isActive && (
+                        <motion.div
+                          className="absolute inset-0 rounded-full -z-10"
+                          style={{ background: getColorHex(step.color) + '20' }}
+                          animate={{
+                            scale: [1, 1.3, 1],
+                            opacity: [0.5, 0.8, 0.5]
+                          }}
+                          transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        />
+                      )}
+                    </motion.div>
+
+                    {/* Day Label */}
+                    <motion.div className="mt-6 text-center">
+                      <span className={`text-sm font-mono ${colors.text} font-semibold`}>
+                        {step.day}
+                      </span>
+                    </motion.div>
+
+                    {/* Expanded Card (shown when active/hovered) */}
+                    <AnimatePresence>
+                      {(isActive || isHovered) && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 20, scale: 0.9 }}
+                          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                          className="absolute top-32 left-1/2 -translate-x-1/2 w-64 z-50"
+                        >
+                          <GlowCard glowColor={getColorHex(step.color)}>
+                            <div className="p-6 bg-[#080808] rounded-xl border border-white/10">
+                              <h3 className="text-xl font-bold text-white mb-3">
+                                {step.title}
+                              </h3>
+                              <p className="text-white/70 leading-relaxed">
+                                {step.description}
+                              </p>
+                            </div>
+                          </GlowCard>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                )
+              })}
+            </div>
+
+            {/* Add spacing for expanded cards */}
+            <div className="h-72" />
+          </div>
+
+          {/* Mobile: Vertical Cards */}
+          <div className="lg:hidden space-y-8">
             {timelineSteps.map((step, index) => {
               const colors = colorMap[step.color]
+              const StepIcon = step.icon
               return (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                 >
                   <GlowCard>
-                    <div className="p-6 bg-[#080808] rounded-xl border border-white/10 flex items-start gap-4">
-                      <div className={`w-12 h-12 rounded-lg ${colors.bg} border ${colors.border} flex items-center justify-center flex-shrink-0`}>
-                        <step.icon className={`w-6 h-6 ${colors.text}`} />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="text-xs text-white/60 font-mono">{step.day}</span>
-                          <h3 className="text-xl font-bold text-white">{step.title}</h3>
+                    <div className="p-8 bg-[#080808] rounded-xl border border-white/10">
+                      <div className="flex items-start gap-6">
+                        {/* Icon Badge */}
+                        <div className={`w-16 h-16 rounded-2xl ${colors.bg} border-2 ${colors.border} flex items-center justify-center flex-shrink-0`}>
+                          <StepIcon className={`w-8 h-8 ${colors.text}`} />
                         </div>
-                        <p className="text-white/80">{step.description}</p>
+
+                        {/* Content */}
+                        <div className="flex-1 pt-1">
+                          {/* Day Label */}
+                          <div className="mb-3">
+                            <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${colors.bg} ${colors.text} border ${colors.border}`}>
+                              {step.day}
+                            </span>
+                          </div>
+
+                          {/* Title */}
+                          <h3 className="text-2xl font-bold text-white mb-3">
+                            {step.title}
+                          </h3>
+
+                          {/* Description */}
+                          <p className="text-white/70 text-lg leading-relaxed">{step.description}</p>
+                        </div>
                       </div>
                     </div>
                   </GlowCard>
@@ -149,8 +319,8 @@ const Onboarding = () => {
 
       {/* Checklist Section */}
       <section className="py-12 lg:py-16 px-4 relative z-10 bg-gradient-to-b from-transparent to-black/50">
-        <div className="container mx-auto max-w-3xl">
-          <h2 className="text-4xl font-bold text-center mb-12">What You'll Need</h2>
+        <div className="container mx-auto max-w-full lg:max-w-3xl">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">What You'll Need</h2>
           <GlowCard>
             <div className="p-6 bg-[#080808] rounded-xl border border-white/10">
               <div className="space-y-3">

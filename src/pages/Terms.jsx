@@ -18,7 +18,7 @@ const Terms = () => {
       content: [
         'Title Voice provides AI-powered voice agent services designed specifically for title companies, including automated call handling, scheduling, deal status inquiries, and integration with title production software.',
         'Our services are provided on a subscription basis with various plan tiers as described on our Pricing page.',
-        'We strive for 99.9% uptime but do not guarantee uninterrupted service. Scheduled maintenance will be communicated in advance.',
+        'We guarantee 99% uptime during covered service hours (business hours for Professional plan, 24/7 for Enterprise plan). Scheduled maintenance will be communicated in advance.',
       ],
     },
     {
@@ -50,10 +50,11 @@ const Terms = () => {
     {
       title: '6. Payment & Billing',
       content: [
-        'Subscription fees are billed in advance on a monthly or annual basis as selected during signup.',
-        'All fees are non-refundable except as required by law or as explicitly stated in our refund policy.',
-        'We reserve the right to change pricing with 30 days notice. Existing subscriptions will be honored until the end of the current billing period.',
-        'Failure to pay may result in suspension or termination of your account.',
+        'Subscription fees are billed in advance on a monthly or annual basis as selected during signup. Payment is due upon receipt via ACH or credit card on file.',
+        'All fees are non-refundable except as required by law or as explicitly stated in our refund policy (see Section 8).',
+        'Late payments: If payment is 10 days overdue, service will be paused. If payment is 30 days overdue, service will be terminated and the account closed.',
+        'Late payment interest: Overdue balances accrue interest at 2% per month (24% APR) until paid in full.',
+        'Price increases: After 6 months of service, we reserve the right to increase pricing by a maximum of 10% per 6-month period, with 30 days advance written notice.',
       ],
     },
     {
@@ -68,12 +69,15 @@ const Terms = () => {
       title: '8. Contract Terms & Termination',
       content: [
         'All subscriptions begin with a 3-month pilot period to evaluate service fit.',
-        'After successful pilot completion, contracts automatically convert to a 12-month standard term.',
-        'Either party may terminate with 30 days written notice during any contract period.',
+        'After successful pilot completion, contracts automatically convert to a 12-month standard term. Contracts auto-renew for 12-month periods thereafter.',
+        'Either party may terminate with 30 days written notice during any contract period. Notice must be in writing and acknowledged by the Provider.',
+        'Early termination: If Client terminates before the end of a contract term, Client is responsible for payment of ALL remaining monthly fees for that term.',
+        'Service pause: Once service is activated, billing continues regardless of usage. Service pauses or temporary suspensions are not permitted.',
         'A one-time setup fee of $5,000 applies to all new accounts. This fee is non-refundable after setup begins.',
-        'We offer a 30-day money-back guarantee during the pilot period. If unsatisfied within the first 30 days, we will refund subscription fees (setup fee excluded).',
+        'We offer a 30-day money-back guarantee during the pilot period. If unsatisfied within the first 30 days, we will refund monthly subscription fees only (setup fee is non-refundable).',
         'Title Voice may suspend or terminate your account immediately for material violation of these terms.',
-        'Upon termination, your right to use the service ceases immediately. We retain data for 30 days (see Privacy Policy).',
+        'Upon termination, your right to use the service ceases immediately. We retain data for 30 days post-termination, after which all data is permanently deleted.',
+        'Data export after termination: Clients may request a data export during the 30-day retention period. After the 30-day period, data export requests incur a $250 fee.',
       ],
     },
     {
@@ -126,7 +130,7 @@ const Terms = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-black text-white relative">
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <SEO
         title="Terms of Service"
         description="Title Voice terms of service - Read our terms and conditions for using our AI voice agent platform."
@@ -142,7 +146,7 @@ const Terms = () => {
       <section className="relative pt-32 pb-16 px-4 overflow-hidden">
         {/* Sphere Motion GIF — same as landing page */}
         <div className="absolute inset-0">
-          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60 scale-75" />
+          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -170,7 +174,7 @@ const Terms = () => {
 
       {/* Content */}
       <section className="relative pb-24 px-4">
-        <div className="container mx-auto max-w-4xl relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-4xl relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

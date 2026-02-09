@@ -60,7 +60,7 @@ const IntegrationSection = () => {
 
           <motion.div
             variants={containerVariants}
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-4xl mx-auto"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 max-w-4xl mx-auto"
           >
             {integrations.map((integration, index) => (
               <motion.div
@@ -73,7 +73,7 @@ const IntegrationSection = () => {
                   transition: { duration: 0.2 }
                 }}
               >
-                <div className="bg-white border-2 border-gray-200 rounded-xl p-6 text-center hover:border-navy-300 hover:shadow-lg transition-all duration-300 group-hover:shadow-navy-200">
+                <div className="bg-white border-2 border-gray-200 rounded-xl p-3 sm:p-4 md:p-6 text-center hover:border-navy-300 hover:shadow-lg transition-all duration-300 group-hover:shadow-navy-200">
                   <div className="w-12 h-12 bg-gradient-to-br from-navy-100 to-navy-200 rounded-lg mx-auto mb-4 flex items-center justify-center">
                     <span className="text-navy-600 font-bold text-sm">
                       {integration.charAt(0)}

@@ -109,14 +109,14 @@ const MetricsSection = () => {
         >
           <motion.h2
             variants={itemVariants}
-            className="text-3xl lg:text-4xl font-bold mb-12"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-12"
           >
             Title Voice delivers real results for title companies nationwide.
           </motion.h2>
 
           <motion.div
             variants={containerVariants}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-4xl mx-auto"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 max-w-4xl mx-auto"
           >
             {metrics.map((metric, index) => (
               <motion.div
@@ -129,7 +129,7 @@ const MetricsSection = () => {
                 }}
               >
                 <motion.div
-                  className="text-4xl lg:text-5xl font-bold mb-2"
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2"
                   style={{ background: 'linear-gradient(to right, #3282B8, #BBE1FA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}

@@ -82,3 +82,22 @@ jspm_packages/
 
 # DynamoDB Local files
 .dynamodb/
+
+# Debug and planning documents
+*_PLAN.md
+*_AUDIT*.md
+*_FIXES*.md
+*_DEBUG*.md
+MOBILE_*.md
+DESKTOP_*.md
+COMPLETE_*.md
+CORRECTIONS_*.md
+LATEST_*.md
+WORK_*.md
+FINAL_*.md
+*.txt
+
+# Keep these important docs
+!README.md
+!CONTACT_FORM_SETUP.md
+!CLAUDE.md

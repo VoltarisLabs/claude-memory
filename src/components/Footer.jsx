@@ -120,7 +120,7 @@ const Footer = () => {
           {/* Column 2: Product */}
           <motion.div variants={itemVariants}>
             <h3 className="text-sm font-semibold text-white/80 uppercase tracking-wider mb-4">Product</h3>
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               {footerLinks.product.map((link, index) => (
                 <li key={index}>
                   {link.href.startsWith('http') ? (
@@ -163,7 +163,7 @@ const Footer = () => {
             </ul>
 
             <h3 className="text-sm font-semibold text-white/80 uppercase tracking-wider mb-4">Resources</h3>
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               {footerLinks.resources.map((link, index) => (
                 <li key={index}>
                   <Link to={link.href} className="text-white/35 hover:text-white/80 transition-colors duration-300 text-sm block">
@@ -177,7 +177,7 @@ const Footer = () => {
           {/* Column 4: Legal */}
           <motion.div variants={itemVariants}>
             <h3 className="text-sm font-semibold text-white/80 uppercase tracking-wider mb-4">Legal</h3>
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               {footerLinks.legal.map((link, index) => (
                 <li key={index}>
                   <Link to={link.href} className="text-white/35 hover:text-white/80 transition-colors duration-300 text-sm block">

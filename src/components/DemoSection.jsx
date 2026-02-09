@@ -72,20 +72,16 @@ const DemoSection = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white rounded-2xl shadow-xl p-8"
+            className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8"
           >
             {/* Cal.com Widget Container */}
-            <div 
+            <div
               id="my-cal-inline-30min"
-              style={{ 
-                width: '100%', 
-                height: '600px',
+              className="w-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] flex items-center justify-center"
+              style={{
                 border: '2px solid #e5e5e5',
                 borderRadius: '8px',
-                backgroundColor: '#f9f9f9',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
+                backgroundColor: '#f9f9f9'
               }}
             >
               <p style={{ fontSize: '18px', color: '#666' }}>

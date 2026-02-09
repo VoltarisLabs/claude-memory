@@ -50,20 +50,20 @@ const BookingModal = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.3, type: 'spring', damping: 25 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-2xl overflow-hidden pointer-events-auto"
+              className="relative w-full max-w-full sm:max-w-2xl md:max-w-4xl max-h-[90vh] bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-2xl overflow-hidden pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}
               <button
                 onClick={closeModal}
-                className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/80 hover:bg-white border border-gray-200 shadow-lg transition-all duration-200 hover:scale-110"
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-white/80 hover:bg-white border border-gray-200 shadow-lg transition-all duration-200 hover:scale-110"
                 aria-label="Close modal"
               >
                 <X className="w-5 h-5 text-gray-600" />
               </button>
 
               {/* Header */}
-              <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] px-8 py-6">
+              <div className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] px-4 sm:px-8 py-6">
                 <h2 className="text-2xl md:text-3xl font-bold text-white">
                   Schedule Your Demo
                 </h2>
@@ -79,7 +79,7 @@ const BookingModal = () => {
                     src="https://cal.com/title-voice-ai-tsigyx/30min?embed=true&embedType=inline"
                     style={{
                       width: '100%',
-                      height: '650px',
+                      height: 'min(650px, 70vh)',
                       border: 'none',
                       borderRadius: '8px'
                     }}

@@ -44,7 +44,7 @@ const Pricing = () => {
   }))
 
   return (
-    <div className="min-h-screen bg-black text-white relative">
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <SEO
         title="Pricing"
         description="Transparent pricing for Title Voice AI receptionist. Professional and Enterprise plans with free demo available."
@@ -69,7 +69,7 @@ const Pricing = () => {
       <VoiceWaves />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen px-4 pt-32 pb-20">
+      <section className="relative flex flex-col justify-center items-center text-center min-h-screen bg-black overflow-hidden px-4">
         {/* Animated Gradient Mesh Background */}
         <GradientMesh variant="purple" intensity="low" />
 
@@ -86,37 +86,26 @@ const Pricing = () => {
             transition={{ duration: 0.8 }}
             className="mb-8"
           >
-            {/* Pill Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#0080FF]/20 border border-[#0080FF]/40 backdrop-blur-md shadow-lg shadow-[#0080FF]/20 mb-8 hover:bg-[#0080FF]/25 hover:border-[#0080FF]/50 transition-all duration-300"
-            >
-              <SparklesIcon className="w-4 h-4 text-[#0080FF]" />
-              <span className="text-sm text-[#0080FF] font-semibold">Transparent Pricing</span>
-            </motion.div>
-
-            <div className="mb-6">
+            <div className="mb-6 mt-12">
               <WordReveal
-                text="Simple, Transparent Pricing"
+                text="Transparent Pricing, Powerful Results"
                 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white"
                 trigger="mount"
               />
             </div>
             <div className="mb-8">
               <h1 className="text-2xl md:text-4xl font-medium text-white">
-                Choose the perfect plan for your title company.
+                Scale your operations without scaling your costs.
               </h1>
             </div>
 
             <motion.p
-              className="text-xl text-white/80 mb-12 max-w-4xl mx-auto"
+              className="text-xl text-white/80 mb-12 max-w-full md:max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              Start with our Professional plan and scale as your business grows. All plans include our core AI features with no hidden fees.
+              Every plan includes 24/7 AI support, seamless integrations, and unlimited scaling. No hidden fees, no surprises—just predictable pricing that grows with your business.
             </motion.p>
             <motion.div
               initial={{ opacity: 0 }}
@@ -124,7 +113,7 @@ const Pricing = () => {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="mt-4"
             >
-              <Link to="/roi-calculator" className="text-[#0080FF] hover:text-[#0080FF]/80 transition-colors text-sm font-medium">
+              <Link to="/roi-calculator" className="text-white hover:text-[#0080FF] transition-colors text-base font-semibold underline decoration-[#0080FF] underline-offset-4 hover:decoration-white">
                 Calculate your potential savings →
               </Link>
             </motion.div>
@@ -147,7 +136,7 @@ const Pricing = () => {
       </section>
 
       {/* Pricing Plans */}
-      <section className="py-20 px-4 relative z-10">
+      <section className="py-12 lg:py-20 px-4 relative z-10">
         <div className="container mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -160,7 +149,7 @@ const Pricing = () => {
                 Choose Your Plan
               </span>
             </h2>
-            <p className="text-xl text-white max-w-3xl mx-auto mb-8">
+            <p className="text-xl text-white max-w-full md:max-w-3xl mx-auto mb-8">
               All plans include our core AI features
             </p>
 
@@ -209,7 +198,7 @@ const Pricing = () => {
             </motion.div>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-full md:max-w-4xl mx-auto items-start">
             {pricingPlans.map((plan, index) => (
               <ScrollReveal
                 key={plan.name}
@@ -220,7 +209,7 @@ const Pricing = () => {
               >
                 <motion.div whileHover={{ y: -6 }} transition={{ duration: 0.3 }} className="h-full">
                   <GlowCard className="h-full rounded-2xl">
-                  <div className="relative p-6 bg-[#080808] rounded-2xl border border-white/10 transition-all duration-500 hover:border-[#0080FF]/30 h-full flex flex-col overflow-hidden">
+                  <div className="relative p-4 md:p-6 bg-[#080808] rounded-2xl border border-white/10 transition-all duration-500 hover:border-[#0080FF]/30 h-full flex flex-col overflow-hidden">
                     <BorderBeam size={320} duration={8} delay={index * 4} colorFrom="#0080FF" colorTo="#4F1AD6" borderWidth={2} />
 
                     {/* Badge */}
@@ -309,7 +298,7 @@ const Pricing = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="max-w-4xl mx-auto mt-10"
+            className="max-w-full md:max-w-4xl mx-auto mt-10"
           >
             <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] px-6 py-5">
               <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs text-white/50">
@@ -336,8 +325,8 @@ const Pricing = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 px-4 bg-black relative z-10">
-        <div className="container mx-auto max-w-6xl">
+      <section className="py-12 lg:py-20 px-4 bg-black relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -355,12 +344,12 @@ const Pricing = () => {
               ))}
               <span className="text-white font-semibold ml-2">4.8/5</span>
             </div>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">
+            <p className="text-xl text-white/80 max-w-full md:max-w-3xl mx-auto">
               Trusted by title companies across the country
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {testimonials.map((testimonial, index) => (
               <ScrollReveal
                 key={index}
@@ -369,7 +358,7 @@ const Pricing = () => {
                 duration={0.6}
               >
                 <GlowCard className="h-full rounded-2xl">
-                  <div className="relative p-6 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/20 transition-all duration-300 h-full group">
+                  <div className="relative p-4 md:p-6 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/20 transition-all duration-300 h-full group">
                     <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-[#0080FF]/0 group-hover:bg-[#0080FF]/50 transition-all duration-300 rounded-full" />
                     <Quote className="w-8 h-8 text-white/10 group-hover:text-white/20 transition-colors mb-4" />
                     <p className="text-white/80 mb-6 leading-relaxed text-sm">{testimonial.text}</p>
@@ -403,7 +392,7 @@ const Pricing = () => {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-20 px-4 relative z-10">
+      <section id="faq" className="py-12 lg:py-20 px-4 relative z-10">
         <div className="container mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -416,12 +405,12 @@ const Pricing = () => {
                 Frequently Asked Questions
               </span>
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">
+            <p className="text-xl text-white/80 max-w-full md:max-w-3xl mx-auto">
               Everything you need to know about our pricing and plans
             </p>
           </motion.div>
 
-          <div className="max-w-4xl mx-auto space-y-4">
+          <div className="max-w-full md:max-w-4xl mx-auto space-y-4">
             {faqs.map((faq, index) => (
               <motion.div
                 key={index}

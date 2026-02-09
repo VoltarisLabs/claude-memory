@@ -109,7 +109,7 @@ const ResultsSection = () => {
                 transition: { duration: 0.2 }
               }}
             >
-              <div className="bg-white border-2 border-gray-100 rounded-2xl p-8 text-center hover:border-navy-200 hover:shadow-lg transition-all duration-300 group-hover:shadow-navy-100">
+              <div className="bg-white border-2 border-gray-100 rounded-2xl p-4 sm:p-6 md:p-8 text-center hover:border-navy-200 hover:shadow-lg transition-all duration-300 group-hover:shadow-navy-100">
                 <motion.div
                   className="w-16 h-16 bg-gradient-to-br from-navy-100 to-navy-200 text-navy-600 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:from-navy-200 group-hover:to-navy-300 transition-all duration-300"
                   whileHover={{
@@ -152,7 +152,7 @@ const ResultsSection = () => {
           className="text-center mt-16"
         >
           <motion.div
-            className="bg-gradient-to-r from-navy-50 to-blue-50 rounded-2xl p-8 md:p-12"
+            className="bg-gradient-to-r from-navy-50 to-blue-50 rounded-2xl p-4 sm:p-6 md:p-8 lg:p-12"
             whileHover={{
               scale: 1.02,
               transition: { duration: 0.2 }

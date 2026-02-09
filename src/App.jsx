@@ -13,6 +13,7 @@ import Footer from './components/Footer'
 import BookingModal from './components/BookingModal'
 import ScrollToTop from './components/ScrollToTop'
 import FloatingCTA from './components/FloatingCTA'
+import ScrollToTopButton from './components/ScrollToTopButton'
 
 // Pages
 import Home from './pages/Home'
@@ -127,8 +128,15 @@ function App() {
           <BookingModal />
         </div>
 
-        {/* Floating CTA button - positioned at bottom right */}
-        <FloatingCTA />
+        {/* Floating CTA button - desktop only */}
+        <div className="hidden md:block">
+          <FloatingCTA />
+        </div>
+
+        {/* Scroll to top button - mobile only */}
+        <div className="md:hidden">
+          <ScrollToTopButton />
+        </div>
       </Router>
     </BookingProvider>
     </PreloaderProvider>

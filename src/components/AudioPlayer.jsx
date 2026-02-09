@@ -280,7 +280,7 @@ const AudioPlayer = ({ src, title }) => {
       <audio ref={audioRef} src={src} preload="metadata" crossOrigin="anonymous" />
 
       {/* Minimal card */}
-      <div className="relative flex items-center gap-3 px-4 py-3
+      <div className="relative flex items-center gap-2 sm:gap-3 px-2 sm:px-3 md:px-4 py-2 sm:py-3
                     bg-white/[0.04] border border-white/[0.08] rounded-xl
                     transition-colors duration-300 hover:bg-white/[0.06]">
 
@@ -288,7 +288,7 @@ const AudioPlayer = ({ src, title }) => {
         <button
           onClick={togglePlay}
           disabled={isLoading}
-          className="w-10 h-10 rounded-full flex items-center justify-center
+          className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-full flex items-center justify-center
                    bg-[#0080FF] hover:bg-[#0073e6] active:scale-95
                    transition-all duration-200 flex-shrink-0
                    disabled:opacity-40 disabled:cursor-not-allowed"
@@ -301,7 +301,7 @@ const AudioPlayer = ({ src, title }) => {
         </button>
 
         {/* Canvas Waveform */}
-        <div ref={containerRef} className="flex-1 h-12 relative cursor-pointer">
+        <div ref={containerRef} className="flex-1 h-8 sm:h-10 md:h-12 relative cursor-pointer">
           {isLoading ? (
             <div className="flex items-center justify-center h-full gap-[3px]">
               {Array.from({ length: 30 }).map((_, i) => (
@@ -327,7 +327,7 @@ const AudioPlayer = ({ src, title }) => {
         </div>
 
         {/* Time */}
-        <div className="text-[11px] font-mono text-white/50 tabular-nums flex-shrink-0 min-w-[65px] text-right">
+        <div className="text-xs sm:text-sm font-mono text-white/50 tabular-nums flex-shrink-0 min-w-[45px] sm:min-w-[55px] md:min-w-[65px] text-right">
           <span className="text-white/80">{formatTime(currentTime)}</span>
           <span className="text-white/30"> / </span>
           <span>{formatTime(duration)}</span>
@@ -336,7 +336,7 @@ const AudioPlayer = ({ src, title }) => {
 
       {/* Title caption */}
       {title && (
-        <p className="text-white/40 text-[11px] mt-1.5 ml-1 tracking-wide font-medium">
+        <p className="text-white/40 text-xs mt-1.5 ml-1 tracking-wide font-medium">
           {title}
         </p>
       )}

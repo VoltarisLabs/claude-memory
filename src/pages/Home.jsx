@@ -11,6 +11,7 @@ import AudioPlayer from '../components/AudioPlayer'
 import SEO from '../components/SEO'
 import ScrollReveal from '../components/ScrollReveal'
 import GradientMesh from '../components/GradientMesh'
+import AnimatedCounter from '../components/AnimatedCounter'
 import {
   Phone,
   Calendar,
@@ -48,7 +49,7 @@ const Home = () => {
   const scrollToReceptionist = () => {
     const section = document.getElementById('receptionist-section')
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      section.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
   }
 
@@ -366,7 +367,7 @@ integrations.configure({
               </h2>
             </div>
             <motion.p
-              className="text-xl md:text-2xl text-white mb-12 max-w-4xl mx-auto"
+              className="text-xl md:text-2xl text-white mb-12 max-w-full md:max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
@@ -424,8 +425,8 @@ integrations.configure({
       {/* Gradient Divider */}
 
       {/* Why Title Companies Need An AI Answering Service Section */}
-      <section className="py-16 px-4 bg-black">
-        <div className="container mx-auto max-w-7xl">
+      <section className="py-12 lg:py-16 px-4 bg-black">
+        <div className="container mx-auto max-w-full lg:max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -441,7 +442,7 @@ integrations.configure({
             </h2>
           </motion.div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {/* Left Side List */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -797,12 +798,12 @@ integrations.configure({
           y: 0
         }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="py-12 px-4 bg-black relative overflow-hidden"
+        className="hidden lg:block py-12 px-4 bg-black relative overflow-hidden"
       >
         {/* Ambient background glow */}
         <div className="absolute inset-0 pointer-events-none">
           <motion.div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[200px] rounded-full"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[600px] h-[120px] sm:h-[200px] rounded-full"
             style={{ background: 'radial-gradient(ellipse, rgba(0, 128, 255, 0.08) 0%, transparent 70%)' }}
             animate={{
               scale: [1, 1.1, 1],
@@ -816,7 +817,7 @@ integrations.configure({
           />
         </div>
 
-        <div className="container mx-auto max-w-7xl">
+        <div className="container mx-auto max-w-full lg:max-w-7xl">
           <div className="flex items-center justify-center">
             <motion.div
               className="relative group"
@@ -827,11 +828,11 @@ integrations.configure({
               <div className="absolute -inset-1 bg-gradient-to-r from-[#0080FF]/20 via-[#4F1AD6]/20 to-[#0080FF]/20 rounded-full blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
 
               {/* Main navigation container */}
-              <div className="relative bg-black/80 backdrop-blur-2xl border border-white/10 rounded-full px-3 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+              <div className="relative bg-black/80 backdrop-blur-2xl border border-white/10 rounded-full px-1.5 py-1.5 sm:px-2 sm:py-2 md:px-3 md:py-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-x-auto scrollbar-hide max-w-full">
                 {/* Inner subtle gradient border */}
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#0080FF]/10 via-transparent to-[#4F1AD6]/10 pointer-events-none" />
 
-                <div className="flex items-center gap-2 relative">
+                <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 lg:gap-3 relative min-w-min">
                   {miniNavSections.map((section, index) => {
                     const Icon = section.icon
                     const isActive = activeSection === section.id
@@ -839,7 +840,7 @@ integrations.configure({
                       <React.Fragment key={section.id}>
                         <motion.button
                           onClick={() => scrollToSection(section.id)}
-                          className={`relative flex items-center gap-2.5 px-6 py-3 rounded-full transition-all duration-500 overflow-hidden ${
+                          className={`relative flex items-center gap-1.5 sm:gap-2 md:gap-2.5 px-2.5 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3 lg:px-6 rounded-full transition-all duration-500 overflow-hidden min-h-[40px] sm:min-h-[44px] whitespace-nowrap ${
                             isActive
                               ? 'text-white'
                               : 'text-white/60 hover:text-white/90'
@@ -901,13 +902,13 @@ integrations.configure({
                               delay: index * 0.1
                             }}
                           >
-                            <Icon className={`w-4 h-4 transition-all duration-300 ${
+                            <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-all duration-300 ${
                               isActive ? 'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]' : ''
                             }`} />
                           </motion.div>
 
                           {/* Text */}
-                          <span className={`text-sm font-semibold relative z-10 transition-all duration-300 ${
+                          <span className={`text-xs sm:text-sm font-semibold relative z-10 transition-all duration-300 ${
                             isActive ? 'tracking-wide' : 'tracking-normal'
                           }`}>
                             {section.title}
@@ -918,7 +919,7 @@ integrations.configure({
                             <motion.div
                               initial={{ scale: 0, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
-                              className="w-1.5 h-1.5 rounded-full bg-white relative z-10"
+                              className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-white relative z-10"
                               transition={{ type: 'spring', stiffness: 500, damping: 20, delay: 0.1 }}
                             >
                               <motion.div
@@ -959,7 +960,7 @@ integrations.configure({
       {/* Sticky navigation removed per user request */}
 
       {/* Receptionist AI Section */}
-      <section id="receptionist-section" className="py-16 lg:py-20 px-4 bg-black relative overflow-hidden">
+      <section id="receptionist-section" className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 bg-black relative overflow-hidden">
         {/* Background gradient orb */}
         <div className="absolute top-1/2 right-0 w-96 h-96 bg-[#0080FF]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
         {/* Dot grid texture */}
@@ -968,7 +969,7 @@ integrations.configure({
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }}
         />
 
-        <div className="container mx-auto max-w-7xl relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-7xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
             {/* Left Side - Description */}
             <motion.div
@@ -1263,7 +1264,7 @@ integrations.configure({
       </section>
 
       {/* Deal Status Section - ALTERNATING LAYOUT */}
-      <section id="deal-status-section" className="py-16 lg:py-20 px-4 bg-black relative overflow-hidden">
+      <section id="deal-status-section" className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 bg-black relative overflow-hidden">
         {/* Background gradient orb - left side for variation */}
         <div className="absolute top-1/2 left-0 w-96 h-96 bg-[#4F1AD6]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
         <div
@@ -1271,7 +1272,7 @@ integrations.configure({
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }}
         />
 
-        <div className="container mx-auto max-w-7xl relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-7xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
             {/* Left Side - Description (lg:order-2 for alternating) */}
             <motion.div
@@ -1348,7 +1349,7 @@ integrations.configure({
               className="lg:order-1"
             >
               <GlowCard className="rounded-2xl">
-                <div className="group bg-[#080808] rounded-2xl p-6 border border-white/10 min-h-[400px] hover:border-white/20 transition-all duration-300 relative overflow-hidden">
+                <div className="group bg-[#080808] rounded-2xl p-6 border border-white/10 min-h-auto sm:min-h-[300px] md:min-h-[400px] hover:border-white/20 transition-all duration-300 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#4F1AD6]/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                   <div className="space-y-4 relative z-10">
@@ -1564,11 +1565,11 @@ integrations.configure({
       </section>
 
       {/* Scheduler Section */}
-      <section id="scheduler-section" className="py-16 lg:py-20 px-4 bg-black relative overflow-hidden">
+      <section id="scheduler-section" className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 bg-black relative overflow-hidden">
         <div className="absolute top-1/2 right-0 w-96 h-96 bg-[#0080FF]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
         <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
-        <div className="container mx-auto max-w-7xl relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-7xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -1620,7 +1621,7 @@ integrations.configure({
 
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} viewport={{ once: true, amount: 0.3 }}>
               <GlowCard className="rounded-2xl">
-                <div className="group bg-[#080808] rounded-2xl p-6 border border-white/10 min-h-[400px] hover:border-white/20 transition-all duration-300 relative overflow-hidden">
+                <div className="group bg-[#080808] rounded-2xl p-6 border border-white/10 min-h-auto sm:min-h-[300px] md:min-h-[400px] hover:border-white/20 transition-all duration-300 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#0080FF]/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                   <div className="space-y-4 relative z-10">
                     <div className="flex items-center gap-3 pb-4 border-b border-white/10">
@@ -1745,11 +1746,11 @@ integrations.configure({
       </section>
 
       {/* Warm Transfers Section - ALTERNATING LAYOUT */}
-      <section id="warm-transfers-section" className="py-16 lg:py-20 px-4 bg-black relative overflow-hidden">
+      <section id="warm-transfers-section" className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 bg-black relative overflow-hidden">
         <div className="absolute top-1/2 left-0 w-96 h-96 bg-[#4F1AD6]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
         <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
-        <div className="container mx-auto max-w-7xl relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-7xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -1801,7 +1802,7 @@ integrations.configure({
 
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} viewport={{ once: true, amount: 0.3 }} className="lg:order-1">
               <GlowCard className="rounded-2xl">
-                <div className="group bg-[#080808] rounded-2xl p-6 border border-white/10 min-h-[400px] hover:border-white/20 transition-all duration-300 relative overflow-hidden">
+                <div className="group bg-[#080808] rounded-2xl p-6 border border-white/10 min-h-auto sm:min-h-[300px] md:min-h-[400px] hover:border-white/20 transition-all duration-300 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#4F1AD6]/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                   <div className="space-y-4 relative z-10">
                     <div className="flex items-center gap-3 pb-4 border-b border-white/10">
@@ -1926,11 +1927,11 @@ integrations.configure({
       </section>
 
       {/* Outbound Campaigns Section */}
-      <section id="outbound-campaigns-section" className="py-16 lg:py-20 px-4 bg-black relative overflow-hidden">
+      <section id="outbound-campaigns-section" className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 bg-black relative overflow-hidden">
         <div className="absolute top-1/2 right-0 w-96 h-96 bg-[#0080FF]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
         <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
-        <div className="container mx-auto max-w-7xl relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-7xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -1993,7 +1994,7 @@ integrations.configure({
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               viewport={{ once: true, amount: 0.3 }}
-              className="bg-white/5 rounded-2xl p-6 border border-white/10 min-h-[400px]"
+              className="bg-white/5 rounded-2xl p-6 border border-white/10 min-h-auto sm:min-h-[300px] md:min-h-[400px]"
             >
               <div className="space-y-4">
                 {/* Call Header */}
@@ -2126,8 +2127,8 @@ integrations.configure({
 
 
       {/* How It Works Section - Dark Minimalist Grid */}
-      < section className="py-20 px-4 bg-black" >
-        <div className="container mx-auto max-w-7xl">
+      <section className="py-12 lg:py-20 px-4 bg-black">
+        <div className="container mx-auto max-w-full lg:max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -2143,12 +2144,12 @@ integrations.configure({
                 How It Works
               </span>
             </h2>
-            <p className="text-xl text-white max-w-3xl mx-auto">
+            <p className="text-xl text-white max-w-full md:max-w-3xl mx-auto">
               Get started in three simple steps and transform your title company operations.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {workflowSteps.map((step, index) => (
               <motion.div
                 key={index}
@@ -2212,20 +2213,20 @@ integrations.configure({
       {/* Gradient Divider */}
 
       {/* Trust Stats Bar */}
-      <section className="py-16 px-4 bg-black relative z-10">
-        <div className="container mx-auto max-w-5xl">
+      <section className="py-12 lg:py-16 px-4 bg-black relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="bg-white/5 border border-white/10 backdrop-blur rounded-2xl p-6"
           >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 text-center">
               {[
-                { value: '500+', label: 'Title Companies' },
-                { value: '1M+', label: 'Calls Handled' },
-                { value: '99.9%', label: 'Uptime' },
-                { value: '4.8/5', label: 'Rating' }
+                { value: 100, suffix: '+', label: 'Title Companies', animated: true },
+                { value: 500, suffix: 'K+', label: 'Calls Handled', animated: true },
+                { value: 99, suffix: '%', label: 'Uptime', animated: true },
+                { value: '4.8/5', label: 'Rating', animated: false }
               ].map((stat, index) => (
                 <motion.div
                   key={index}
@@ -2233,8 +2234,19 @@ integrations.configure({
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
-                  <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
-                    {stat.value}
+                  <div className="text-3xl md:text-4xl font-bold">
+                    {stat.animated ? (
+                      <AnimatedCounter
+                        value={stat.value}
+                        suffix={stat.suffix}
+                        duration={2000}
+                        className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent"
+                      />
+                    ) : (
+                      <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                        {stat.value}
+                      </span>
+                    )}
                   </div>
                   <div className="text-white/60 text-sm mt-1">{stat.label}</div>
                 </motion.div>
@@ -2247,8 +2259,8 @@ integrations.configure({
       {/* Gradient Divider */}
 
       {/* Testimonials Section */}
-      <section className="py-20 px-4 bg-black relative z-10">
-        <div className="container mx-auto max-w-6xl">
+      <section className="py-12 lg:py-20 px-4 bg-black relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -2266,12 +2278,12 @@ integrations.configure({
               ))}
               <span className="text-white font-semibold ml-2">4.8/5</span>
             </div>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">
+            <p className="text-xl text-white/80 max-w-full md:max-w-3xl mx-auto">
               Trusted by title companies across the country
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {[
               {
                 name: 'Operations Director',
@@ -2359,7 +2371,7 @@ integrations.configure({
       {/* Gradient Divider */}
 
       {/* Book a Demo Section - Premium Enhanced */}
-      <section className="relative py-20 px-4 bg-black overflow-hidden">
+      <section className="relative py-12 lg:py-20 px-4 bg-black overflow-hidden">
         {/* Ambient Background Effects */}
         <div className="absolute inset-0 pointer-events-none">
           <motion.div
@@ -2389,7 +2401,7 @@ integrations.configure({
           />
         </div>
 
-        <div className="container mx-auto max-w-7xl relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-7xl relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -2418,12 +2430,12 @@ integrations.configure({
                 See Title Voice in action
               </span>
             </h2>
-            <p className="text-xl text-white/50 mb-4 max-w-3xl mx-auto">
+            <p className="text-xl text-white/50 mb-4 max-w-full md:max-w-3xl mx-auto">
               Book a personalized demo and see how Title Voice can transform your title company operations.
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-8 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-stretch">
             {/* Left Side - Demo Benefits */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}

@@ -78,7 +78,7 @@ const Hero = () => {
           >
             <motion.h1
               variants={itemVariants}
-              className="text-5xl lg:text-6xl font-bold leading-tight"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
             >
               <span className="gradient-text">
                 AI Virtual Assistant for Title Companies
@@ -91,7 +91,7 @@ const Hero = () => {
 
             <motion.p
               variants={itemVariants}
-              className="text-xl text-gray-600 leading-relaxed"
+              className="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl"
             >
               Title Voice AI virtual assistant handles calls 24/7, schedules closings, and manages customer inquiries. Our title company virtual assistant integrates with ResWare, RamQuest, and all major title software to keep your business running smoothly.
             </motion.p>
@@ -123,7 +123,7 @@ const Hero = () => {
             animate="visible"
             className="relative"
           >
-            <div className="bg-gray-50 rounded-2xl p-6 shadow-xl">
+            <div className="bg-gray-50 rounded-2xl p-3 sm:p-4 md:p-6 shadow-xl">
               {/* Chat Messages */}
               <div className="space-y-4 mb-6">
                 <AnimatePresence mode="wait">
@@ -142,7 +142,7 @@ const Hero = () => {
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: 0.2 }}
                     >
-                      <div className="bg-[#0F4C75] text-white px-4 py-3 rounded-2xl rounded-br-md max-w-xs">
+                      <div className="bg-[#0F4C75] text-white px-4 py-3 rounded-2xl rounded-br-md max-w-[85%] sm:max-w-xs md:max-w-sm">
                         <div className="flex items-center gap-2 mb-1">
                           <div className="w-6 h-6 bg-[#3282B8] rounded-full flex items-center justify-center text-xs font-bold">
                             SK
@@ -160,7 +160,7 @@ const Hero = () => {
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: 0.4 }}
                     >
-                      <div className="bg-white text-gray-800 px-4 py-3 rounded-2xl rounded-bl-md max-w-xs shadow-sm border">
+                      <div className="bg-white text-gray-800 px-4 py-3 rounded-2xl rounded-bl-md max-w-[85%] sm:max-w-xs md:max-w-sm shadow-sm border">
                         <div className="flex items-center gap-2 mb-1">
                           <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs font-bold text-white">
                             TV

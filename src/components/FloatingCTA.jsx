@@ -43,7 +43,7 @@ const FloatingCTA = () => {
             damping: 25,
             duration: 0.3
           }}
-          className="fixed bottom-8 right-8 z-50 group"
+          className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 group"
         >
           {/* Dismiss button */}
           <button
@@ -57,7 +57,7 @@ const FloatingCTA = () => {
           {/* Main CTA button */}
           <motion.button
             onClick={handleClick}
-            className="relative flex items-center gap-3 px-6 py-4 rounded-full overflow-hidden shadow-2xl"
+            className="relative flex items-center gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-full overflow-hidden shadow-2xl max-w-[90%] sm:max-w-none"
             style={{
               background: 'linear-gradient(135deg, #0080FF 0%, #4F1AD6 100%)',
               backgroundSize: '200% 200%',
@@ -103,7 +103,7 @@ const FloatingCTA = () => {
             <Calendar className="w-5 h-5 text-white relative z-10" />
 
             {/* Text */}
-            <span className="font-semibold text-white relative z-10 whitespace-nowrap">
+            <span className="font-semibold text-white relative z-10 whitespace-normal sm:whitespace-nowrap text-sm sm:text-base">
               Book a Demo
             </span>
 

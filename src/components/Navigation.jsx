@@ -60,7 +60,7 @@ const Navigation = () => {
           : 'bg-transparent'
       }`}
     >
-      <div className="container mx-auto px-6 max-w-7xl">
+      <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <motion.div
@@ -101,7 +101,7 @@ const Navigation = () => {
 
           {/* Mobile Menu Button */}
           <motion.button
-            className="md:hidden p-2 text-white/80"
+            className="md:hidden p-4 text-white/80"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             whileTap={{ scale: 0.9 }}
             aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
@@ -135,7 +135,7 @@ const Navigation = () => {
                         handleNavClick(e, item.href)
                         setIsMobileMenuOpen(false)
                       }}
-                      className={`block font-medium transition-colors duration-200 py-1 ${
+                      className={`block font-medium transition-colors duration-200 py-3 ${
                         isActive(item.href)
                           ? 'text-[#0080FF]'
                           : 'text-white/50 hover:text-white'

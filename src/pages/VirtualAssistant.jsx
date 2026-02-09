@@ -62,7 +62,7 @@ const VirtualAssistant = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-black text-white relative">
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <SEO
         title="AI Virtual Assistant"
         description="AI Virtual Assistant for title companies — 24/7 call handling, smart routing, and seamless software integration."
@@ -78,7 +78,7 @@ const VirtualAssistant = () => {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 py-12 lg:py-16">
         <div className="absolute inset-0">
-          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60 scale-75" />
+          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -112,7 +112,7 @@ const VirtualAssistant = () => {
             </div>
 
             <motion.p
-              className="text-xl text-white/80 mb-12 max-w-4xl mx-auto"
+              className="text-xl text-white/80 mb-12 max-w-full md:max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -143,7 +143,7 @@ const VirtualAssistant = () => {
 
       {/* Features Grid */}
       <section className="py-16 lg:py-20 px-4 relative z-10">
-        <div className="container mx-auto max-w-6xl">
+        <div className="container mx-auto max-w-full lg:max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -159,7 +159,7 @@ const VirtualAssistant = () => {
                 Why Title Companies Choose Our Virtual Assistant
               </span>
             </h2>
-            <p className="text-xl text-white/60 max-w-3xl mx-auto">
+            <p className="text-xl text-white/60 max-w-full md:max-w-3xl mx-auto">
               Our AI virtual assistant is specifically designed for title companies,
               integrating seamlessly with your existing workflow and software.
             </p>
@@ -197,7 +197,7 @@ const VirtualAssistant = () => {
 
       {/* Integration Section */}
       <section className="py-16 lg:py-20 px-4 relative z-10">
-        <div className="container mx-auto max-w-5xl">
+        <div className="container mx-auto max-w-full lg:max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -213,7 +213,7 @@ const VirtualAssistant = () => {
                 Seamless Integration with Your Title Software
               </span>
             </h2>
-            <p className="text-xl text-white/60 max-w-3xl mx-auto">
+            <p className="text-xl text-white/60 max-w-full md:max-w-3xl mx-auto">
               Our virtual assistant integrates with ResWare, RamQuest, and all major
               title company software for a unified workflow experience.
             </p>
@@ -246,7 +246,7 @@ const VirtualAssistant = () => {
         <div className="absolute inset-0">
           <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
           <motion.div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#0080FF]/10 rounded-full blur-[200px]"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] max-w-[800px] h-[120vw] max-h-[800px] bg-[#0080FF]/10 rounded-full blur-[120px] sm:blur-[200px]"
             animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.15, 0.1] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -258,7 +258,7 @@ const VirtualAssistant = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto"
+            className="text-center max-w-full md:max-w-4xl mx-auto"
           >
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
               <span className="text-white">Ready for Your Own</span>
@@ -267,7 +267,7 @@ const VirtualAssistant = () => {
                 AI Virtual Assistant?
               </span>
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-white/60 mb-14 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-white/60 mb-14 max-w-full md:max-w-2xl mx-auto leading-relaxed">
               See how Title Voice can handle your calls 24/7, schedule closings, and keep your clients informed — all on autopilot.
             </p>
 

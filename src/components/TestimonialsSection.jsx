@@ -187,7 +187,7 @@ const TestimonialsSection = () => {
             <div className="flex items-center justify-center gap-4 mt-8">
               <motion.button
                 onClick={prevTestimonial}
-                className="w-10 h-10 bg-gray-100 hover:bg-navy-100 text-gray-600 hover:text-navy-600 rounded-full flex items-center justify-center transition-colors duration-200"
+                className="w-11 h-11 bg-gray-100 hover:bg-navy-100 text-gray-600 hover:text-navy-600 rounded-full flex items-center justify-center transition-colors duration-200"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -200,20 +200,27 @@ const TestimonialsSection = () => {
                   <motion.button
                     key={index}
                     onClick={() => goToTestimonial(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                    className={`p-2 rounded-full transition-all duration-200 ${
+                      index === currentIndex
+                        ? 'bg-transparent'
+                        : 'bg-transparent'
+                    }`}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    aria-label={`Go to testimonial ${index + 1}`}
+                  >
+                    <div className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${
                       index === currentIndex
                         ? 'bg-navy-600 scale-125'
-                        : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.9 }}
-                  />
+                        : 'bg-gray-300'
+                    }`} />
+
                 ))}
               </div>
 
               <motion.button
                 onClick={nextTestimonial}
-                className="w-10 h-10 bg-gray-100 hover:bg-navy-100 text-gray-600 hover:text-navy-600 rounded-full flex items-center justify-center transition-colors duration-200"
+                className="w-11 h-11 bg-gray-100 hover:bg-navy-100 text-gray-600 hover:text-navy-600 rounded-full flex items-center justify-center transition-colors duration-200"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >

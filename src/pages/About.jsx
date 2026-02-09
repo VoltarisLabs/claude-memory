@@ -1,385 +1,293 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
-import { Link } from 'react-router-dom'
-import SparklesBackground from '../components/Sparkles'
+import { motion } from 'framer-motion'
+import { useInView } from 'react-intersection-observer'
+import {
+  Target,
+  Users,
+  Zap,
+  Shield,
+  TrendingUp,
+  CheckCircle,
+  Sparkles as SparklesIcon,
+  Phone,
+  Clock,
+  Heart,
+  AlertTriangle,
+  XCircle,
+  DollarSign,
+  Calendar as CalendarIcon,
+  Quote,
+  Search,
+  Settings,
+  Rocket
+} from 'lucide-react'
+import Sparkles from '../components/Sparkles'
 import VoiceWaves from '../components/VoiceWaves'
+import GlowCard from '../components/GlowCard'
+import BorderBeam from '../components/BorderBeam'
 import { PrimaryButton, OutlineButton } from '../components/Buttons'
-import { ArrowRight, Calendar, Phone, PhoneOff, Bot, Plug, Shield, Target, TrendingUp, Headphones, Zap, CheckCircle2, Sparkles as SparklesIcon } from 'lucide-react'
 import SEO from '../components/SEO'
+import { useBooking } from '../context/BookingContext'
+import GradientMesh from '../components/GradientMesh'
+import SpaceLines from '../components/SpaceLines'
 import { WordReveal } from '../components/TextAnimations'
-
-// ─── Animated Counter ────────────────────────────────
-const AnimatedCounter = ({ value, suffix = '', prefix = '', duration = 2000 }) => {
-  const [count, setCount] = useState(0)
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.5 })
-  const numericValue = parseFloat(value)
-
-  useEffect(() => {
-    if (!isInView) return
-    const startTime = performance.now()
-    const step = (currentTime) => {
-      const elapsed = currentTime - startTime
-      const progress = Math.min(elapsed / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setCount(Math.floor(eased * numericValue))
-      if (progress < 1) requestAnimationFrame(step)
-    }
-    requestAnimationFrame(step)
-  }, [isInView, numericValue, duration])
-
-  return <span ref={ref}>{prefix}{count}{suffix}</span>
-}
-
-// ─── Glow Card with Cursor Tracking ─────────────────
-const GlowCard = ({ children, className = '', glowColor = 'rgba(0, 128, 255, 0.4)' }) => {
-  const [position, setPosition] = useState({ x: 0, y: 0 })
-  const [opacity, setOpacity] = useState(0)
-
-  const handleMouseMove = useCallback((e) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top })
-  }, [])
-
-  return (
-    <div
-      className={`relative group ${className}`}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setOpacity(1)}
-      onMouseLeave={() => setOpacity(0)}
-    >
-      {/* Outer glow */}
-      <div
-        className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${glowColor}, transparent 40%)`,
-          opacity: opacity * 0.15,
-        }}
-      />
-      {/* Border glow */}
-      <div
-        className="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-500"
-        style={{
-          background: `radial-gradient(400px circle at ${position.x}px ${position.y}px, ${glowColor}, transparent 40%)`,
-          opacity: opacity * 0.3,
-          maskImage: 'linear-gradient(black, black) content-box, linear-gradient(black, black)',
-          maskComposite: 'exclude',
-          WebkitMaskComposite: 'xor',
-          padding: '1px',
-          borderRadius: '1rem',
-        }}
-      />
-      {children}
-    </div>
-  )
-}
-
-// ─── Stagger Container ──────────────────────────────
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
-  }
-}
-
-const staggerItem = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1, y: 0,
-    transition: { type: 'spring', stiffness: 200, damping: 20 }
-  }
-}
+import AnimatedCounter from '../components/AnimatedCounter'
 
 const About = () => {
-  const problemStats = [
-    { value: '78', prefix: '$', suffix: 'K', label: 'Lost Per Year', sublabel: 'to missed calls' },
-    { value: '47', suffix: '+', label: 'Calls to Voicemail', sublabel: 'every single month' },
-    { value: '23', suffix: '%', label: 'Calls Unanswered', sublabel: 'during business hours' },
-    { value: '5', suffix: 'pm', label: 'Phones Stop', sublabel: 'deals don\'t' },
+  const { openModal } = useBooking()
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1
+  })
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 }
+    }
+  }
+
+  const staggerItem = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+    }
+  }
+
+  const values = [
+    {
+      icon: Target,
+      title: 'Customer First',
+      description: 'Every decision we make starts with your success. We build solutions that solve real problems for title companies.'
+    },
+    {
+      icon: Shield,
+      title: 'Trust & Security',
+      description: 'Your data security is paramount. We maintain the highest standards of compliance and data protection.'
+    },
+    {
+      icon: Zap,
+      title: 'Innovation',
+      description: 'We continuously evolve our AI technology to stay ahead of industry needs and deliver cutting-edge solutions.'
+    },
+    {
+      icon: Users,
+      title: 'Partnership',
+      description: 'We work alongside you as a true partner, invested in your growth and long-term success.'
+    },
+    {
+      icon: TrendingUp,
+      title: 'Results Driven',
+      description: 'We measure our success by the tangible results we deliver - more calls answered, more deals closed.'
+    },
+    {
+      icon: Heart,
+      title: 'Excellence',
+      description: 'We hold ourselves to the highest standards in everything we do, from AI accuracy to customer support.'
+    }
   ]
 
   const whatWeDo = [
     {
-      icon: Headphones,
-      title: '24/7 Call Answering',
-      description: 'Every call answered. Holidays, weekends, 2am. Your AI never sleeps, never calls in sick, and never puts a caller on hold.',
-    },
-    {
-      icon: Calendar,
-      title: 'Closing Scheduling',
-      description: 'The AI checks your calendar in real-time and books closings on the spot. No phone tag. No callbacks.',
-    },
-    {
       icon: Phone,
-      title: 'Status Inquiries',
-      description: '"Where\'s my closing?" stops interrupting your team. The AI pulls file status and answers instantly.',
+      title: '24/7 AI Receptionist',
+      description: 'Never miss a call with our intelligent AI that handles inquiries, schedules appointments, and provides real-time updates.'
     },
     {
-      icon: Plug,
-      title: 'Software Integration',
-      description: 'Direct integration with Qualia, SoftPro, ResWare, and RamQuest. The AI sees your calendar and files in real-time.',
+      icon: Clock,
+      title: 'Smart Scheduling',
+      description: 'Automated closing scheduling that integrates seamlessly with your title software and calendar systems.'
     },
     {
-      icon: Shield,
-      title: 'Smart Escalation',
-      description: 'When a caller needs a real person, the AI knows. It transfers with full context so your team isn\'t starting from scratch.',
+      icon: CheckCircle,
+      title: 'Workflow Automation',
+      description: 'Streamline repetitive tasks and focus your team on high-value activities that grow your business.'
+    },
+    {
+      icon: Users,
+      title: 'Team Collaboration',
+      description: 'Seamless handoffs between AI and human team members ensure every customer gets personalized attention.'
     },
     {
       icon: TrendingUp,
-      title: 'Revenue Recovery',
-      description: 'Capture the deals that used to walk out the door. One saved closing pays for months of service.',
+      title: 'Analytics & Insights',
+      description: 'Detailed reporting and analytics help you optimize operations and make data-driven decisions.'
     },
+    {
+      icon: Shield,
+      title: 'Compliance & Security',
+      description: 'Built with title industry compliance in mind, ensuring your operations meet all regulatory requirements.'
+    }
+  ]
+
+  const stats = [
+    { value: 100, suffix: '+', label: 'Title Companies', animated: true },
+    { value: 500, suffix: 'K+', label: 'Calls Handled', animated: true },
+    { value: 99.9, suffix: '%', label: 'Uptime', animated: true },
+    { value: '4.8/5', label: 'Customer Rating', animated: false }
   ]
 
   const steps = [
     {
-      number: '01',
-      title: 'Connect',
-      description: 'We connect Title Voice to your existing phone system and title production software. Setup takes 48 hours, not weeks.',
-      icon: Plug,
+      icon: Search,
+      title: 'Discover',
+      description: 'We learn about your unique challenges and requirements'
     },
     {
-      number: '02',
-      title: 'Configure',
-      description: 'We customize your AI agent with your company\'s name, processes, and workflows. It sounds like part of your team from day one.',
-      icon: Bot,
+      icon: Settings,
+      title: 'Design',
+      description: 'Custom AI solution tailored to your specific workflow'
     },
     {
-      number: '03',
-      title: 'Capture',
-      description: 'Start capturing every call 24/7. After-hours, weekends, holidays. The calls that used to go to voicemail now get handled.',
-      icon: Target,
-    },
+      icon: Rocket,
+      title: 'Deploy',
+      description: 'Seamless integration with your existing systems'
+    }
   ]
 
   return (
-    <div className="min-h-screen bg-black text-white relative">
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <SEO
         title="About Us"
-        description="Title Voice exists because title companies shouldn't lose deals to voicemail. We built an AI voice agent that answers every call, 24/7."
-        canonical="/about"
+        description="Learn about Title Voice - the AI-powered solution revolutionizing title company operations with 24/7 virtual assistants and intelligent automation."
       />
 
-      {/* Background effects */}
+      {/* Background Effects */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <SparklesBackground particleColor="#38bdf8" particleDensity={50} minSize={1} maxSize={2.5} speed={0.8} />
+        <Sparkles particleColor="#38bdf8" particleDensity={60} speed={0.3} />
       </div>
       <VoiceWaves />
 
-      {/* ═══════════════════ HERO ═══════════════════ */}
-      <section className="relative min-h-screen px-4 pt-32 pb-20">
-        {/* Spheremotion Background */}
-        <div className="absolute inset-0">
-          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60" />
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
+      {/* Hero Section */}
+      <section className="relative flex flex-col justify-center items-center text-center min-h-screen overflow-hidden px-4">
+        {/* Animated Gradient Mesh Background */}
+        <GradientMesh variant="default" intensity="low" />
+
+        {/* SpaceLines for futuristic depth */}
+        <SpaceLines />
+
+        {/* Blurred gradient orbs */}
+        <div className="absolute top-1/4 left-1/4 w-[28rem] h-[28rem] bg-[#0080FF]/25 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-[#4F1AD6]/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/2 right-1/3 w-72 h-72 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
+
+        {/* Gradient bottom fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none" />
 
         <div className="container mx-auto text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
             className="mb-8"
           >
-            {/* Pill Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#0080FF]/20 border border-[#0080FF]/40 backdrop-blur-md shadow-lg shadow-[#0080FF]/20 mb-8 hover:bg-[#0080FF]/25 hover:border-[#0080FF]/50 transition-all duration-300"
-            >
-              <SparklesIcon className="w-4 h-4 text-[#0080FF]" />
-              <span className="text-sm text-[#0080FF] font-semibold">Our Story</span>
-            </motion.div>
-
             <div className="mb-6">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white">
-                <WordReveal text="Never Miss Another Call" delay={0.3} />
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">
+                <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                  <WordReveal text="Pioneering Title Operations" delay={0.2} />
+                </span>
+                <br />
+                <span className="text-white">
+                  <WordReveal text="with AI-Powered Solutions" delay={0.6} />
+                </span>
               </h1>
             </div>
 
-            <div className="mb-8">
-              <h2 className="text-2xl md:text-4xl font-medium text-white">
-                Built for title companies, powered by AI.
-              </h2>
-            </div>
-
             <motion.p
-              className="text-xl text-white/80 mb-12 max-w-4xl mx-auto"
+              className="text-xl text-white/80 mb-12 max-w-full md:max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              transition={{ duration: 0.8, delay: 0.8, type: "spring", stiffness: 100 }}
             >
-              We built Title Voice because title companies shouldn't lose $78,000 a year to voicemail. When a realtor calls after hours and no one answers, they call your competitor. We fix that.
+              We're on a mission to help title companies operate more efficiently, serve customers better, and grow faster with intelligent AI automation.
             </motion.p>
+
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.0, type: "spring", stiffness: 100 }}
+            >
+              <PrimaryButton size="lg" onClick={openModal}>
+                Get Started
+              </PrimaryButton>
+              <OutlineButton size="lg" onClick={() => window.location.href = '/contact'}>
+                Contact Us
+              </OutlineButton>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* ═══════════════════ THE PROBLEM ═══════════════════ */}
-      <section className="py-28 lg:py-36 px-4 relative">
-        <div className="container mx-auto relative z-10">
+      {/* Mission Section */}
+      <section className="py-12 lg:py-20 px-4 relative z-10">
+        <div className="container mx-auto relative z-10 max-w-full lg:max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center mb-20"
+            className="text-center mb-16"
           >
-            <span className="section-badge mb-6 inline-flex">
-              <span className="section-badge-dot" />
-              The Problem
-            </span>
-            <h2 className="text-display-sm font-bold mb-6">
-              <span className="text-white">The Calls You </span>
-              <span className="gradient-text">Never Knew You Missed</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                Our Mission
+              </span>
             </h2>
-            <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
-              When a realtor calls at 6pm and gets voicemail, they don't leave a message.
-              They call someone else. You never see the missed call. The deal just disappears.
+            <p className="text-lg text-white/50 max-w-full md:max-w-2xl mx-auto leading-relaxed">
+              To empower title companies with AI technology that transforms operations, enhances customer experiences, and drives sustainable growth in an evolving real estate landscape.
             </p>
           </motion.div>
 
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
-          >
-            {problemStats.map((stat, index) => (
-              <motion.div key={index} variants={staggerItem}>
-                <GlowCard>
-                  <div className="text-center p-5 sm:p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm">
-                    <div className="text-3xl sm:text-4xl md:text-5xl font-bold gradient-text mb-2 leading-none">
-                      <AnimatedCounter value={stat.value} suffix={stat.suffix} prefix={stat.prefix || ''} />
-                    </div>
-                    <p className="text-white/80 text-sm font-semibold mb-1">{stat.label}</p>
-                    <p className="text-white/30 text-xs">{stat.sublabel}</p>
-                  </div>
-                </GlowCard>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+          <GlowCard>
+            <div className="p-6 md:p-8 bg-white/[0.03] border border-white/[0.06] rounded-2xl relative overflow-hidden">
+              <BorderBeam size={250} duration={12} delay={0} />
 
-      {/* ═══════════════════ THE STORY ═══════════════════ */}
-      <section className="py-28 lg:py-36 px-4 relative overflow-hidden">
-        {/* Decorative side gradient */}
-        <div className="absolute left-0 top-1/4 w-px h-1/2 bg-gradient-to-b from-transparent via-[#0080FF]/20 to-transparent" />
-
-        <div className="container mx-auto relative z-10 max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <span className="section-badge mb-8 inline-flex">
-              <span className="section-badge-dot" />
-              Why We Built This
-            </span>
-
-            <div className="space-y-8 mt-8">
-              <motion.p
-                className="text-xl sm:text-2xl text-white/60 leading-relaxed"
-                initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1, duration: 0.8 }}
-              >
-                Every title company owner we talked to said the same thing:
-                <span className="text-white font-semibold"> "We don't miss that many calls."</span>
-              </motion.p>
-
-              <motion.p
-                className="text-xl sm:text-2xl text-white/60 leading-relaxed"
-                initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2, duration: 0.8 }}
-              >
-                Then they looked at their phone records.
-              </motion.p>
-
-              <motion.div
-                className="relative pl-6 border-l-2 border-[#0080FF]/30"
-                initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-              >
-                <p className="text-xl sm:text-2xl text-white/60 leading-relaxed">
-                  One owner in Florida told us she was "pretty confident" her team caught most calls.
-                  We pulled her numbers together. <span className="text-white font-semibold">47 calls went to voicemail last month.</span> She
-                  went quiet for about 10 seconds. Then she said:
+              <div className="relative z-10">
+                <p className="text-lg text-white/80 leading-relaxed mb-6">
+                  Founded by industry veterans who witnessed firsthand the challenges title companies face - from missed calls and scheduling chaos to staffing constraints and operational inefficiencies - we set out to create a better solution.
                 </p>
-                <p className="text-2xl sm:text-3xl font-semibold text-[#0080FF] mt-4 italic">
-                  "I had no idea."
+                <p className="text-lg text-white/80 leading-relaxed mb-6">
+                  Title Voice was born from the belief that artificial intelligence could be a force multiplier for title operations, handling routine tasks with precision while freeing teams to focus on relationships and complex work that requires human expertise.
                 </p>
-              </motion.div>
-
-              <motion.p
-                className="text-xl sm:text-2xl text-white/60 leading-relaxed"
-                initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4, duration: 0.8 }}
-              >
-                47 calls. Average deal value $1,250. That's <span className="text-white font-bold">$58,750 in opportunities</span> she
-                never even knew existed. Not lost deals. Deals that never had a chance to happen.
-              </motion.p>
-
-              <motion.p
-                className="text-xl sm:text-2xl text-white/60 leading-relaxed"
-                initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-              >
-                That's why we built Title Voice. Not to replace your team, but to make sure
-                <span className="text-white font-semibold"> no call goes unanswered. Ever.</span> At 5pm, at 9pm, on Christmas morning.
-              </motion.p>
+                <p className="text-lg text-white/80 leading-relaxed">
+                  Today, we partner with title companies nationwide to transform customer interactions, accelerate business growth, and preserve the personal relationships that set them apart.
+                </p>
+              </div>
             </div>
-          </motion.div>
+          </GlowCard>
         </div>
       </section>
 
-      {/* ═══════════════════ WHAT WE DO ═══════════════════ */}
-      <section className="py-28 lg:py-36 px-4 relative">
-        {/* Dot pattern background */}
-        <div className="absolute inset-0 bg-dot-pattern bg-dot-lg opacity-30 pointer-events-none" />
-
+      {/* What We Do Section */}
+      <section className="py-12 lg:py-20 px-4 relative z-10">
         <div className="container mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center mb-20"
+            className="text-center mb-16"
           >
-            <span className="section-badge mb-6 inline-flex">
-              <span className="section-badge-dot" />
-              What We Do
-            </span>
-            <h2 className="text-display-sm font-bold mb-6">
-              <span className="text-white">Your AI </span>
-              <span className="gradient-text">Receptionist</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                What We Do
+              </span>
             </h2>
-            <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
-              An AI voice agent built specifically for title companies. It sounds human,
-              knows your systems, and handles calls your team can't get to.
+            <p className="text-lg text-white/50 max-w-full md:max-w-2xl mx-auto leading-relaxed">
+              Comprehensive AI-powered solutions designed specifically for the title industry
             </p>
           </motion.div>
 
           <motion.div
+            ref={ref}
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 max-w-full lg:max-w-6xl mx-auto"
           >
             {whatWeDo.map((item, index) => {
               const IconComponent = item.icon
@@ -387,11 +295,11 @@ const About = () => {
                 <motion.div key={index} variants={staggerItem}>
                   <GlowCard className="h-full">
                     <div className="p-5 sm:p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] h-full group hover:bg-white/[0.05] transition-all duration-500">
-                      <div className="icon-box-lg mb-4 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(0,128,255,0.15)] transition-all duration-500">
+                      <div className="w-12 h-12 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-4 group-hover:bg-[#0080FF]/20 transition-all duration-300">
                         <IconComponent className="w-6 h-6 text-[#0080FF]" />
                       </div>
-                      <h3 className="text-lg font-bold text-white mb-3">{item.title}</h3>
-                      <p className="text-white/50 text-sm leading-relaxed">{item.description}</p>
+                      <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                      <p className="text-white/60 leading-relaxed">{item.description}</p>
                     </div>
                   </GlowCard>
                 </motion.div>
@@ -401,30 +309,229 @@ const About = () => {
         </div>
       </section>
 
-      {/* ═══════════════════ HOW IT WORKS ═══════════════════ */}
-      <section className="py-28 lg:py-36 px-4 relative">
+      {/* Case Study Section */}
+      <section className="py-12 lg:py-20 px-4 relative z-10">
+        <div className="container mx-auto relative z-10 max-w-full lg:max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                Real Results
+              </span>
+            </h2>
+            <p className="text-lg text-white/50 max-w-full md:max-w-2xl mx-auto leading-relaxed">
+              How we helped a title company discover $30,550 in monthly missed opportunities
+            </p>
+          </motion.div>
+
+          <GlowCard>
+            <div className="relative overflow-hidden rounded-2xl bg-[#0a0a0a]/80 border border-white/[0.08]">
+              <BorderBeam size={300} duration={15} delay={0} />
+
+              {/* Quote Header */}
+              <div className="p-6 md:p-8 border-b border-white/[0.08] relative z-10">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center flex-shrink-0">
+                    <Quote className="w-6 h-6 text-[#0080FF]" />
+                  </div>
+                  <div>
+                    <p className="text-lg md:text-xl text-white/90 italic leading-relaxed">
+                      "I was pretty confident our team caught most calls. We pulled the numbers together. 47 calls went to voicemail last month. I went quiet for about 10 seconds. Then I said: <span className="text-[#0080FF] font-semibold">I had no idea.</span>"
+                    </p>
+                    <p className="text-white/50 mt-4">
+                      — Title Company Owner, Orlando, FL
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Problem | Solution Split */}
+              <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/[0.08] relative z-10">
+                {/* The Problem */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6 }}
+                  viewport={{ once: true }}
+                  className="p-6 md:p-8 flex flex-col relative z-10"
+                >
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                      <AlertTriangle className="w-5 h-5 text-red-400" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">The Problem</h3>
+                  </div>
+
+                  <div className="space-y-4 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <XCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-white/80 font-semibold">Invisible Revenue Leak</p>
+                        <p className="text-white/60 text-sm">47 calls/month going to voicemail</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <XCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-white/80 font-semibold">Lost Opportunities</p>
+                        <p className="text-white/60 text-sm">Realtors calling competitors instead</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <XCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-white/80 font-semibold">Unknown Impact</p>
+                        <p className="text-white/60 text-sm">No visibility into missed calls</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 p-4 rounded-xl bg-red-500/5 border border-red-500/10">
+                    <div className="flex items-center gap-2 mb-2">
+                      <DollarSign className="w-5 h-5 text-red-400" />
+                      <p className="text-white/80 font-semibold">Monthly Revenue Loss</p>
+                    </div>
+                    <p className="text-3xl font-bold text-red-400">$58,750</p>
+                    <p className="text-white/50 text-sm mt-1">
+                      47 calls × $1,250 avg deal value
+                    </p>
+                    <p className="text-white/60 text-sm mt-2 pt-2 border-t border-red-500/10">
+                      Annual impact: <span className="text-red-400 font-semibold">$705,000</span>
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Our Solution */}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true }}
+                  className="p-6 md:p-8 flex flex-col relative z-10"
+                >
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center">
+                      <SparklesIcon className="w-5 h-5 text-[#0080FF]" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">Our Solution</h3>
+                  </div>
+
+                  <div className="space-y-4 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-[#0080FF] flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-white/80 font-semibold">24/7 AI Call Answering</p>
+                        <p className="text-white/60 text-sm">Never miss another opportunity</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-[#0080FF] flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-white/80 font-semibold">Instant Scheduling</p>
+                        <p className="text-white/60 text-sm">Real-time calendar integration</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-[#0080FF] flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-white/80 font-semibold">Status Inquiries Handled</p>
+                        <p className="text-white/60 text-sm">Frees team for high-value work</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-[#0080FF] flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-white/80 font-semibold">Software Integration</p>
+                        <p className="text-white/60 text-sm">Works with Qualia, SoftPro, ResWare</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 p-4 rounded-xl bg-[#0080FF]/5 border border-[#0080FF]/10">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Phone className="w-5 h-5 text-[#0080FF]" />
+                      <p className="text-white/80 font-semibold">Calls Handled Monthly</p>
+                    </div>
+                    <p className="text-3xl font-bold text-[#0080FF]">34-50</p>
+                    <p className="text-white/50 text-sm mt-1">
+                      Average after-hours calls captured
+                    </p>
+                    <p className="text-white/60 text-sm mt-2 pt-2 border-t border-[#0080FF]/10">
+                      <span className="text-[#0080FF] font-semibold">100%</span> of calls answered, 24/7
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Results Summary */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                viewport={{ once: true }}
+                className="p-6 md:p-8 border-t border-white/[0.08] relative z-10"
+              >
+                <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-[#0080FF]" />
+                  The Impact
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="text-center p-4 rounded-xl bg-white/[0.02] border border-white/[0.08]">
+                    <p className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                      $705K+
+                    </p>
+                    <p className="text-white/60 text-sm mt-1">Annual Revenue Saved</p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-white/[0.02] border border-white/[0.08]">
+                    <p className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                      47 → 0
+                    </p>
+                    <p className="text-white/60 text-sm mt-1">Missed Calls Eliminated</p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-white/[0.02] border border-white/[0.08]">
+                    <p className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                      2 weeks
+                    </p>
+                    <p className="text-white/60 text-sm mt-1">Setup Time</p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </GlowCard>
+        </div>
+      </section>
+
+      {/* Our Process Section */}
+      <section className="py-12 lg:py-20 px-4 relative z-10">
         <div className="container mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center mb-20"
+            className="text-center mb-16"
           >
-            <span className="section-badge mb-6 inline-flex">
-              <span className="section-badge-dot" />
-              How It Works
-            </span>
-            <h2 className="text-display-sm font-bold mb-6">
-              <span className="text-white">Live in </span>
-              <span className="gradient-text">48 Hours</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                How We Work
+              </span>
             </h2>
-            <p className="text-lg text-white/50 max-w-xl mx-auto">
-              No months of setup. No complex onboarding. Just results.
+            <p className="text-lg text-white/50 max-w-full md:max-w-xl mx-auto">
+              A simple, proven process to get you up and running
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto relative">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 max-w-full lg:max-w-5xl mx-auto relative">
             {/* Connecting line */}
             <div className="hidden md:block absolute top-1/2 left-0 right-0 h-px -translate-y-1/2 z-0">
               <div className="h-full bg-gradient-to-r from-transparent via-[#0080FF]/20 to-transparent" />
@@ -435,25 +542,22 @@ const About = () => {
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 40 }}
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.15, type: 'spring', stiffness: 150, damping: 20 }}
                   className="relative z-10"
                 >
                   <GlowCard className="h-full">
-                    <div className="relative p-5 sm:p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] h-full group hover:bg-white/[0.05] transition-all duration-500">
-                      {/* Step number watermark */}
-                      <div className="absolute top-4 right-6 text-7xl font-bold text-white/[0.03] group-hover:text-[#0080FF]/[0.06] transition-colors duration-700 select-none">
-                        {step.number}
+                    <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-center h-full flex flex-col items-center">
+                      <div className="w-16 h-16 rounded-full bg-[#0080FF]/10 backdrop-blur-md flex items-center justify-center mb-4 relative border border-[#0080FF]/30">
+                        <StepIcon className="w-8 h-8 text-[#0080FF]" />
+                        <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-[#0080FF] backdrop-blur-sm flex items-center justify-center text-sm font-bold text-white border border-[#0080FF]/50">
+                          {index + 1}
+                        </div>
                       </div>
-
-                      <div className="icon-box-lg mb-4 group-hover:scale-110 transition-transform duration-500">
-                        <StepIcon className="w-6 h-6 text-[#0080FF]" />
-                      </div>
-
                       <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
-                      <p className="text-white/50 leading-relaxed">{step.description}</p>
+                      <p className="text-white/60 leading-relaxed">{step.description}</p>
                     </div>
                   </GlowCard>
                 </motion.div>
@@ -463,171 +567,137 @@ const About = () => {
         </div>
       </section>
 
-      {/* ═══════════════════ COMPANY A vs B ═══════════════════ */}
-      <section className="py-28 lg:py-36 px-4 relative">
-        <div className="container mx-auto relative z-10 max-w-5xl">
+      {/* Values Section */}
+      <section className="py-12 lg:py-20 px-4 relative z-10">
+        <div className="container mx-auto relative z-10 max-w-full lg:max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center mb-20"
+            className="text-center mb-16"
           >
-            <span className="section-badge mb-6 inline-flex">
-              <span className="section-badge-dot" />
-              The Difference
-            </span>
-            <h2 className="text-display-sm font-bold mb-6">
-              <span className="text-white">Which Company </span>
-              <span className="gradient-text">Are You?</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                Our Values
+              </span>
             </h2>
+            <p className="text-lg text-white/50 max-w-full md:max-w-2xl mx-auto leading-relaxed">
+              The principles that guide everything we do
+            </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-            {/* Company A */}
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, type: 'spring', stiffness: 100, damping: 20 }}
-              className="p-6 sm:p-7 rounded-2xl bg-white/[0.02] border border-red-500/15 hover:border-red-500/25 transition-all duration-500"
-            >
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                  <PhoneOff className="w-5 h-5 text-red-400" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-red-400">Company A</h3>
-                  <p className="text-white/30 text-xs">Without Title Voice</p>
-                </div>
-              </div>
-              <ul className="space-y-3">
-                {[
-                  'Voicemail after 5pm',
-                  'Realtors wait until morning',
-                  'Missed calls = missed revenue',
-                  '"We\'ll return your call during business hours"',
-                  'Losing relationships one voicemail at a time',
-                ].map((item, i) => (
-                  <motion.li
-                    key={i}
-                    className="flex items-start gap-3 text-white/50"
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 * i, duration: 0.4 }}
-                  >
-                    <span className="text-red-400/60 mt-1 text-sm font-mono">✕</span>
-                    <span className="text-sm leading-relaxed">{item}</span>
-                  </motion.li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Company B */}
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, type: 'spring', stiffness: 100, damping: 20 }}
-              className="p-6 sm:p-7 rounded-2xl bg-white/[0.03] border border-[#0080FF]/20 hover:border-[#0080FF]/35 transition-all duration-500 relative overflow-hidden"
-            >
-              {/* Subtle gradient glow */}
-              <div className="absolute top-0 right-0 w-60 h-60 bg-[#0080FF]/[0.04] rounded-full blur-[80px] pointer-events-none" />
-
-              <div className="flex items-center gap-3 mb-5 relative">
-                <div className="icon-box w-12 h-12 rounded-xl">
-                  <Phone className="w-5 h-5 text-[#0080FF]" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-[#0080FF]">Company B</h3>
-                  <p className="text-white/30 text-xs">With Title Voice</p>
-                </div>
-              </div>
-              <ul className="space-y-3 relative">
-                {[
-                  'Every call answered, 24/7/365',
-                  'Closings scheduled at 9pm on a Sunday',
-                  'Status inquiries handled automatically',
-                  'Realtors get helped, not frustrated',
-                  'Building loyalty while the team sleeps',
-                ].map((item, i) => (
-                  <motion.li
-                    key={i}
-                    className="flex items-start gap-3 text-white/80"
-                    initial={{ opacity: 0, x: 10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 * i, duration: 0.4 }}
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-[#0080FF] mt-0.5 flex-shrink-0" />
-                    <span className="text-sm leading-relaxed">{item}</span>
-                  </motion.li>
-                ))}
-              </ul>
-            </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {values.map((value, index) => {
+              const ValueIcon = value.icon
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5 }}
+                >
+                  <GlowCard className="h-full">
+                    <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] h-full group hover:bg-white/[0.05] transition-all duration-300">
+                      <div className="w-12 h-12 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <ValueIcon className="w-6 h-6 text-[#0080FF]" />
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-3">{value.title}</h3>
+                      <p className="text-white/60 leading-relaxed">{value.description}</p>
+                    </div>
+                  </GlowCard>
+                </motion.div>
+              )
+            })}
           </div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-center text-white/30 mt-10 text-sm"
-          >
-            Company B charges the same rates. The only difference is who picks up the phone.
-          </motion.p>
         </div>
       </section>
 
-      {/* ═══════════════════ CTA ═══════════════════ */}
+      {/* Stats Section */}
       <section className="py-16 lg:py-24 px-4 relative overflow-hidden">
-        {/* Background effects */}
-        <div className="absolute inset-0 bg-dot-pattern bg-dot-lg opacity-20 pointer-events-none" />
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full pointer-events-none"
-          style={{ background: 'radial-gradient(circle, rgba(0, 128, 255, 0.12) 0%, transparent 70%)' }}
-          animate={{ scale: [1, 1.15, 1], opacity: [0.8, 1, 0.8] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
-          style={{ background: 'radial-gradient(circle, rgba(79, 26, 214, 0.08) 0%, transparent 70%)' }}
-          animate={{ scale: [1.1, 1, 1.1], opacity: [0.6, 0.9, 0.6] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        />
-
         <div className="container mx-auto relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center max-w-4xl mx-auto"
+            className="text-center max-w-full md:max-w-4xl mx-auto"
           >
-            <h2 className="text-display-sm sm:text-display font-bold mb-8 leading-tight">
-              <span className="text-white">Stop Losing Deals</span>
-              <br />
-              <span className="gradient-text-hero">To Voicemail</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-12">
+              <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                Our Impact
+              </span>
             </h2>
-            <p className="text-lg sm:text-xl text-white/50 mb-14 max-w-2xl mx-auto leading-relaxed">
-              See what happens when every call gets answered. 15-minute demo.
-              No pressure. Just the truth about your missed calls.
+
+            <p className="text-lg sm:text-xl text-white/50 mb-14 max-w-full md:max-w-2xl mx-auto leading-relaxed">
+              Trusted by title companies nationwide to deliver exceptional results
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <PrimaryButton size="lg" onClick={() => window.open('https://cal.com/title-voice-ai-tsigyx/30min', '_blank')}>
-                Schedule a Demo
-                <ArrowRight className="w-5 h-5" />
-              </PrimaryButton>
-              <Link to="/contact">
-                <OutlineButton size="lg">
-                  <Phone className="w-5 h-5" />
-                  Contact Us
-                </OutlineButton>
-              </Link>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="text-center"
+                >
+                  <div className="text-4xl md:text-5xl font-bold mb-2">
+                    {stat.animated ? (
+                      <AnimatedCounter
+                        value={stat.value}
+                        suffix={stat.suffix}
+                        duration={2000}
+                        className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent"
+                      />
+                    ) : (
+                      <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                        {stat.value}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-white/60 text-sm md:text-base">{stat.label}</div>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-12 lg:py-20 px-4 relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-4xl">
+          <GlowCard>
+            <div className="relative p-8 md:p-12 bg-gradient-to-br from-[#0080FF]/10 to-[#4F1AD6]/10 border border-white/10 rounded-2xl text-center overflow-hidden">
+              <BorderBeam size={300} duration={15} delay={0} />
+
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="relative z-10"
+              >
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                  Ready to Transform Your Title Operations?
+                </h2>
+                <p className="text-lg text-white/70 mb-8 max-w-full md:max-w-2xl mx-auto">
+                  Join hundreds of title companies using Title Voice to streamline operations, improve customer service, and grow their business.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <PrimaryButton size="lg" onClick={openModal}>
+                    Schedule a Demo
+                  </PrimaryButton>
+                  <OutlineButton size="lg" onClick={() => window.location.href = '/contact'}>
+                    Contact Sales
+                  </OutlineButton>
+                </div>
+              </motion.div>
+            </div>
+          </GlowCard>
         </div>
       </section>
     </div>

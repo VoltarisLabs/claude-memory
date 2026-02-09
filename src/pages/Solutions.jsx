@@ -7,6 +7,7 @@ import {
   Clock,
   CheckCircle,
   Star,
+  ArrowLeft,
   ArrowRight,
   Play,
   Users,
@@ -105,7 +106,7 @@ const Solutions = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-black text-white relative">
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <SEO
         title="Solutions"
         description="AI voice receptionist solutions for title companies. Automate call handling, deal updates, scheduling, and customer support."
@@ -118,7 +119,7 @@ const Solutions = () => {
       <VoiceWaves />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen px-4 pt-32 pb-20">
+      <section className="relative flex flex-col justify-center items-center text-center min-h-screen bg-black overflow-hidden px-4">
         {/* Spheremotion Background */}
         <div className="absolute inset-0">
           <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60" />
@@ -137,17 +138,7 @@ const Solutions = () => {
             className="mb-8"
           >
             {/* Pill Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#0080FF]/20 border border-[#0080FF]/40 backdrop-blur-md shadow-lg shadow-[#0080FF]/20 mb-8 hover:bg-[#0080FF]/25 hover:border-[#0080FF]/50 transition-all duration-300"
-            >
-              <SparklesIcon className="w-4 h-4 text-[#0080FF]" />
-              <span className="text-sm text-[#0080FF] font-semibold">AI-Powered Solutions</span>
-            </motion.div>
-
-            <div className="mb-6">
+            <div className="mb-6 mt-12">
               <WordReveal
                 text="AI Solutions for Title Companies"
                 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white"
@@ -161,7 +152,7 @@ const Solutions = () => {
             </div>
 
             <motion.p
-              className="text-xl text-white mb-12 max-w-4xl mx-auto"
+              className="text-xl text-white mb-12 max-w-full md:max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -189,20 +180,20 @@ const Solutions = () => {
       {/* Gradient Divider */}
 
       {/* Trust Stats Bar */}
-      <section className="py-16 px-4 bg-black relative z-10">
-        <div className="container mx-auto max-w-5xl">
+      <section className="py-12 lg:py-16 px-4 bg-black relative z-10">
+        <div className="container mx-auto max-w-full lg:max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="bg-white/5 border border-white/10 backdrop-blur rounded-2xl p-6"
+            className="bg-white/5 border border-white/10 backdrop-blur rounded-2xl p-4 md:p-6"
           >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 text-center">
               {[
-                { value: '500+', label: 'Title Companies' },
-                { value: '1M+', label: 'Calls Handled' },
-                { value: '99.9%', label: 'Uptime' },
-                { value: '4.8/5', label: 'Rating' }
+                { value: 100, suffix: '+', label: 'Title Companies', animated: true },
+                { value: 500, suffix: 'K+', label: 'Calls Handled', animated: true },
+                { value: 99, suffix: '%', label: 'Uptime', animated: true },
+                { value: '4.8/5', label: 'Rating', animated: false }
               ].map((stat, index) => (
                 <motion.div
                   key={index}
@@ -210,8 +201,19 @@ const Solutions = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
-                  <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
-                    {stat.value}
+                  <div className="text-3xl md:text-4xl font-bold">
+                    {stat.animated ? (
+                      <AnimatedCounter
+                        value={stat.value}
+                        suffix={stat.suffix}
+                        duration={2000}
+                        className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent"
+                      />
+                    ) : (
+                      <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
+                        {stat.value}
+                      </span>
+                    )}
                   </div>
                   <div className="text-white/60 text-sm mt-1">{stat.label}</div>
                 </motion.div>
@@ -224,25 +226,25 @@ const Solutions = () => {
       {/* Gradient Divider */}
 
       {/* Solutions Grid */}
-      <section className="py-20 px-4 relative z-10">
+      <section className="py-12 lg:py-20 px-4 relative z-10">
         <div className="container mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            className="text-center mb-8 sm:mb-12 md:mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Our Solutions
               </span>
             </h2>
-            <p className="text-xl text-white max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-white max-w-full md:max-w-3xl mx-auto">
               Comprehensive AI solutions designed specifically for title companies
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
             {solutions.map((solution, index) => (
               <ScrollReveal
                 key={index}
@@ -250,9 +252,9 @@ const Solutions = () => {
                 delay={index * 0.15}
                 duration={0.6}
               >
-                <motion.div whileHover={{ y: -6 }} transition={{ duration: 0.3 }}>
+                <motion.div whileHover={{ y: -6 }} transition={{ duration: 0.3 }} className="h-full">
                   <GlowCard className="h-full rounded-2xl">
-                  <div className="group relative p-6 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/30 transition-all duration-500 h-full flex flex-col overflow-hidden"
+                  <div className="group relative p-4 sm:p-5 md:p-6 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/30 transition-all duration-500 h-full flex flex-col overflow-hidden"
                     style={{ transition: 'border-color 0.5s, box-shadow 0.5s' }}
                   >
                     <BorderBeam size={150} duration={10} delay={index * 2} colorFrom="#0080FF" colorTo="#4F1AD6" />
@@ -261,20 +263,20 @@ const Solutions = () => {
                     <div className="absolute inset-0 bg-gradient-to-br from-[#0080FF]/[0.03] to-[#4F1AD6]/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" />
 
                     {/* Glass icon box */}
-                    <div className="relative z-10 w-16 h-16 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-4 group-hover:bg-[#0080FF]/20 group-hover:border-[#0080FF]/40 transition-all duration-300">
-                      <solution.icon className="w-8 h-8 text-[#0080FF]" />
+                    <div className="relative z-10 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-[#0080FF]/20 group-hover:border-[#0080FF]/40 transition-all duration-300 flex-shrink-0">
+                      <solution.icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#0080FF]" />
                     </div>
 
-                    <h3 className="relative z-10 text-2xl font-bold text-white mb-4">{solution.title}</h3>
-                    <p className="relative z-10 text-white/80 mb-4 leading-relaxed">{solution.description}</p>
+                    <h3 className="relative z-10 text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3 md:mb-4">{solution.title}</h3>
+                    <p className="relative z-10 text-white/80 text-sm sm:text-base mb-3 sm:mb-4 leading-relaxed flex-1">{solution.description}</p>
 
-                    <div className="relative z-10 space-y-2 mt-auto">
+                    <div className="relative z-10 space-y-1.5 sm:space-y-2 mt-auto">
                       {solution.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center gap-3">
-                          <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
-                            <Check className="w-3 h-3 text-[#0080FF]" />
+                        <div key={idx} className="flex items-center gap-2 sm:gap-3">
+                          <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center flex-shrink-0">
+                            <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#0080FF]" />
                           </div>
-                          <span className="text-white/80 text-sm">{feature}</span>
+                          <span className="text-white/80 text-xs sm:text-sm">{feature}</span>
                         </div>
                       ))}
                     </div>
@@ -290,7 +292,7 @@ const Solutions = () => {
       {/* Gradient Divider */}
 
       {/* Deep Dive Section */}
-      <section className="py-20 px-4 relative z-10">
+      <section className="py-8 sm:py-12 lg:py-20 px-4 relative z-10">
         {/* Ambient background orbs */}
         <div className="absolute top-1/2 left-1/4 w-80 h-80 bg-[#0080FF]/8 rounded-full blur-[120px] pointer-events-none -translate-y-1/2" />
         <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-[#4F1AD6]/8 rounded-full blur-[100px] pointer-events-none" />
@@ -311,17 +313,17 @@ const Solutions = () => {
               <Target className="w-4 h-4 text-[#0080FF]" />
               <span className="text-sm text-[#0080FF] font-medium">Solution Explorer</span>
             </motion.div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Deep Dive
               </span>
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-white/80 max-w-full md:max-w-3xl mx-auto">
               Explore each solution in detail
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-5 gap-8 max-w-6xl mx-auto items-center">
+          <div className="hidden lg:grid lg:grid-cols-5 gap-6 lg:gap-8 max-w-full lg:max-w-7xl mx-auto items-center">
             {/* Left Panel - Solution List (Subtle scroll animation) */}
             <motion.div
               initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, x: -20 }}
@@ -347,7 +349,7 @@ const Solutions = () => {
                     <h4 className="text-xs uppercase tracking-widest text-[#0080FF] font-semibold">{group.group}</h4>
                     <div className="flex-1 h-px bg-gradient-to-r from-[#0080FF]/20 to-transparent" />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-1.5 sm:space-y-2">
                     {group.items.map((item, iIdx) => {
                       const globalIdx = gIdx === 0 ? iIdx : 3 + iIdx
                       const Icon = item.icon
@@ -356,7 +358,7 @@ const Solutions = () => {
                         <motion.button
                           key={iIdx}
                           onClick={() => setActiveDeepDive(globalIdx)}
-                          className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-300 text-left relative overflow-hidden ${
+                          className={`w-full flex items-center gap-2.5 sm:gap-3 lg:gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-300 text-left relative overflow-hidden ${
                             isActive
                               ? 'bg-gradient-to-r from-[#0080FF]/15 to-[#4F1AD6]/10 border border-[#0080FF]/30 text-white shadow-[0_0_20px_rgba(0,128,255,0.1)]'
                               : 'bg-white/[0.03] border border-white/[0.06] text-white/50 hover:text-white hover:bg-white/[0.06] hover:border-white/10'
@@ -380,8 +382,8 @@ const Solutions = () => {
                           }`}>
                             <Icon className={`w-4 h-4 transition-colors duration-300 ${isActive ? 'text-[#0080FF]' : 'text-white/50'}`} />
                           </div>
-                          <div className="flex-1">
-                            <span className="font-medium text-[15px]">{item.title}</span>
+                          <div className="flex-1 min-w-0">
+                            <span className="font-medium text-base line-clamp-2 sm:line-clamp-none block">{item.title}</span>
                             {isActive && (
                               <motion.p
                                 initial={{ opacity: 0, height: 0 }}
@@ -422,7 +424,7 @@ const Solutions = () => {
                       <BorderBeam size={180} duration={10} delay={0} colorFrom="#0080FF" colorTo="#4F1AD6" />
 
                       {/* Gradient header area */}
-                      <div className="relative px-8 pt-8 pb-6">
+                      <div className="relative px-4 sm:px-6 md:px-8 pt-6 sm:pt-8 pb-4 sm:pb-6">
                         {/* Header gradient background */}
                         <div className="absolute inset-0 bg-gradient-to-br from-[#0080FF]/[0.06] to-[#4F1AD6]/[0.03]" />
                         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
@@ -449,7 +451,7 @@ const Solutions = () => {
                             {/* Status pill */}
                             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/15">
                               <div className="w-1.5 h-1.5 rounded-full bg-[#00CC88] animate-pulse" />
-                              <span className="text-[11px] text-white/50 font-medium uppercase tracking-wider">Active</span>
+                              <span className="text-xs text-white/50 font-medium uppercase tracking-wider">Active</span>
                             </div>
                           </div>
                         </div>
@@ -507,13 +509,121 @@ const Solutions = () => {
               </AnimatePresence>
             </div>
           </div>
+
+          {/* Mobile Step Navigator */}
+          <div className="lg:hidden w-full mx-auto">
+            {/* Step indicator */}
+            <div className="flex items-center justify-between mb-4 px-2">
+              <span className="text-sm text-white/50 font-medium">
+                Step {activeDeepDive + 1} of {allDeepDiveItems.length}
+              </span>
+              <div className="flex items-center gap-2">
+                {allDeepDiveItems.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveDeepDive(index)}
+                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                      index === activeDeepDive
+                        ? 'bg-[#0080FF] scale-125'
+                        : 'bg-white/20 hover:bg-white/40'
+                    }`}
+                    aria-label={`Go to solution ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Single solution card with slide animation */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeDeepDive}
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -40 }}
+                transition={{ duration: 0.3 }}
+              >
+                <GlowCard className="rounded-2xl">
+                  <div className="relative bg-[#080808] rounded-2xl border border-white/10 overflow-hidden">
+                    <BorderBeam size={180} duration={10} delay={0} colorFrom="#0080FF" colorTo="#4F1AD6" />
+
+                    {/* Header */}
+                    <div className="relative px-6 pt-6 pb-4">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#0080FF]/[0.06] to-[#4F1AD6]/[0.03]" />
+                      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+                      <div className="relative flex items-center gap-4">
+                        <div className="relative">
+                          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0080FF]/20 to-[#4F1AD6]/10 border border-[#0080FF]/25 flex items-center justify-center">
+                            {React.createElement(currentDeepDive.icon, { className: "w-7 h-7 text-[#0080FF]" })}
+                          </div>
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-xl font-bold text-white mb-1">{currentDeepDive.title}</h3>
+                          <span className="inline-flex items-center gap-1 text-xs font-bold text-[#0080FF] bg-[#0080FF]/10 px-2.5 py-0.5 rounded-full border border-[#0080FF]/20">
+                            Solution {activeDeepDive + 1}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <div className="px-6 pb-4">
+                      <p className="text-white/60 leading-relaxed text-sm">{currentDeepDive.description}</p>
+                    </div>
+
+                    {/* Capabilities */}
+                    <div className="px-6 pb-6">
+                      <div className="grid grid-cols-1 gap-2.5">
+                        {currentDeepDive.capabilities.map((capability, idx) => (
+                          <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: idx * 0.08 }}
+                            className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]"
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-6 h-6 rounded-md bg-[#0080FF]/15 border border-[#0080FF]/20 flex items-center justify-center shrink-0">
+                                <Check className="w-3 h-3 text-[#0080FF]" />
+                              </div>
+                              <span className="text-white/80 text-sm">{capability}</span>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </GlowCard>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Next/Previous buttons */}
+            <div className="flex items-center justify-between mt-6 gap-4">
+              <button
+                onClick={() => setActiveDeepDive(prev => Math.max(0, prev - 1))}
+                disabled={activeDeepDive === 0}
+                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white/[0.05] border border-white/10 text-white/70 font-medium text-sm transition-all duration-200 hover:bg-white/[0.08] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white/[0.05]"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Previous
+              </button>
+              <button
+                onClick={() => setActiveDeepDive(prev => Math.min(allDeepDiveItems.length - 1, prev + 1))}
+                disabled={activeDeepDive === allDeepDiveItems.length - 1}
+                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] text-white font-medium text-sm transition-all duration-200 hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                Next
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Gradient Divider */}
 
       {/* Benefits Section */}
-      <section className="py-20 px-4 relative z-10">
+      <section className="py-12 lg:py-20 px-4 relative z-10">
         <div className="container mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -521,17 +631,17 @@ const Solutions = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Proven Results
               </span>
             </h2>
-            <p className="text-xl text-white max-w-3xl mx-auto">
+            <p className="text-xl text-white max-w-full md:max-w-3xl mx-auto">
               See the measurable impact Title Voice has on title company operations
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
             {benefits.map((benefit, index) => {
               const Icon = benefit.icon
               return (

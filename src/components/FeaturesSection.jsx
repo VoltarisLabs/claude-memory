@@ -141,29 +141,31 @@ const FeaturesSection = () => {
           variants={itemVariants}
           className="flex justify-center mb-12"
         >
-          <div className="bg-gray-900 rounded-lg p-1 flex gap-1">
-            {tabs.map((tab) => (
-              <motion.button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                  activeTab === tab.id
-                    ? 'bg-white text-gray-900'
-                    : 'text-gray-300 hover:text-white'
-                }`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {tab.label}
-              </motion.button>
-            ))}
+          <div className="bg-gray-900 rounded-lg p-1 overflow-x-auto lg:overflow-visible scrollbar-hide max-w-full">
+            <div className="flex gap-2 sm:gap-3 md:gap-4 min-w-min lg:min-w-0 lg:justify-center pb-1">
+              {tabs.map((tab) => (
+                <motion.button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3 lg:px-6 rounded-md text-xs sm:text-sm md:text-base font-medium transition-all duration-200 min-h-[44px] whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? 'bg-white text-gray-900'
+                      : 'text-gray-300 hover:text-white'
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {tab.label}
+                </motion.button>
+              ))}
+            </div>
           </div>
         </motion.div>
 
         {/* Feature Content */}
         <motion.div
           variants={containerVariants}
-          className="grid lg:grid-cols-2 gap-12 items-center"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 items-center"
         >
           {/* Left Content */}
           <motion.div variants={itemVariants} className="space-y-6">

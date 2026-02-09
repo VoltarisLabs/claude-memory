@@ -68,7 +68,7 @@ export const AnimatedInput = ({
           name={name}
           required={required}
           value={value}
-          className={`peer w-full bg-transparent border-b-2 ${getBorderColor()} pt-2 pb-2 pr-10 text-white outline-none transition-colors`}
+          className={`peer w-full bg-transparent border-b-2 ${getBorderColor()} pt-3 pb-3 pr-10 text-base text-white outline-none transition-colors`}
           onFocus={() => setIsFocused(true)}
           onBlur={handleBlur}
           onChange={handleChange}
@@ -182,7 +182,7 @@ export const AnimatedTextarea = ({
           value={value}
           rows={rows}
           maxLength={maxLength}
-          className={`peer w-full bg-transparent border-b-2 ${getBorderColor()} pt-2 pb-2 text-white outline-none transition-colors resize-none`}
+          className={`peer w-full bg-transparent border-b-2 ${getBorderColor()} pt-3 pb-3 text-base text-white outline-none transition-colors resize-none`}
           onFocus={() => setIsFocused(true)}
           onBlur={handleBlur}
           onChange={handleChange}
@@ -280,7 +280,7 @@ export const AnimatedSelect = ({
           name={name}
           required={required}
           value={value}
-          className={`peer w-full bg-transparent border-b-2 ${getBorderColor()} pt-2 pb-2 pr-8 outline-none transition-colors appearance-none cursor-pointer ${hasValue ? 'text-white' : 'text-transparent'}`}
+          className={`peer w-full bg-transparent border-b-2 ${getBorderColor()} pt-3 pb-3 pr-10 text-base outline-none transition-colors appearance-none cursor-pointer ${hasValue ? 'text-white' : 'text-transparent'}`}
           onFocus={() => setIsFocused(true)}
           onBlur={handleBlur}
           onChange={onChange}

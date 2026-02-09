@@ -1,13 +1,13 @@
-import React, { useRef, useState, useCallback } from 'react'
+import React, { useRef, useState, useCallback, useEffect } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion'
 import { Loader2, Check, X } from 'lucide-react'
 
 // ─── Size Maps ─────────────────────────────────────────────────────────────────
 const sizeMap = {
-  sm: 'px-4 sm:px-6 py-2 sm:py-2.5 text-sm',
-  md: 'px-5 sm:px-8 py-3 sm:py-4 text-sm sm:text-base',
-  lg: 'px-6 sm:px-10 py-3.5 sm:py-5 text-base sm:text-lg',
-  card: 'w-full justify-center py-3 text-base rounded-xl',
+  sm: 'px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 text-xs sm:text-sm',
+  md: 'px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 text-sm sm:text-base',
+  lg: 'px-5 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-base sm:text-lg',
+  card: 'w-full justify-center px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-5 text-sm sm:text-base rounded-xl',
 }
 
 // ─── Primary Button ────────────────────────────────────────────────────────────
@@ -16,6 +16,7 @@ export const PrimaryButton = ({ children, onClick, className = '', size = 'md', 
   const ref = useRef(null)
   const [isHovered, setIsHovered] = useState(false)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const [blobSize, setBlobSize] = useState(120)
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -24,6 +25,15 @@ export const PrimaryButton = ({ children, onClick, className = '', size = 'md', 
   const springY = useSpring(y, springConfig)
   const innerX = useTransform(springX, v => v * -0.3)
   const innerY = useTransform(springY, v => v * -0.3)
+
+  useEffect(() => {
+    const updateBlobSize = () => {
+      setBlobSize(window.innerWidth < 640 ? 80 : 120)
+    }
+    updateBlobSize()
+    window.addEventListener('resize', updateBlobSize)
+    return () => window.removeEventListener('resize', updateBlobSize)
+  }, [])
 
   const handleMouseMove = useCallback((e) => {
     if (!ref.current || disabled) return
@@ -79,13 +89,13 @@ export const PrimaryButton = ({ children, onClick, className = '', size = 'md', 
       <motion.div
         className="absolute pointer-events-none"
         style={{
-          width: 120,
-          height: 120,
+          width: blobSize,
+          height: blobSize,
           borderRadius: '50%',
           background: 'rgba(255,255,255,0.15)',
           filter: 'blur(20px)',
-          left: mousePos.x - 60,
-          top: mousePos.y - 60,
+          left: mousePos.x - (blobSize / 2),
+          top: mousePos.y - (blobSize / 2),
         }}
         animate={{ scale: isHovered ? 1 : 0, opacity: isHovered ? 1 : 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
@@ -188,7 +198,7 @@ export const NavButton = ({ children, onClick, className = '', fullWidth = false
 
   return (
     <motion.button
-      className={`group relative px-6 py-2.5 text-sm rounded-full font-semibold overflow-hidden flex items-center justify-center gap-2 ${fullWidth ? 'w-full' : ''} ${className}`}
+      className={`group relative px-6 py-3 text-sm rounded-full font-semibold overflow-hidden flex items-center justify-center gap-2 ${fullWidth ? 'w-full' : ''} ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(0, 128, 255, 0.3)' }}
