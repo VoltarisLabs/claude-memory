@@ -11,22 +11,22 @@ const ResultsSection = () => {
 
   const results = [
     {
-      icon: <TrendingUp className="w-8 h-8" />,
-      value: "10×",
-      label: "Average return on investment",
-      description: "Title companies see significant ROI within the first month"
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      value: "50+",
-      label: "Title companies trust us",
-      description: "Growing community of successful title companies nationwide"
-    },
-    {
       icon: <DollarSign className="w-8 h-8" />,
-      value: "$100M+",
-      label: "Closings coordinated",
-      description: "Total transaction value processed through our platform"
+      value: "$4,200",
+      label: "Average monthly savings",
+      description: "Title companies save on average $4,200 per month in staffing costs"
+    },
+    {
+      icon: <TrendingUp className="w-8 h-8" />,
+      value: "3.2×",
+      label: "More calls handled",
+      description: "Handle significantly more calls without adding staff"
+    },
+    {
+      icon: <Clock className="w-8 h-8" />,
+      value: "24/7",
+      label: "Always available",
+      description: "Never miss a call with round-the-clock AI receptionist coverage"
     },
     {
       icon: <Globe className="w-8 h-8" />,
@@ -36,13 +36,13 @@ const ResultsSection = () => {
     },
     {
       icon: <Settings className="w-8 h-8" />,
-      value: "Customizable",
+      value: "Custom",
       label: "Tailored scripts and workflows",
       description: "Adapt to your specific business processes and requirements"
     },
     {
-      icon: <Clock className="w-8 h-8" />,
-      value: "2-Day",
+      icon: <Users className="w-8 h-8" />,
+      value: "2 Weeks",
       label: "Quick implementation",
       description: "Get up and running quickly with our streamlined setup process"
     }
@@ -103,7 +103,7 @@ const ResultsSection = () => {
               key={index}
               variants={itemVariants}
               className="group"
-              whileHover={{ 
+              whileHover={{
                 y: -5,
                 scale: 1.02,
                 transition: { duration: 0.2 }
@@ -112,7 +112,7 @@ const ResultsSection = () => {
               <div className="bg-white border-2 border-gray-100 rounded-2xl p-8 text-center hover:border-navy-200 hover:shadow-lg transition-all duration-300 group-hover:shadow-navy-100">
                 <motion.div
                   className="w-16 h-16 bg-gradient-to-br from-navy-100 to-navy-200 text-navy-600 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:from-navy-200 group-hover:to-navy-300 transition-all duration-300"
-                  whileHover={{ 
+                  whileHover={{
                     rotate: 5,
                     scale: 1.1,
                     transition: { duration: 0.2 }
@@ -125,7 +125,7 @@ const ResultsSection = () => {
                   className="text-4xl lg:text-5xl font-bold text-navy-600 mb-3"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ 
+                  transition={{
                     delay: index * 0.1,
                     duration: 0.6,
                     ease: "easeOut"
@@ -153,7 +153,7 @@ const ResultsSection = () => {
         >
           <motion.div
             className="bg-gradient-to-r from-navy-50 to-blue-50 rounded-2xl p-8 md:p-12"
-            whileHover={{ 
+            whileHover={{
               scale: 1.02,
               transition: { duration: 0.2 }
             }}
@@ -162,12 +162,12 @@ const ResultsSection = () => {
               Ready to Transform Your Title Operations?
             </h3>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-              Join hundreds of title companies already using Title Voice to streamline their operations and improve client satisfaction.
+              See how title companies are using Title Voice to streamline their operations and improve client satisfaction.
             </p>
             <motion.a
               href="#demo"
               className="inline-block gradient-bg text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-lg transition-all duration-200"
-              whileHover={{ 
+              whileHover={{
                 scale: 1.05,
                 boxShadow: "0 10px 30px rgba(30, 58, 138, 0.3)"
               }}
@@ -183,4 +183,3 @@ const ResultsSection = () => {
 }
 
 export default ResultsSection
-

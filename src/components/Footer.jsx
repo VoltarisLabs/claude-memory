@@ -25,13 +25,16 @@ const Footer = () => {
       { name: 'Solutions', href: '/solutions' },
       { name: 'Workflows', href: '/workflows' },
       { name: 'Pricing', href: '/pricing' },
-      { name: 'Integrations', href: '/workflow-integration' },
       { name: 'FAQ', href: '#', onClick: handleFaqClick },
       { name: 'Book a Demo', href: 'https://cal.com/title-voice-ai-tsigyx/30min' }
     ],
     company: [
       { name: 'About Us', href: '/about' },
       { name: 'Contact', href: '/contact' }
+    ],
+    resources: [
+      { name: 'Getting Started', href: '/workflow-integration' },
+      { name: 'ROI Calculator', href: '/roi-calculator' }
     ],
     legal: [
       { name: 'Privacy Policy', href: '/privacy' },
@@ -67,25 +70,25 @@ const Footer = () => {
       {/* Top border gradient */}
       <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
-      <div className="container mx-auto px-6 py-20 max-w-7xl">
+      <div className="container mx-auto px-6 py-16 max-w-7xl">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12"
         >
-          {/* Company Info */}
-          <motion.div variants={itemVariants} className="lg:col-span-2">
+          {/* Column 1: Company Info */}
+          <motion.div variants={itemVariants}>
             <div className="mb-6">
               <Logo showText={true} size="default" />
             </div>
-            <p className="text-white/50 mb-8 leading-relaxed max-w-sm">
-              AI for the Title Industry — Never miss a call again with our 24/7 AI receptionist built specifically for title companies.
+            <p className="text-white/50 mb-6 leading-relaxed text-sm">
+              AI for the Title Industry — Never miss a call again.
             </p>
 
             {/* Contact Info */}
-            <div className="space-y-3 mb-8">
-              <a href="mailto:support@titlevoice.ai" className="flex items-center gap-3 text-white/50 hover:text-white/70 transition-colors duration-300 group">
+            <div className="space-y-2.5 mb-6">
+              <a href="mailto:support@titlevoice.ai" className="flex items-center gap-3 text-white/50 hover:text-white/80 transition-colors duration-300 group">
                 <Mail className="w-4 h-4 group-hover:text-[#0080FF] transition-colors" />
                 <span className="text-sm">support@titlevoice.ai</span>
               </a>
@@ -114,10 +117,10 @@ const Footer = () => {
             </div>
           </motion.div>
 
-          {/* Product Links */}
+          {/* Column 2: Product */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-sm font-semibold text-white/80 uppercase tracking-wider mb-6">Product</h3>
-            <ul className="space-y-3">
+            <h3 className="text-sm font-semibold text-white/80 uppercase tracking-wider mb-4">Product</h3>
+            <ul className="space-y-2.5">
               {footerLinks.product.map((link, index) => (
                 <li key={index}>
                   {link.href.startsWith('http') ? (
@@ -125,19 +128,19 @@ const Footer = () => {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-white/35 hover:text-white/70 transition-colors duration-300 text-sm block"
+                      className="text-white/35 hover:text-white/80 transition-colors duration-300 text-sm block"
                     >
                       {link.name}
                     </a>
                   ) : link.onClick ? (
                     <button
                       onClick={link.onClick}
-                      className="text-white/35 hover:text-white/70 transition-colors duration-300 text-sm text-left"
+                      className="text-white/35 hover:text-white/80 transition-colors duration-300 text-sm text-left"
                     >
                       {link.name}
                     </button>
                   ) : (
-                    <Link to={link.href} className="text-white/35 hover:text-white/70 transition-colors duration-300 text-sm block">
+                    <Link to={link.href} className="text-white/35 hover:text-white/80 transition-colors duration-300 text-sm block">
                       {link.name}
                     </Link>
                   )}
@@ -146,24 +149,38 @@ const Footer = () => {
             </ul>
           </motion.div>
 
-          {/* Company Links */}
+          {/* Column 3: Company + Resources */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-sm font-semibold text-white/80 uppercase tracking-wider mb-6">Company</h3>
-            <ul className="space-y-3">
+            <h3 className="text-sm font-semibold text-white/80 uppercase tracking-wider mb-4">Company</h3>
+            <ul className="space-y-2.5 mb-8">
               {footerLinks.company.map((link, index) => (
                 <li key={index}>
-                  <Link to={link.href} className="text-white/35 hover:text-white/70 transition-colors duration-300 text-sm block">
+                  <Link to={link.href} className="text-white/35 hover:text-white/80 transition-colors duration-300 text-sm block">
                     {link.name}
                   </Link>
                 </li>
               ))}
             </ul>
 
-            <h3 className="text-sm font-semibold text-white/80 uppercase tracking-wider mb-6 mt-10">Legal</h3>
-            <ul className="space-y-3">
+            <h3 className="text-sm font-semibold text-white/80 uppercase tracking-wider mb-4">Resources</h3>
+            <ul className="space-y-2.5">
+              {footerLinks.resources.map((link, index) => (
+                <li key={index}>
+                  <Link to={link.href} className="text-white/35 hover:text-white/80 transition-colors duration-300 text-sm block">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Column 4: Legal */}
+          <motion.div variants={itemVariants}>
+            <h3 className="text-sm font-semibold text-white/80 uppercase tracking-wider mb-4">Legal</h3>
+            <ul className="space-y-2.5">
               {footerLinks.legal.map((link, index) => (
                 <li key={index}>
-                  <Link to={link.href} className="text-white/35 hover:text-white/70 transition-colors duration-300 text-sm block">
+                  <Link to={link.href} className="text-white/35 hover:text-white/80 transition-colors duration-300 text-sm block">
                     {link.name}
                   </Link>
                 </li>
@@ -177,7 +194,7 @@ const Footer = () => {
           variants={itemVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="border-t border-white/[0.06] mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
+          className="border-t border-white/[0.06] mt-12 pt-6 flex flex-col md:flex-row justify-between items-center gap-4"
         >
           <p className="text-white/25 text-sm">
             &copy; {new Date().getFullYear()} Title Voice. All rights reserved.

@@ -171,7 +171,7 @@ const About = () => {
       <section className="relative min-h-screen px-4 pt-32 pb-20">
         {/* Spheremotion Background */}
         <div className="absolute inset-0">
-          <img src="/spheremotion.gif" alt="Animated sphere motion background" className="w-full h-full object-cover opacity-60" />
+          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -194,7 +194,7 @@ const About = () => {
             </motion.div>
 
             <div className="mb-6">
-              <h1 className="text-6xl md:text-8xl font-bold text-white">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white">
                 <WordReveal text="Never Miss Another Call" delay={0.3} />
               </h1>
             </div>
@@ -251,8 +251,8 @@ const About = () => {
             {problemStats.map((stat, index) => (
               <motion.div key={index} variants={staggerItem}>
                 <GlowCard>
-                  <div className="text-center p-6 sm:p-8 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm">
-                    <div className="text-4xl sm:text-5xl md:text-6xl font-bold gradient-text mb-3 leading-none">
+                  <div className="text-center p-5 sm:p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm">
+                    <div className="text-3xl sm:text-4xl md:text-5xl font-bold gradient-text mb-2 leading-none">
                       <AnimatedCounter value={stat.value} suffix={stat.suffix} prefix={stat.prefix || ''} />
                     </div>
                     <p className="text-white/80 text-sm font-semibold mb-1">{stat.label}</p>
@@ -386,8 +386,8 @@ const About = () => {
               return (
                 <motion.div key={index} variants={staggerItem}>
                   <GlowCard className="h-full">
-                    <div className="p-6 sm:p-8 rounded-2xl bg-white/[0.03] border border-white/[0.06] h-full group hover:bg-white/[0.05] transition-all duration-500">
-                      <div className="icon-box-lg mb-6 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(0,128,255,0.15)] transition-all duration-500">
+                    <div className="p-5 sm:p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] h-full group hover:bg-white/[0.05] transition-all duration-500">
+                      <div className="icon-box-lg mb-4 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(0,128,255,0.15)] transition-all duration-500">
                         <IconComponent className="w-6 h-6 text-[#0080FF]" />
                       </div>
                       <h3 className="text-lg font-bold text-white mb-3">{item.title}</h3>
@@ -442,17 +442,17 @@ const About = () => {
                   className="relative z-10"
                 >
                   <GlowCard className="h-full">
-                    <div className="relative p-8 sm:p-10 rounded-2xl bg-white/[0.03] border border-white/[0.06] h-full group hover:bg-white/[0.05] transition-all duration-500">
+                    <div className="relative p-5 sm:p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] h-full group hover:bg-white/[0.05] transition-all duration-500">
                       {/* Step number watermark */}
                       <div className="absolute top-4 right-6 text-7xl font-bold text-white/[0.03] group-hover:text-[#0080FF]/[0.06] transition-colors duration-700 select-none">
                         {step.number}
                       </div>
 
-                      <div className="icon-box-lg mb-8 group-hover:scale-110 transition-transform duration-500">
+                      <div className="icon-box-lg mb-4 group-hover:scale-110 transition-transform duration-500">
                         <StepIcon className="w-6 h-6 text-[#0080FF]" />
                       </div>
 
-                      <h3 className="text-xl font-bold text-white mb-4">{step.title}</h3>
+                      <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
                       <p className="text-white/50 leading-relaxed">{step.description}</p>
                     </div>
                   </GlowCard>
@@ -490,9 +490,9 @@ const About = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, type: 'spring', stiffness: 100, damping: 20 }}
-              className="p-8 sm:p-10 rounded-2xl bg-white/[0.02] border border-red-500/15 hover:border-red-500/25 transition-all duration-500"
+              className="p-6 sm:p-7 rounded-2xl bg-white/[0.02] border border-red-500/15 hover:border-red-500/25 transition-all duration-500"
             >
-              <div className="flex items-center gap-3 mb-8">
+              <div className="flex items-center gap-3 mb-5">
                 <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
                   <PhoneOff className="w-5 h-5 text-red-400" />
                 </div>
@@ -501,7 +501,7 @@ const About = () => {
                   <p className="text-white/30 text-xs">Without Title Voice</p>
                 </div>
               </div>
-              <ul className="space-y-5">
+              <ul className="space-y-3">
                 {[
                   'Voicemail after 5pm',
                   'Realtors wait until morning',
@@ -530,12 +530,12 @@ const About = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, type: 'spring', stiffness: 100, damping: 20 }}
-              className="p-8 sm:p-10 rounded-2xl bg-white/[0.03] border border-[#0080FF]/20 hover:border-[#0080FF]/35 transition-all duration-500 relative overflow-hidden"
+              className="p-6 sm:p-7 rounded-2xl bg-white/[0.03] border border-[#0080FF]/20 hover:border-[#0080FF]/35 transition-all duration-500 relative overflow-hidden"
             >
               {/* Subtle gradient glow */}
               <div className="absolute top-0 right-0 w-60 h-60 bg-[#0080FF]/[0.04] rounded-full blur-[80px] pointer-events-none" />
 
-              <div className="flex items-center gap-3 mb-8 relative">
+              <div className="flex items-center gap-3 mb-5 relative">
                 <div className="icon-box w-12 h-12 rounded-xl">
                   <Phone className="w-5 h-5 text-[#0080FF]" />
                 </div>
@@ -544,7 +544,7 @@ const About = () => {
                   <p className="text-white/30 text-xs">With Title Voice</p>
                 </div>
               </div>
-              <ul className="space-y-5 relative">
+              <ul className="space-y-3 relative">
                 {[
                   'Every call answered, 24/7/365',
                   'Closings scheduled at 9pm on a Sunday',
@@ -554,7 +554,7 @@ const About = () => {
                 ].map((item, i) => (
                   <motion.li
                     key={i}
-                    className="flex items-start gap-3 text-white/70"
+                    className="flex items-start gap-3 text-white/80"
                     initial={{ opacity: 0, x: 10 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
@@ -581,7 +581,7 @@ const About = () => {
       </section>
 
       {/* ═══════════════════ CTA ═══════════════════ */}
-      <section className="py-24 sm:py-32 lg:py-40 px-4 relative overflow-hidden">
+      <section className="py-16 lg:py-24 px-4 relative overflow-hidden">
         {/* Background effects */}
         <div className="absolute inset-0 bg-dot-pattern bg-dot-lg opacity-20 pointer-events-none" />
         <motion.div

@@ -33,6 +33,18 @@ export default {
           800: '#200a55',
           900: '#10052b',
         },
+        navy: {
+          50: '#f3f7fc',
+          100: '#e6eef9',
+          200: '#c0d6f0',
+          300: '#8bb3e3',
+          400: '#4e8dd2',
+          500: '#2a6ebe',
+          600: '#1e3a8a',
+          700: '#1a3270',
+          800: '#182a5d',
+          900: '#19264e',
+        },
         background: '#000000',
         cardBg: '#080808',
         surface: {
@@ -45,7 +57,8 @@ export default {
         accent: '#00F6FF',
       },
       fontFamily: {
-        sans: ['Urbanist', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'sans-serif'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'sans-serif'],
+        display: ['Manrope', 'Inter', 'sans-serif'],
       },
       fontSize: {
         'display': ['clamp(3rem, 8vw, 7.5rem)', { lineHeight: '1.05', letterSpacing: '-0.02em' }],

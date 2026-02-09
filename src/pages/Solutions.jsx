@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { motion, AnimatePresence, useInView, useReducedMotion } from 'framer-motion'
 import {
   Phone,
   Calendar,
@@ -36,9 +36,11 @@ import { WordReveal } from '../components/TextAnimations'
 import { PrimaryButton, OutlineButton } from '../components/Buttons'
 import EnhancedCTA from '../components/EnhancedCTA'
 import SEO from '../components/SEO'
+import ScrollReveal from '../components/ScrollReveal'
 
 const Solutions = () => {
   const [activeDeepDive, setActiveDeepDive] = useState(0)
+  const shouldReduceMotion = useReducedMotion()
 
   const solutions = [
     {
@@ -119,7 +121,7 @@ const Solutions = () => {
       <section className="relative min-h-screen px-4 pt-32 pb-20">
         {/* Spheremotion Background */}
         <div className="absolute inset-0">
-          <img src="/spheremotion.gif" alt="Animated sphere motion background" className="w-full h-full object-cover opacity-60" />
+          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -148,7 +150,7 @@ const Solutions = () => {
             <div className="mb-6">
               <WordReveal
                 text="AI Solutions for Title Companies"
-                className="text-6xl md:text-8xl font-bold text-white"
+                className="text-5xl md:text-6xl lg:text-7xl font-bold text-white"
                 trigger="mount"
               />
             </div>
@@ -193,14 +195,14 @@ const Solutions = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="bg-white/5 border border-white/10 backdrop-blur rounded-2xl p-8"
+            className="bg-white/5 border border-white/10 backdrop-blur rounded-2xl p-6"
           >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {[
                 { value: '500+', label: 'Title Companies' },
                 { value: '1M+', label: 'Calls Handled' },
                 { value: '99.9%', label: 'Uptime' },
-                { value: '4.9/5', label: 'Rating' }
+                { value: '4.8/5', label: 'Rating' }
               ].map((stat, index) => (
                 <motion.div
                   key={index}
@@ -230,7 +232,7 @@ const Solutions = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Our Solutions
               </span>
@@ -242,15 +244,15 @@ const Solutions = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {solutions.map((solution, index) => (
-              <motion.div
+              <ScrollReveal
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1, type: "spring", stiffness: 100 }}
-                whileHover={{ y: -6 }}
+                animation="fadeUp"
+                delay={index * 0.15}
+                duration={0.6}
               >
-                <GlowCard className="h-full rounded-2xl">
-                  <div className="group relative p-8 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/30 transition-all duration-500 h-full flex flex-col overflow-hidden"
+                <motion.div whileHover={{ y: -6 }} transition={{ duration: 0.3 }}>
+                  <GlowCard className="h-full rounded-2xl">
+                  <div className="group relative p-6 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/30 transition-all duration-500 h-full flex flex-col overflow-hidden"
                     style={{ transition: 'border-color 0.5s, box-shadow 0.5s' }}
                   >
                     <BorderBeam size={150} duration={10} delay={index * 2} colorFrom="#0080FF" colorTo="#4F1AD6" />
@@ -259,14 +261,14 @@ const Solutions = () => {
                     <div className="absolute inset-0 bg-gradient-to-br from-[#0080FF]/[0.03] to-[#4F1AD6]/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" />
 
                     {/* Glass icon box */}
-                    <div className="relative z-10 w-16 h-16 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-6 group-hover:bg-[#0080FF]/20 group-hover:border-[#0080FF]/40 transition-all duration-300">
+                    <div className="relative z-10 w-16 h-16 rounded-lg bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-4 group-hover:bg-[#0080FF]/20 group-hover:border-[#0080FF]/40 transition-all duration-300">
                       <solution.icon className="w-8 h-8 text-[#0080FF]" />
                     </div>
 
                     <h3 className="relative z-10 text-2xl font-bold text-white mb-4">{solution.title}</h3>
-                    <p className="relative z-10 text-white/70 mb-6 leading-relaxed">{solution.description}</p>
+                    <p className="relative z-10 text-white/80 mb-4 leading-relaxed">{solution.description}</p>
 
-                    <div className="relative z-10 space-y-3 mt-auto">
+                    <div className="relative z-10 space-y-2 mt-auto">
                       {solution.features.map((feature, idx) => (
                         <div key={idx} className="flex items-center gap-3">
                           <div className="w-5 h-5 rounded-full bg-[#0080FF]/15 border border-[#0080FF]/25 flex items-center justify-center">
@@ -278,7 +280,8 @@ const Solutions = () => {
                     </div>
                   </div>
                 </GlowCard>
-              </motion.div>
+                </motion.div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -308,7 +311,7 @@ const Solutions = () => {
               <Target className="w-4 h-4 text-[#0080FF]" />
               <span className="text-sm text-[#0080FF] font-medium">Solution Explorer</span>
             </motion.div>
-            <h2 className="text-5xl md:text-6xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Deep Dive
               </span>
@@ -319,10 +322,26 @@ const Solutions = () => {
           </motion.div>
 
           <div className="grid lg:grid-cols-5 gap-8 max-w-6xl mx-auto items-center">
-            {/* Left Panel - Solution List */}
-            <div className="lg:col-span-2 space-y-6">
+            {/* Left Panel - Solution List (Subtle scroll animation) */}
+            <motion.div
+              initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="lg:col-span-2 space-y-6"
+            >
               {deepDiveSolutions.map((group, gIdx) => (
-                <div key={gIdx}>
+                <motion.div
+                  key={gIdx}
+                  initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.3,
+                    delay: shouldReduceMotion ? 0 : gIdx * 0.08,
+                    ease: "easeOut"
+                  }}
+                >
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#0080FF]" />
                     <h4 className="text-xs uppercase tracking-widest text-[#0080FF] font-semibold">{group.group}</h4>
@@ -344,6 +363,7 @@ const Solutions = () => {
                           }`}
                           whileHover={{ x: 4 }}
                           whileTap={{ scale: 0.98 }}
+                          transition={{ duration: 0.2 }}
                         >
                           {/* Active indicator bar */}
                           {isActive && (
@@ -383,9 +403,9 @@ const Solutions = () => {
                       )
                     })}
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             {/* Right Panel - Active Solution Display */}
             <div className="lg:col-span-3">
@@ -455,7 +475,7 @@ const Solutions = () => {
                                 <div className="w-6 h-6 rounded-md bg-[#0080FF]/15 border border-[#0080FF]/20 flex items-center justify-center shrink-0 group-hover/cap:bg-[#0080FF]/25 group-hover/cap:border-[#0080FF]/35 transition-all duration-300">
                                   <Check className="w-3 h-3 text-[#0080FF]" />
                                 </div>
-                                <span className="text-white/70 text-sm group-hover/cap:text-white/90 transition-colors duration-300">{cap}</span>
+                                <span className="text-white/80 text-sm group-hover/cap:text-white/90 transition-colors duration-300">{cap}</span>
                               </div>
                             </motion.div>
                           ))}
@@ -501,7 +521,7 @@ const Solutions = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Proven Results
               </span>
@@ -520,17 +540,17 @@ const Solutions = () => {
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.15, type: "spring", stiffness: 100 }}
-                  className="text-center p-8 rounded-2xl bg-[#080808] border border-white/10 hover:border-[#0080FF]/50 transition-all duration-300"
+                  className="text-center p-6 rounded-2xl bg-[#080808] border border-white/10 hover:border-[#0080FF]/50 transition-all duration-300"
                   whileHover={{ scale: 1.05, y: -5, boxShadow: "0 20px 40px rgba(0, 128, 255, 0.1)" }}
                 >
-                  <div className="w-12 h-12 rounded-xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mx-auto mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mx-auto mb-3">
                     <Icon className="w-6 h-6 text-[#0080FF]" />
                   </div>
-                  <div className="text-5xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent mb-4">
+                  <div className="text-4xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent mb-3">
                     <AnimatedCounter value={benefit.value} suffix={benefit.suffix} />
                   </div>
                   <h3 className="text-xl font-bold text-white mb-2">{benefit.title}</h3>
-                  <p className="text-white/70">{benefit.description}</p>
+                  <p className="text-white/80">{benefit.description}</p>
                 </motion.div>
               )
             })}

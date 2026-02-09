@@ -328,7 +328,7 @@ const AudioPlayer = ({ src, title }) => {
 
         {/* Time */}
         <div className="text-[11px] font-mono text-white/50 tabular-nums flex-shrink-0 min-w-[65px] text-right">
-          <span className="text-white/70">{formatTime(currentTime)}</span>
+          <span className="text-white/80">{formatTime(currentTime)}</span>
           <span className="text-white/30"> / </span>
           <span>{formatTime(duration)}</span>
         </div>

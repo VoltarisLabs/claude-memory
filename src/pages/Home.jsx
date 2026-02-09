@@ -9,6 +9,8 @@ import { PrimaryButton, OutlineButton } from '../components/Buttons'
 import { useBooking } from '../context/BookingContext'
 import AudioPlayer from '../components/AudioPlayer'
 import SEO from '../components/SEO'
+import ScrollReveal from '../components/ScrollReveal'
+import GradientMesh from '../components/GradientMesh'
 import {
   Phone,
   Calendar,
@@ -38,8 +40,6 @@ const Home = () => {
   const { openModal } = useBooking()
   const [activeTab, setActiveTab] = useState('receptionist')
   const [activeSection, setActiveSection] = useState('receptionist')
-  const [showMiniNav, setShowMiniNav] = useState(false)
-  const [isSticky, setIsSticky] = useState(false)
   const [activeCategory, setActiveCategory] = useState('ai-answering-service')
   const { scrollYProgress } = useScroll()
   const y = useTransform(scrollYProgress, [0, 1], [0, -50])
@@ -157,40 +157,21 @@ integrations.configure({
     }
   ]
 
-  // Handle scroll to show/hide following nav and track active section
+  // Track active section for navigation highlighting
   useEffect(() => {
     const handleScroll = () => {
-      const heroSection = document.getElementById('hero-section')
-      const miniNavSection = document.getElementById('mini-nav-section')
-      const outboundSection = document.getElementById('outbound-campaigns-section')
-
-      if (heroSection && miniNavSection && outboundSection) {
-        const heroBottom = heroSection.offsetTop + heroSection.offsetHeight
-        const miniNavBottom = miniNavSection.offsetTop + miniNavSection.offsetHeight
-        const outboundBottom = outboundSection.offsetTop + outboundSection.offsetHeight
-        const scrollY = window.scrollY
-
-        // Show following nav when we're in the feature sections area
-        const shouldShow = scrollY > heroBottom - 200 && scrollY < outboundBottom
-        setShowMiniNav(shouldShow)
-
-        // Check if following navbar should be sticky (when scrolled past original navbar)
-        const shouldBeSticky = scrollY > miniNavBottom - 100 && shouldShow
-        setIsSticky(shouldBeSticky)
-
-        // Track active section
-        const sections = miniNavSections.map(section => document.getElementById(`${section.id}-section`))
-        const currentSection = sections.find(section => {
-          if (section) {
-            const rect = section.getBoundingClientRect()
-            return rect.top <= 200 && rect.bottom >= 200
-          }
-          return false
-        })
-
-        if (currentSection) {
-          setActiveSection(currentSection.id.replace('-section', ''))
+      // Track active section
+      const sections = miniNavSections.map(section => document.getElementById(`${section.id}-section`))
+      const currentSection = sections.find(section => {
+        if (section) {
+          const rect = section.getBoundingClientRect()
+          return rect.top <= 200 && rect.bottom >= 200
         }
+        return false
+      })
+
+      if (currentSection) {
+        setActiveSection(currentSection.id.replace('-section', ''))
       }
     }
 
@@ -351,13 +332,12 @@ integrations.configure({
       <VoiceWaves />
       {/* Hero Section - Cinematic Animated Orb */}
       <section id="hero-section" className="relative flex flex-col justify-center items-center text-center min-h-screen bg-black overflow-hidden">
+        {/* Animated Gradient Mesh Background */}
+        <GradientMesh variant="default" intensity="low" />
+
         {/* Sphere Motion GIF Animation - Full Cover */}
         <div className="absolute inset-0">
-          <img
-            src="/spheremotion.gif"
-            alt="Sphere Motion Animation"
-            className="w-full h-full object-cover opacity-60"
-          />
+          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60" />
         </div>
 
         {/* Gradient overlay for smooth transition */}
@@ -976,83 +956,10 @@ integrations.configure({
         </div>
       </motion.section>
 
-      {/* Following Mini Navigation - Advanced Sticky Following Navbar */}
-      <motion.div
-        initial={{ opacity: 0, y: -20, scale: 0.95 }}
-        animate={{
-          opacity: isSticky ? 1 : 0,
-          y: isSticky ? 0 : -20,
-          scale: isSticky ? 1 : 0.95
-        }}
-        transition={{
-          duration: 0.5,
-          ease: "easeOut",
-          type: "spring",
-          stiffness: 100,
-          damping: 15
-        }}
-        className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 ${isSticky ? 'block' : 'hidden'
-          }`}
-      >
-        <motion.div
-          className="bg-black/90 backdrop-blur-2xl border border-[#8B5CF6]/40 rounded-full px-6 py-3 shadow-2xl"
-          animate={{
-            boxShadow: isSticky
-              ? [
-                "0 20px 40px rgba(139, 92, 246, 0.4), 0 0 0 1px rgba(139, 92, 246, 0.3)",
-                "0 25px 50px rgba(139, 92, 246, 0.5), 0 0 0 1px rgba(139, 92, 246, 0.4)",
-                "0 20px 40px rgba(139, 92, 246, 0.4), 0 0 0 1px rgba(139, 92, 246, 0.3)"
-              ]
-              : "0 10px 30px rgba(0, 0, 0, 0.3)"
-          }}
-          transition={{
-            duration: 2,
-            repeat: isSticky ? Infinity : 0,
-            ease: "easeInOut"
-          }}
-          whileHover={{
-            scale: 1.02,
-            boxShadow: "0 30px 60px rgba(139, 92, 246, 0.6), 0 0 0 1px rgba(139, 92, 246, 0.5)"
-          }}
-        >
-          <div className="flex items-center gap-2 md:gap-3 relative">
-            {miniNavSections.map((section, index) => {
-              const Icon = section.icon
-              const isActive = activeSection === section.id
-              return (
-                <motion.button
-                  key={section.id}
-                  onClick={() => scrollToSection(section.id)}
-                  className={`relative flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 md:py-2.5 rounded-full transition-colors duration-300 ${isActive
-                    ? 'text-white'
-                    : 'text-white/70 hover:text-white hover:bg-white/10'
-                    }`}
-                  whileHover={{
-                    scale: 1.05,
-                    transition: { duration: 0.2 }
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {isActive && (
-                    <motion.div
-                      layoutId="stickyNavIndicator"
-                      className="absolute inset-0 bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] rounded-full"
-                      style={{ boxShadow: '0 8px 25px rgba(0, 128, 255, 0.4)' }}
-                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                    />
-                  )}
-                  <Icon className="w-3.5 h-3.5 md:w-4 md:h-4 relative z-10" />
-                  <span className="text-xs md:text-sm font-medium hidden sm:inline relative z-10">{section.title}</span>
-                  <span className="text-xs font-medium sm:hidden relative z-10">{section.title.split(' ')[0]}</span>
-                </motion.button>
-              )
-            })}
-          </div>
-        </motion.div>
-      </motion.div>
+      {/* Sticky navigation removed per user request */}
 
       {/* Receptionist AI Section */}
-      <section id="receptionist-section" className="py-24 px-4 bg-black relative overflow-hidden">
+      <section id="receptionist-section" className="py-16 lg:py-20 px-4 bg-black relative overflow-hidden">
         {/* Background gradient orb */}
         <div className="absolute top-1/2 right-0 w-96 h-96 bg-[#0080FF]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
         {/* Dot grid texture */}
@@ -1062,7 +969,7 @@ integrations.configure({
         />
 
         <div className="container mx-auto max-w-7xl relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
             {/* Left Side - Description */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -1123,7 +1030,7 @@ integrations.configure({
               {/* Premium play button with pulsing rings */}
               <div className="w-full max-w-md mt-6">
                 <AudioPlayer
-                  src="/audio_processed/never-miss-a-call_processed.m4a"
+                  src="/audio/never-miss-a-call_processed.m4a"
                   title="Receptionist AI"
                 />
               </div>
@@ -1137,11 +1044,11 @@ integrations.configure({
               viewport={{ once: true, amount: 0.3 }}
             >
               <GlowCard className="rounded-2xl">
-                <div className="group bg-[#080808] rounded-2xl p-6 border border-white/10 min-h-[400px] hover:border-white/20 transition-all duration-300 relative overflow-hidden">
+                <div className="group bg-[#080808] rounded-2xl p-5 border border-white/10 hover:border-white/20 transition-all duration-300 relative overflow-hidden">
                   {/* Gradient overlay on hover */}
                   <div className="absolute inset-0 bg-gradient-to-br from-[#0080FF]/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                  <div className="space-y-4 relative z-10">
+                  <div className="space-y-3 relative z-10">
                     {/* Call Header with LIVE indicator */}
                     <div className="flex items-center gap-3 pb-4 border-b border-white/10">
                       <div className="relative">
@@ -1356,7 +1263,7 @@ integrations.configure({
       </section>
 
       {/* Deal Status Section - ALTERNATING LAYOUT */}
-      <section id="deal-status-section" className="py-24 px-4 bg-black relative overflow-hidden">
+      <section id="deal-status-section" className="py-16 lg:py-20 px-4 bg-black relative overflow-hidden">
         {/* Background gradient orb - left side for variation */}
         <div className="absolute top-1/2 left-0 w-96 h-96 bg-[#4F1AD6]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
         <div
@@ -1365,7 +1272,7 @@ integrations.configure({
         />
 
         <div className="container mx-auto max-w-7xl relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
             {/* Left Side - Description (lg:order-2 for alternating) */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -1426,7 +1333,7 @@ integrations.configure({
               {/* Premium play button with pulsing rings */}
               <div className="w-full max-w-md mt-6">
                 <AudioPlayer
-                  src="/audio_processed/Real-time-updates_processed.m4a"
+                  src="/audio/a%20proper%20inquery_processed.wav"
                   title="Deal Status"
                 />
               </div>
@@ -1657,12 +1564,12 @@ integrations.configure({
       </section>
 
       {/* Scheduler Section */}
-      <section id="scheduler-section" className="py-24 px-4 bg-black relative overflow-hidden">
+      <section id="scheduler-section" className="py-16 lg:py-20 px-4 bg-black relative overflow-hidden">
         <div className="absolute top-1/2 right-0 w-96 h-96 bg-[#0080FF]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
         <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
         <div className="container mx-auto max-w-7xl relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -1705,7 +1612,7 @@ integrations.configure({
 
               <div className="w-full max-w-md mt-6">
                 <AudioPlayer
-                  src="/audio_processed/Smart-scheduling_processed.m4a"
+                  src="/audio/perfect_note_processed.wav"
                   title="Scheduler"
                 />
               </div>
@@ -1838,12 +1745,12 @@ integrations.configure({
       </section>
 
       {/* Warm Transfers Section - ALTERNATING LAYOUT */}
-      <section id="warm-transfers-section" className="py-24 px-4 bg-black relative overflow-hidden">
+      <section id="warm-transfers-section" className="py-16 lg:py-20 px-4 bg-black relative overflow-hidden">
         <div className="absolute top-1/2 left-0 w-96 h-96 bg-[#4F1AD6]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
         <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
         <div className="container mx-auto max-w-7xl relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -1886,7 +1793,7 @@ integrations.configure({
 
               <div className="w-full max-w-md mt-6">
                 <AudioPlayer
-                  src="/audio_processed/Seamless-handoffs_processed.m4a"
+                  src="/audio/good%20handover%20can%20be%20used_processed.wav"
                   title="Warm Transfers"
                 />
               </div>
@@ -2019,12 +1926,12 @@ integrations.configure({
       </section>
 
       {/* Outbound Campaigns Section */}
-      <section id="outbound-campaigns-section" className="py-24 px-4 bg-black relative overflow-hidden">
+      <section id="outbound-campaigns-section" className="py-16 lg:py-20 px-4 bg-black relative overflow-hidden">
         <div className="absolute top-1/2 right-0 w-96 h-96 bg-[#0080FF]/10 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
         <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
         <div className="container mx-auto max-w-7xl relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -2074,7 +1981,7 @@ integrations.configure({
               {/* Premium play button with pulsing rings */}
               <div className="w-full max-w-md mt-6">
                 <AudioPlayer
-                  src="/audio_processed/Reachmoreclients_processed.m4a"
+                  src="/audio/Leave%20a%20message_processed.wav"
                   title="Outbound Service"
                 />
               </div>
@@ -2096,7 +2003,7 @@ integrations.configure({
                   </div>
                   <div>
                     <h4 className="text-white font-semibold">Outbound Call</h4>
-                    <p className="text-white/70 text-sm">In Progress</p>
+                    <p className="text-white/80 text-sm">In Progress</p>
                   </div>
                 </div>
 
@@ -2231,7 +2138,7 @@ integrations.configure({
             }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 How It Works
               </span>
@@ -2257,7 +2164,7 @@ integrations.configure({
               >
                 {/* Main Card */}
                 <motion.div
-                  className="bg-black/80 backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center relative overflow-hidden h-full min-h-[280px] flex flex-col"
+                  className="bg-black/80 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center relative overflow-hidden h-full flex flex-col"
                   whileHover={{
                     scale: 1.02,
                     borderColor: "rgba(0, 128, 255, 0.3)",
@@ -2273,7 +2180,7 @@ integrations.configure({
 
                   {/* Icon Container */}
                   <motion.div
-                    className="w-20 h-20 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/25 flex items-center justify-center mx-auto mb-6 relative z-10"
+                    className="w-20 h-20 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/25 flex items-center justify-center mx-auto mb-4 relative z-10"
                     whileHover={{
                       rotate: 360,
                       scale: 1.1,
@@ -2311,14 +2218,14 @@ integrations.configure({
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="bg-white/5 border border-white/10 backdrop-blur rounded-2xl p-8"
+            className="bg-white/5 border border-white/10 backdrop-blur rounded-2xl p-6"
           >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {[
                 { value: '500+', label: 'Title Companies' },
                 { value: '1M+', label: 'Calls Handled' },
                 { value: '99.9%', label: 'Uptime' },
-                { value: '4.9/5', label: 'Rating' }
+                { value: '4.8/5', label: 'Rating' }
               ].map((stat, index) => (
                 <motion.div
                   key={index}
@@ -2348,7 +2255,7 @@ integrations.configure({
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 What Our Clients Say
               </span>
@@ -2357,9 +2264,9 @@ integrations.configure({
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
               ))}
-              <span className="text-white font-semibold ml-2">4.9/5</span>
+              <span className="text-white font-semibold ml-2">4.8/5</span>
             </div>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto">
+            <p className="text-xl text-white/80 max-w-3xl mx-auto">
               Trusted by title companies across the country
             </p>
           </motion.div>
@@ -2367,61 +2274,61 @@ integrations.configure({
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                name: 'Sarah Mitchell',
-                role: 'CEO, Premier Title Group',
-                text: 'Title Voice reduced our missed calls by 95% and saved us over $4,000/month in staffing costs. The AI handles complex inquiries with ease.',
-                metric: '95% fewer missed calls',
+                name: 'Operations Director',
+                role: 'Regional title agency, Southeast',
+                text: 'Title Voice reduced our missed calls significantly and saved us thousands per month in staffing costs. The AI handles complex inquiries with ease.',
+                metric: 'Fewer missed calls',
                 rating: 5
               },
               {
-                name: 'James Rodriguez',
-                role: 'Operations Manager, Apex Title',
-                text: 'The scheduling automation alone saved our team 20 hours per week. Clients love the instant responses and 24/7 availability.',
-                metric: '20 hrs saved weekly',
+                name: 'Operations Manager',
+                role: 'Title agency, Florida',
+                text: 'The scheduling automation alone saved our team hours every week. Clients love the instant responses and 24/7 availability.',
+                metric: 'Hours saved weekly',
                 rating: 5
               },
               {
-                name: 'Emily Chen',
-                role: 'VP Operations, National Title Co',
+                name: 'VP of Operations',
+                role: 'Multi-state title company',
                 text: 'We saw ROI within the first month. The warm transfer feature ensures complex issues get to the right person with full context.',
                 metric: 'ROI in 30 days',
                 rating: 5
               },
               {
-                name: 'Michael Davis',
-                role: 'Owner, Davis Title Services',
+                name: 'Agency Owner',
+                role: 'Independent title company, Texas',
                 text: "As a small shop, Title Voice gave us enterprise-level phone coverage. Our clients can't tell the difference from a human receptionist.",
-                metric: '4.9/5 client rating',
+                metric: '4.8/5 client rating',
                 rating: 5
               },
               {
-                name: 'Lisa Thompson',
-                role: 'Director, Summit Title Agency',
+                name: 'Director of Operations',
+                role: 'Title agency, Northeast',
                 text: "The CRM integration is seamless. Every call is logged, every deal status is updated in real-time. It's transformed our operations.",
                 metric: '100% call logging',
                 rating: 5
               },
               {
-                name: 'Robert Kim',
-                role: 'Managing Partner, Pacific Title',
-                text: 'We expanded to 3 new locations without hiring additional reception staff. Title Voice scales effortlessly with our growth.',
-                metric: '3x growth, 0 new hires',
+                name: 'Managing Partner',
+                role: 'Multi-location title group, West Coast',
+                text: 'We expanded to new locations without hiring additional reception staff. Title Voice scales effortlessly with our growth.',
+                metric: 'Scaled without new hires',
                 rating: 5
               }
             ].map((testimonial, index) => (
-              <motion.div
+              <ScrollReveal
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                animation="fadeUp"
+                delay={index * 0.12}
+                duration={0.6}
               >
                 <GlowCard className="h-full rounded-2xl">
-                  <div className="relative p-6 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/20 transition-all duration-300 h-full group">
+                  <div className="relative p-5 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/20 transition-all duration-300 h-full group">
                     <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-[#0080FF]/0 group-hover:bg-[#0080FF]/50 transition-all duration-300 rounded-full" />
-                    <Quote className="w-8 h-8 text-white/10 group-hover:text-white/20 transition-colors mb-4" />
-                    <p className="text-white/70 mb-6 leading-relaxed text-sm">{testimonial.text}</p>
+                    <Quote className="w-8 h-8 text-white/10 group-hover:text-white/20 transition-colors mb-3" />
+                    <p className="text-white/80 mb-4 leading-relaxed text-sm">{testimonial.text}</p>
                     <motion.div
-                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 mb-6"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 mb-4"
                       whileHover={{ scale: 1.05 }}
                     >
                       <TrendingUp className="w-3.5 h-3.5 text-[#0080FF]" />
@@ -2443,7 +2350,7 @@ integrations.configure({
                     </div>
                   </div>
                 </GlowCard>
-              </motion.div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -2506,7 +2413,7 @@ integrations.configure({
               </div>
             </motion.div>
 
-            <h2 className="text-5xl md:text-6xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="text-white">
                 See Title Voice in action
               </span>
@@ -2559,7 +2466,7 @@ integrations.configure({
                     className="relative group"
                   >
                     <motion.div
-                      className="relative p-8 rounded-2xl bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-sm border border-white/10 overflow-hidden"
+                      className="relative p-6 rounded-2xl bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-sm border border-white/10 overflow-hidden"
                       whileHover={{
                         scale: 1.02,
                         y: -4,
@@ -2647,7 +2554,7 @@ integrations.configure({
               transition={{ duration: 0.6, delay: 0.2 }}
               className="relative lg:sticky lg:top-24 h-fit"
             >
-              <div className="relative bg-gradient-to-br from-[#0d1117] to-[#0a0d12] rounded-3xl p-10 border border-[#0080FF]/20 overflow-hidden group backdrop-blur-sm">
+              <div className="relative bg-gradient-to-br from-[#0d1117] to-[#0a0d12] rounded-3xl p-8 border border-[#0080FF]/20 overflow-hidden group backdrop-blur-sm">
                 {/* Animated gradient orbs */}
                 <motion.div
                   animate={{
@@ -2728,7 +2635,7 @@ integrations.configure({
                         <div className="w-5 h-5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center flex-shrink-0">
                           <CheckCircle className="w-3 h-3 text-[#0080FF]" />
                         </div>
-                        <span className="text-white/70">{benefit}</span>
+                        <span className="text-white/80">{benefit}</span>
                       </motion.div>
                     ))}
                   </div>
@@ -2770,7 +2677,7 @@ integrations.configure({
                     <div className="w-1 h-1 bg-white/30 rounded-full" />
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-[#0080FF]/70" />
-                      <span className="text-white/50 text-sm">No commitment required</span>
+                      <span className="text-white/50 text-sm">No obligation to sign up</span>
                     </div>
                   </div>
                 </div>

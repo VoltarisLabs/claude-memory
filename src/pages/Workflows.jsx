@@ -209,11 +209,7 @@ const Workflows = () => {
       <section className="relative min-h-screen px-4 pt-32 pb-20">
         {/* Spheremotion Background */}
         <div className="absolute inset-0">
-          <img
-            src="/spheremotion.gif"
-            alt="Animated sphere motion background"
-            className="w-full h-full object-cover opacity-60"
-          />
+          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -236,7 +232,7 @@ const Workflows = () => {
             </motion.div>
 
             <div className="mb-6">
-              <h1 className="text-6xl md:text-8xl font-bold text-white">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white">
                 <WordReveal text="Intelligent Workflows for Title Companies" />
               </h1>
             </div>
@@ -282,14 +278,14 @@ const Workflows = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="bg-white/5 border border-white/10 backdrop-blur rounded-2xl p-8"
+            className="bg-white/5 border border-white/10 backdrop-blur rounded-2xl p-6"
           >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {[
                 { value: '500+', label: 'Title Companies' },
                 { value: '1M+', label: 'Calls Handled' },
                 { value: '99.9%', label: 'Uptime' },
-                { value: '4.9/5', label: 'Rating' }
+                { value: '4.8/5', label: 'Rating' }
               ].map((stat, index) => (
                 <motion.div
                   key={index}
@@ -332,7 +328,7 @@ const Workflows = () => {
               <Zap className="w-4 h-4 text-[#0080FF]" />
               <span className="text-sm text-[#0080FF] font-medium">Step-by-Step</span>
             </motion.div>
-            <h2 className="text-5xl md:text-6xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 The Complete Journey
               </span>
@@ -498,7 +494,7 @@ const Workflows = () => {
                                 <div className="w-6 h-6 rounded-md bg-[#0080FF]/15 border border-[#0080FF]/20 flex items-center justify-center shrink-0 group-hover/cap:bg-[#0080FF]/25 group-hover/cap:border-[#0080FF]/35 transition-all duration-300">
                                   <Check className="w-3 h-3 text-[#0080FF]" />
                                 </div>
-                                <span className="text-white/70 text-sm group-hover/cap:text-white/90 transition-colors duration-300">{detail}</span>
+                                <span className="text-white/80 text-sm group-hover/cap:text-white/90 transition-colors duration-300">{detail}</span>
                               </div>
                             </motion.div>
                           ))}
@@ -544,7 +540,7 @@ const Workflows = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Workflow Types
               </span>
@@ -585,16 +581,16 @@ const Workflows = () => {
                     <div className="absolute inset-0 bg-gradient-to-br from-[#0080FF]/[0.03] to-[#4F1AD6]/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" />
 
                     {/* Icon with glow effect */}
-                    <div className="relative z-10 w-14 h-14 rounded-xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-5 group-hover:bg-[#0080FF]/15 group-hover:border-[#0080FF]/35 transition-all duration-300">
+                    <div className="relative z-10 w-14 h-14 rounded-xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-3 group-hover:bg-[#0080FF]/15 group-hover:border-[#0080FF]/35 transition-all duration-300">
                       <type.icon className="w-7 h-7 text-[#0080FF]" />
                       {/* Icon glow backdrop */}
                       <div className="absolute inset-0 bg-[#0080FF]/15 rounded-xl blur-lg -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
 
                     <h3 className="relative z-10 text-lg font-bold text-white mb-3">{type.title}</h3>
-                    <p className="relative z-10 text-white/70 text-sm mb-5 leading-relaxed">{type.description}</p>
+                    <p className="relative z-10 text-white/80 text-sm mb-3 leading-relaxed">{type.description}</p>
 
-                    <div className="relative z-10 space-y-2.5 mt-auto">
+                    <div className="relative z-10 space-y-2 mt-auto">
                       {type.features.map((feature, idx) => (
                         <div key={idx} className="flex items-center gap-2.5">
                           <div className="w-5 h-5 rounded-full bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center flex-shrink-0">
@@ -639,7 +635,7 @@ const Workflows = () => {
               <span className="text-sm text-[#0080FF] font-medium">Seamless Integrations</span>
             </motion.div>
 
-            <h2 className="text-5xl md:text-6xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Integration Ecosystem
               </span>
@@ -695,12 +691,12 @@ const Workflows = () => {
                     <h3 className="relative z-10 text-xl font-bold text-white mb-3">
                       {integration.title}
                     </h3>
-                    <p className="relative z-10 text-white/70 text-sm leading-relaxed flex-grow">
+                    <p className="relative z-10 text-white/80 text-sm leading-relaxed flex-grow">
                       {integration.description}
                     </p>
 
                     {/* Status indicator */}
-                    <div className="relative z-10 mt-4 pt-4 border-t border-white/10 flex items-center gap-2">
+                    <div className="relative z-10 mt-3 pt-3 border-t border-white/10 flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                       <span className="text-xs text-white/50 font-medium">Available Now</span>
                     </div>

@@ -16,37 +16,37 @@ const TestimonialsSection = () => {
     {
       id: 1,
       quote: "Title Voice has transformed our operations. We never miss a call anymore, and our clients love the instant responses. It's like having a dedicated receptionist that never sleeps.",
-      author: "Sarah Johnson",
-      title: "Operations Manager",
-      company: "Premier Title Services",
-      avatar: "SJ",
+      author: "Operations Director",
+      title: "Regional title agency",
+      company: "Southeast",
+      avatar: "OD",
       rating: 5
     },
     {
       id: 2,
       quote: "The scheduling integration is incredible. Title Voice books appointments automatically and sends confirmations. Our staff can focus on closings instead of phone calls.",
-      author: "Michael Chen",
-      title: "Title Officer",
-      company: "Metro Title Group",
-      avatar: "MC",
+      author: "Operations Manager",
+      title: "Title agency",
+      company: "Florida",
+      avatar: "OM",
       rating: 5
     },
     {
       id: 3,
-      quote: "We've seen a 40% increase in appointment bookings since implementing Title Voice. The AI understands our business and handles complex inquiries perfectly.",
-      author: "Jennifer Davis",
-      title: "VP of Operations",
-      company: "Heritage Title",
-      avatar: "JD",
+      quote: "We've seen significant improvement in appointment bookings since implementing Title Voice. The AI understands our business and handles complex inquiries perfectly.",
+      author: "VP of Operations",
+      title: "Multi-state title company",
+      company: "",
+      avatar: "VP",
       rating: 5
     },
     {
       id: 4,
-      quote: "Title Voice integrates seamlessly with our existing systems. The setup was quick and our team was up and running in just a few days.",
-      author: "Robert Martinez",
-      title: "IT Director",
-      company: "Capital Title",
-      avatar: "RM",
+      quote: "Title Voice integrates seamlessly with our existing systems. The setup was quick and our team was up and running in just a couple of weeks.",
+      author: "Agency Owner",
+      title: "Independent title company",
+      company: "Texas",
+      avatar: "AO",
       rating: 5
     }
   ]
@@ -173,9 +173,11 @@ const TestimonialsSection = () => {
                     <div className="text-gray-600">
                       {testimonials[currentIndex].title}
                     </div>
-                    <div className="text-navy-600 font-medium">
-                      {testimonials[currentIndex].company}
-                    </div>
+                    {testimonials[currentIndex].company && (
+                      <div className="text-navy-600 font-medium">
+                        {testimonials[currentIndex].company}
+                      </div>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -226,4 +228,3 @@ const TestimonialsSection = () => {
 }
 
 export default TestimonialsSection
-

@@ -9,18 +9,18 @@ const TrustSection = () => {
   })
 
   const companies = [
-    'Fidelity National Title',
-    'First American Title',
-    'Stewart Title',
-    'Old Republic Title',
-    'Chicago Title',
-    'Commonwealth Land Title',
-    'WFG National Title',
-    'Title Resources Group',
-    'Residential Title',
-    'Title Partners',
-    'Premier Title',
-    'Metro Title'
+    'Regional Title Agency',
+    'Multi-State Title Group',
+    'Independent Title Co.',
+    'Metro Title Services',
+    'Coastal Title Partners',
+    'National Settlement Group',
+    'Heritage Closing Services',
+    'Summit Title Agency',
+    'Valley Title Group',
+    'Keystone Title Co.',
+    'Landmark Title Services',
+    'Pioneer Closing Group'
   ]
 
   const containerVariants = {
@@ -60,7 +60,7 @@ const TrustSection = () => {
             variants={itemVariants}
             className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4"
           >
-            Hundreds of Title Companies Already Run on Title Voice
+            Trusted by Title Companies Nationwide
           </motion.h2>
         </motion.div>
 
@@ -85,7 +85,7 @@ const TrustSection = () => {
                 key={`${company}-${index}`}
                 variants={itemVariants}
                 className="flex-shrink-0"
-                whileHover={{ 
+                whileHover={{
                   scale: 1.1,
                   filter: "grayscale(0%)",
                   transition: { duration: 0.2 }
@@ -127,7 +127,7 @@ const TrustSection = () => {
                 key={`reverse-${company}-${index}`}
                 variants={itemVariants}
                 className="flex-shrink-0"
-                whileHover={{ 
+                whileHover={{
                   scale: 1.1,
                   filter: "grayscale(0%)",
                   transition: { duration: 0.2 }
@@ -153,4 +153,3 @@ const TrustSection = () => {
 }
 
 export default TrustSection
-

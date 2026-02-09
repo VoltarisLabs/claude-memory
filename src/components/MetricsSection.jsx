@@ -9,35 +9,35 @@ const MetricsSection = () => {
   })
 
   const [counters, setCounters] = useState({
-    revenue: 0,
-    roi: 0,
-    hours: 0,
-    closings: 0
+    savings: 0,
+    calls: 0,
+    time: 0,
+    availability: 0
   })
 
   const metrics = [
     {
-      value: '$100M+',
-      label: 'Closings coordinated',
-      key: 'revenue',
-      target: 100
+      value: '$4,200',
+      label: 'Average monthly savings',
+      key: 'savings',
+      target: 4200
     },
     {
-      value: '10X',
-      label: 'ROI for title companies',
-      key: 'roi',
-      target: 10
+      value: '3.2X',
+      label: 'More calls handled',
+      key: 'calls',
+      target: 3.2
     },
     {
-      value: '50+',
-      label: 'Title companies served',
-      key: 'hours',
-      target: 50
+      value: '47%',
+      label: 'Time reduction',
+      key: 'time',
+      target: 47
     },
     {
       value: '24/7',
-      label: 'Virtual closing support',
-      key: 'closings',
+      label: 'Availability',
+      key: 'availability',
       target: 24
     }
   ]
@@ -55,10 +55,10 @@ const MetricsSection = () => {
         const timer = setInterval(() => {
           currentStep++
           const currentValue = Math.min(stepSize * currentStep, metric.target)
-          
+
           setCounters(prev => ({
             ...prev,
-            [metric.key]: Math.floor(currentValue)
+            [metric.key]: metric.key === 'calls' ? parseFloat(currentValue.toFixed(1)) : Math.floor(currentValue)
           }))
 
           if (currentStep >= steps) {
@@ -123,7 +123,7 @@ const MetricsSection = () => {
                 key={metric.key}
                 variants={itemVariants}
                 className="text-center"
-                whileHover={{ 
+                whileHover={{
                   scale: 1.05,
                   transition: { duration: 0.2 }
                 }}
@@ -133,16 +133,16 @@ const MetricsSection = () => {
                   style={{ background: 'linear-gradient(to right, #3282B8, #BBE1FA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ 
+                  transition={{
                     delay: index * 0.2,
                     duration: 0.6,
                     ease: "easeOut"
                   }}
                 >
-                  {metric.key === 'revenue' && `$${counters.revenue}K+`}
-                  {metric.key === 'roi' && `${counters.roi}X`}
-                  {metric.key === 'hours' && counters.hours}
-                  {metric.key === 'closings' && `${counters.closings}+`}
+                  {metric.key === 'savings' && `$${counters.savings.toLocaleString()}`}
+                  {metric.key === 'calls' && `${counters.calls}X`}
+                  {metric.key === 'time' && `${counters.time}%`}
+                  {metric.key === 'availability' && `${counters.availability}/7`}
                 </motion.div>
                 <p className="text-gray-300 text-sm lg:text-base">
                   {metric.label}
@@ -157,4 +157,3 @@ const MetricsSection = () => {
 }
 
 export default MetricsSection
-

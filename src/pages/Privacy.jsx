@@ -63,8 +63,18 @@ const Privacy = () => {
       title: '7. Data Retention',
       content: [
         'We retain your personal data for as long as your account is active or as needed to provide services.',
-        'Call recordings and transcripts are retained according to your configured retention policy.',
-        'After account termination, we retain data for up to 90 days before secure deletion, unless longer retention is required by law.',
+        'Call recordings and transcripts are retained for 30 days by default, then automatically deleted. Custom retention available upon request.',
+        'After account termination, we retain data for 30 days before secure deletion, unless longer retention is required by law.',
+        'Compliance data (call logs, audit trails) may be retained longer to meet title industry regulatory requirements.',
+      ],
+    },
+    {
+      title: '7a. Data Export',
+      content: [
+        'You have the right to export your data at any time during your subscription.',
+        'Standard data exports (CSV format) are provided at no cost through your dashboard.',
+        'Custom data exports requiring engineering support (specialized formats, bulk historical data) incur a $250 service fee.',
+        'Upon account termination, you have 30 days to request a final data export before deletion.',
       ],
     },
     {
@@ -94,7 +104,7 @@ const Privacy = () => {
       <section className="relative pt-32 pb-16 px-4 overflow-hidden">
         {/* Sphere Motion GIF — same as landing page */}
         <div className="absolute inset-0">
-          <img src="/spheremotion.gif" alt="Animated sphere motion background" className="w-full h-full object-cover opacity-60 scale-75" />
+          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60 scale-75" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -127,15 +137,15 @@ const Privacy = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="rounded-2xl bg-white/[0.04] border border-white/10 p-6 sm:p-10 lg:p-12"
+            className="rounded-2xl bg-white/[0.04] border border-white/10 p-6 sm:p-8"
           >
-            <p className="text-white/60 mb-10 leading-relaxed">
+            <p className="text-white/60 mb-8 leading-relaxed">
               At Title Voice, we are committed to protecting your privacy and ensuring the security of your data.
               This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you
               use our AI voice agent services.
             </p>
 
-            <div className="space-y-10">
+            <div className="space-y-8">
               {sections.map((section, index) => (
                 <div key={index}>
                   <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">

@@ -13,7 +13,7 @@ const NotFound = () => {
 
       {/* Sphere Motion GIF — same as landing page */}
       <div className="absolute inset-0">
-        <img src="/spheremotion.gif" alt="Animated sphere motion background" className="w-full h-full object-cover opacity-60 scale-75" />
+        <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60 scale-75" />
       </div>
 
       {/* Background effects */}
@@ -27,7 +27,7 @@ const NotFound = () => {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-          className="text-[8rem] sm:text-[12rem] font-bold leading-none bg-gradient-to-r from-[#0080FF] via-[#4F1AD6] to-[#00F6FF] bg-clip-text text-transparent"
+          className="text-[6rem] sm:text-[8rem] lg:text-[10rem] font-bold leading-none bg-gradient-to-r from-[#0080FF] via-[#4F1AD6] to-[#00F6FF] bg-clip-text text-transparent"
         >
           404
         </motion.h1>
@@ -36,7 +36,7 @@ const NotFound = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-xl sm:text-2xl text-white/60 mb-4"
+          className="text-lg sm:text-xl text-white/60 mb-4"
         >
           Page Not Found
         </motion.p>

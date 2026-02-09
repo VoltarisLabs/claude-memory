@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -12,7 +12,7 @@ import Navigation from './components/Navigation'
 import Footer from './components/Footer'
 import BookingModal from './components/BookingModal'
 import ScrollToTop from './components/ScrollToTop'
-import ScrollToTopButton from './components/ScrollToTopButton'
+import FloatingCTA from './components/FloatingCTA'
 
 // Pages
 import Home from './pages/Home'
@@ -26,19 +26,76 @@ import VirtualAssistant from './pages/VirtualAssistant'
 import WorkflowIntegration from './pages/WorkflowIntegration'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
+import Onboarding from './pages/Onboarding'
+import ROICalculator from './pages/ROICalculator'
 import NotFound from './pages/NotFound'
 
-// Animation variants
+// Animation variants for page transitions
 const pageVariants = {
-  initial: { opacity: 0, y: 20 },
-  in: { opacity: 1, y: 0 },
-  out: { opacity: 0, y: -20 }
+  initial: {
+    opacity: 0,
+    y: 20,
+    scale: 0.98
+  },
+  in: {
+    opacity: 1,
+    y: 0,
+    scale: 1
+  },
+  out: {
+    opacity: 0,
+    y: -20,
+    scale: 0.98
+  }
 }
 
 const pageTransition = {
   type: "tween",
-  ease: "anticipate",
-  duration: 0.5
+  ease: [0.25, 0.46, 0.45, 0.94], // easeOutQuart
+  duration: 0.4
+}
+
+// Page wrapper component for animations
+const PageWrapper = ({ children }) => {
+  const location = useLocation()
+
+  return (
+    <motion.div
+      key={location.pathname}
+      initial="initial"
+      animate="in"
+      exit="out"
+      variants={pageVariants}
+      transition={pageTransition}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+function AnimatedRoutes() {
+  const location = useLocation()
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+        <Route path="/solutions" element={<PageWrapper><Solutions /></PageWrapper>} />
+        <Route path="/workflows" element={<PageWrapper><Workflows /></PageWrapper>} />
+        <Route path="/pricing" element={<PageWrapper><Pricing /></PageWrapper>} />
+        <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+        <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+        <Route path="/title-software" element={<PageWrapper><TitleSoftware /></PageWrapper>} />
+        <Route path="/virtual-assistant" element={<PageWrapper><VirtualAssistant /></PageWrapper>} />
+        <Route path="/workflow-integration" element={<PageWrapper><WorkflowIntegration /></PageWrapper>} />
+        <Route path="/privacy" element={<PageWrapper><Privacy /></PageWrapper>} />
+        <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
+        <Route path="/onboarding" element={<PageWrapper><Onboarding /></PageWrapper>} />
+        <Route path="/roi-calculator" element={<PageWrapper><ROICalculator /></PageWrapper>} />
+        <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
+      </Routes>
+    </AnimatePresence>
+  )
 }
 
 function App() {
@@ -46,35 +103,13 @@ function App() {
     <PreloaderProvider minDuration={2000}>
       <BookingProvider>
         <Router>
-        <ScrollToTop />
-        <motion.div
-          initial="initial"
-          animate="in"
-          exit="out"
-          variants={pageVariants}
-          transition={pageTransition}
-          className="min-h-screen bg-black"
-        >
-          <Navigation />
+          <ScrollToTop />
+          <div className="min-h-screen bg-black">
+            <Navigation />
 
-          <main>
-            <AnimatePresence mode="wait">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/solutions" element={<Solutions />} />
-                <Route path="/workflows" element={<Workflows />} />
-                <Route path="/pricing" element={<Pricing />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/title-software" element={<TitleSoftware />} />
-                <Route path="/virtual-assistant" element={<VirtualAssistant />} />
-                <Route path="/workflow-integration" element={<WorkflowIntegration />} />
-                <Route path="/privacy" element={<Privacy />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </AnimatePresence>
-          </main>
+            <main>
+              <AnimatedRoutes />
+            </main>
 
           <Footer />
           <Toaster
@@ -90,10 +125,10 @@ function App() {
 
           {/* Global Booking Modal */}
           <BookingModal />
-        </motion.div>
+        </div>
 
-        {/* Scroll to top button - outside motion.div for proper fixed positioning */}
-        <ScrollToTopButton />
+        {/* Floating CTA button - positioned at bottom right */}
+        <FloatingCTA />
       </Router>
     </BookingProvider>
     </PreloaderProvider>

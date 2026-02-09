@@ -24,7 +24,7 @@ const Badge = ({
     purple: 'bg-[#4F1AD6]/15 border-[#4F1AD6]/30 text-[#4F1AD6]',
     gradient: 'bg-gradient-to-r from-[#0080FF]/15 to-[#4F1AD6]/15 border-[#0080FF]/30 text-[#0080FF]',
     white: 'bg-white/10 border-white/30 text-white',
-    subtle: 'bg-white/5 border-white/20 text-white/70'
+    subtle: 'bg-white/5 border-white/20 text-white/80'
   }
 
   const baseClasses = `

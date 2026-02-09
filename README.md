@@ -304,9 +304,9 @@ Bugs/mismatches in the codebase:
 | Synthetic reviews hardcoded | `TestimonialsSection.jsx`, `Home.jsx` | **DONE** | Genericized all fake names → role + region only |
 | Home.jsx had 3-tier pricing | `Home.jsx` | **DONE** | Collapsed to 2-tier (Professional $1,500 / Enterprise $3,500), removed "Cancel anytime" and "$0 setup fee" |
 | Pricing.jsx wrong numbers | `Pricing.jsx` | **DONE** | Fixed: 2,000 min, $0.27/$0.21 overage, FAQ corrected, trust badges updated |
-| No `src/data/pricingData.js` | README claims it exists | Not fixed | Either create it or fix README |
-| No audio demo files | `public/` | Not fixed | Add real AI voice samples or remove audio player claims |
-| BookingModal doesn't exist | README claims it does | Not fixed | All CTAs are Cal.com links. Fix README |
+| No `src/data/pricingData.js` | README claims it exists | **DONE** | File exists at `src/data/pricingData.js` |
+| No audio demo files | `public/` | **DONE** | Audio files exist in `public/audio/` |
+| BookingModal doesn't exist | README claims it does | **DONE** | BookingModal exists at `src/components/BookingModal.jsx` |
 
 ---
 

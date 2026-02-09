@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext, useContext } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Logo from './Logo'
 
 const PreloaderContext = createContext(null)
 
@@ -92,36 +93,79 @@ export function PreloaderProvider({ children, minDuration = 1500 }) {
 
             {/* Central content */}
             <div className="text-center relative z-10">
-              {/* Logo mark - small animated sphere above text */}
+              {/* Title Voice Logo with breathing animation */}
               <motion.div
-                className="w-10 h-10 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#0080FF] to-[#4F1AD6] relative"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
+                className="relative mx-auto mb-8 flex items-center justify-center"
+                initial={{ scale: 0, opacity: 0, rotate: -180 }}
+                animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                transition={{ duration: 0.8, type: "spring", stiffness: 150, damping: 15 }}
               >
+                {/* Pulsing glow behind logo */}
                 <motion.div
-                  className="absolute inset-0 rounded-full bg-gradient-to-br from-[#0080FF] to-[#4F1AD6]"
-                  animate={{ scale: [1, 1.4, 1], opacity: [0.5, 0, 0.5] }}
+                  className="absolute inset-0 blur-2xl opacity-40"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.5, 0.3]
+                  }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  style={{
+                    background: 'radial-gradient(circle, rgba(0,128,255,0.6) 0%, rgba(79,26,214,0.4) 50%, transparent 70%)'
+                  }}
                 />
-                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/30 to-transparent" />
+
+                {/* Logo with subtle breathing effect */}
+                <motion.div
+                  animate={{
+                    scale: [1, 1.05, 1],
+                    y: [0, -3, 0]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="relative"
+                >
+                  <Logo size="large" />
+                </motion.div>
+
+                {/* Orbiting particles around logo */}
+                {[0, 1, 2].map((i) => (
+                  <motion.div
+                    key={`orbit-${i}`}
+                    className="absolute w-2 h-2 rounded-full bg-gradient-to-br from-[#0080FF] to-[#4F1AD6]"
+                    style={{
+                      top: '50%',
+                      left: '50%',
+                    }}
+                    animate={{
+                      x: [0, Math.cos((i * 120 * Math.PI) / 180) * 70, 0],
+                      y: [0, Math.sin((i * 120 * Math.PI) / 180) * 70, 0],
+                      scale: [0.5, 1, 0.5],
+                      opacity: [0.3, 0.8, 0.3],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: i * 0.3,
+                    }}
+                  />
+                ))}
               </motion.div>
 
               {/* Brand text */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
                 className="mb-8"
               >
-                <span className="text-3xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
-                  Title Voice
-                </span>
                 <motion.p
-                  className="text-white/30 text-sm mt-2 tracking-wider"
+                  className="text-white/40 text-sm tracking-wider font-medium"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5 }}
+                  transition={{ delay: 0.6 }}
                 >
                   AI-Powered Voice Agent
                 </motion.p>

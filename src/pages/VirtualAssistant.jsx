@@ -76,9 +76,9 @@ const VirtualAssistant = () => {
       <VoiceWaves />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 py-20">
+      <section className="relative min-h-screen flex items-center justify-center px-4 py-12 lg:py-16">
         <div className="absolute inset-0">
-          <img src="/spheremotion.gif" alt="Animated sphere motion background" className="w-full h-full object-cover opacity-60 scale-75" />
+          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60 scale-75" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -100,7 +100,7 @@ const VirtualAssistant = () => {
             </motion.div>
 
             <div className="mb-6">
-              <h1 className="text-6xl md:text-8xl font-bold text-white">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white">
                 <WordReveal text="AI Virtual Assistant for Title Companies" delay={0.3} />
               </h1>
             </div>
@@ -142,7 +142,7 @@ const VirtualAssistant = () => {
       {/* Gradient Divider */}
 
       {/* Features Grid */}
-      <section className="py-24 px-4 relative z-10">
+      <section className="py-16 lg:py-20 px-4 relative z-10">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -154,7 +154,7 @@ const VirtualAssistant = () => {
               <span className="w-2 h-2 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6]" />
               Features
             </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Why Title Companies Choose Our Virtual Assistant
               </span>
@@ -174,9 +174,9 @@ const VirtualAssistant = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
                 <GlowCard className="h-full rounded-2xl">
-                  <div className="relative p-8 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/20 transition-all duration-300 h-full group overflow-hidden">
+                  <div className="relative p-6 bg-[#080808] rounded-2xl border border-white/10 hover:border-[#0080FF]/20 transition-all duration-300 h-full group overflow-hidden">
                     <BorderBeam size={200} duration={8} delay={index * 2} />
-                    <div className="w-14 h-14 rounded-2xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-6 group-hover:bg-[#0080FF]/20 transition-colors duration-300">
+                    <div className="w-14 h-14 rounded-2xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-4 group-hover:bg-[#0080FF]/20 transition-colors duration-300">
                       <feature.icon className="w-7 h-7 text-[#0080FF]" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-3">
@@ -196,7 +196,7 @@ const VirtualAssistant = () => {
       {/* Gradient Divider */}
 
       {/* Integration Section */}
-      <section className="py-24 px-4 relative z-10">
+      <section className="py-16 lg:py-20 px-4 relative z-10">
         <div className="container mx-auto max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -208,7 +208,7 @@ const VirtualAssistant = () => {
               <span className="w-2 h-2 rounded-full bg-gradient-to-r from-[#0080FF] to-[#4F1AD6]" />
               Integrations
             </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
                 Seamless Integration with Your Title Software
               </span>
@@ -226,9 +226,9 @@ const VirtualAssistant = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.15 }}
-                className="relative p-8 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-[#0080FF]/30 transition-all duration-500 group"
+                className="relative p-6 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-[#0080FF]/30 transition-all duration-500 group"
               >
-                <div className="w-12 h-12 rounded-xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-5 group-hover:bg-[#0080FF]/20 transition-colors duration-300">
+                <div className="w-12 h-12 rounded-xl bg-[#0080FF]/10 border border-[#0080FF]/20 flex items-center justify-center mb-4 group-hover:bg-[#0080FF]/20 transition-colors duration-300">
                   <item.icon className="w-6 h-6 text-[#0080FF]" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
@@ -242,7 +242,7 @@ const VirtualAssistant = () => {
       {/* Gradient Divider */}
 
       {/* CTA Section */}
-      <section className="py-16 sm:py-24 lg:py-32 px-4 relative overflow-hidden">
+      <section className="py-16 lg:py-24 px-4 relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
           <motion.div

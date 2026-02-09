@@ -12,7 +12,7 @@ import { PrimaryButton, OutlineButton } from './Buttons'
 const EnhancedCTA = ({
   title = 'Ready to Get Started?',
   highlightText = 'Get Started',
-  description = 'Join thousands of title companies who have transformed their operations with Title Voice.',
+  description = 'See how title companies are transforming their operations with Title Voice.',
   primaryButtonText = 'Get Started',
   primaryButtonIcon = <ArrowRight className="w-5 h-5" />,
   secondaryButtonText = 'Schedule Demo',
@@ -84,7 +84,7 @@ const EnhancedCTA = ({
           {/* Content */}
           <div className="relative z-10">
             <motion.h2
-              className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
@@ -111,7 +111,7 @@ const EnhancedCTA = ({
             </motion.h2>
 
             <motion.p
-              className="text-xl md:text-2xl text-white/70 mb-12 max-w-3xl mx-auto leading-relaxed"
+              className="text-lg md:text-xl text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}

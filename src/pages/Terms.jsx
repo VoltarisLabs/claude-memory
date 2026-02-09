@@ -65,22 +65,58 @@ const Terms = () => {
       ],
     },
     {
-      title: '8. Termination',
+      title: '8. Contract Terms & Termination',
       content: [
-        'Either party may terminate the agreement at any time with 30 days written notice.',
-        'Title Voice may suspend or terminate your account immediately for violation of these terms.',
-        'Upon termination, your right to use the service ceases immediately. We will retain your data for 90 days to allow for data export.',
+        'All subscriptions begin with a 3-month pilot period to evaluate service fit.',
+        'After successful pilot completion, contracts automatically convert to a 12-month standard term.',
+        'Either party may terminate with 30 days written notice during any contract period.',
+        'A one-time setup fee of $5,000 applies to all new accounts. This fee is non-refundable after setup begins.',
+        'We offer a 30-day money-back guarantee during the pilot period. If unsatisfied within the first 30 days, we will refund subscription fees (setup fee excluded).',
+        'Title Voice may suspend or terminate your account immediately for material violation of these terms.',
+        'Upon termination, your right to use the service ceases immediately. We retain data for 30 days (see Privacy Policy).',
       ],
     },
     {
-      title: '9. Governing Law',
+      title: '8a. Fair Use Policy',
+      content: [
+        'Our pricing is designed for normal title company operations. Fair use ensures service quality for all customers.',
+        'Accounts with excessive usage may be flagged for review, including: sustained spam calls exceeding 10x average volume, bot or automated traffic unrelated to legitimate business, intentional misuse or system abuse.',
+        'If excessive usage is detected, we will notify you to resolve the issue. In cases of continued abuse, we reserve the right to adjust your plan, apply additional fees, or terminate service.',
+        'Normal business fluctuations (seasonal peaks, marketing campaigns, office growth) are expected and covered under fair use.',
+      ],
+    },
+    {
+      title: '10. Governing Law',
       content: [
         'These Terms shall be governed by and construed in accordance with the laws of the State of Ohio, without regard to its conflict of law provisions.',
         'Any disputes arising under these terms shall be resolved through binding arbitration in Akron, Ohio.',
       ],
     },
     {
-      title: '10. Contact',
+      title: '11. Non-Solicitation',
+      content: [
+        'During the term of this agreement and for a period of twelve (12) months following termination, neither party shall directly or indirectly solicit, recruit, or hire any employee, contractor, or agent of the other party who was involved in the performance of services under this agreement.',
+        'This restriction applies to all personnel involved in the delivery, support, or management of Title Voice services.',
+      ],
+    },
+    {
+      title: '12. Fulfillment Timeline',
+      content: [
+        'Upon receipt of payment and completion of onboarding information, Title Voice will have your AI voice agent live within two (2) weeks.',
+        'Client is responsible for providing all necessary onboarding information, including call scripts, business hours, escalation contacts, and CRM integration credentials, in a timely manner.',
+        'Delays in providing onboarding information may extend the fulfillment timeline accordingly.',
+      ],
+    },
+    {
+      title: '13. Intellectual Property & Ownership',
+      content: [
+        'All AI configurations, prompts, workflows, and system designs developed by Title Voice remain the exclusive intellectual property of Title Voice.',
+        'All call data, transcripts, recordings, and client-specific information generated through the use of Title Voice services remain the property of the Client.',
+        'Client may not replicate, reverse-engineer, or redistribute any Title Voice AI configurations, prompts, or proprietary workflows without prior written consent.',
+      ],
+    },
+    {
+      title: '14. Contact',
       content: [
         'For questions about these Terms of Service, please contact us at:',
         'Email: support@titlevoice.ai',
@@ -106,7 +142,7 @@ const Terms = () => {
       <section className="relative pt-32 pb-16 px-4 overflow-hidden">
         {/* Sphere Motion GIF — same as landing page */}
         <div className="absolute inset-0">
-          <img src="/spheremotion.gif" alt="Animated sphere motion background" className="w-full h-full object-cover opacity-60 scale-75" />
+          <video src="/spheremotion.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60 scale-75" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
 
@@ -139,14 +175,14 @@ const Terms = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="rounded-2xl bg-white/[0.04] border border-white/10 p-6 sm:p-10 lg:p-12"
+            className="rounded-2xl bg-white/[0.04] border border-white/10 p-6 sm:p-8"
           >
-            <p className="text-white/60 mb-10 leading-relaxed">
+            <p className="text-white/60 mb-8 leading-relaxed">
               Please read these Terms of Service carefully before using the Title Voice platform.
               These terms govern your use of our AI voice agent services for title companies.
             </p>
 
-            <div className="space-y-10">
+            <div className="space-y-8">
               {sections.map((section, index) => (
                 <div key={index}>
                   <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">

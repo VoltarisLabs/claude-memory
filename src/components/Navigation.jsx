@@ -34,6 +34,21 @@ const Navigation = () => {
 
   const isActive = (href) => location.pathname === href
 
+  // Scroll to top when clicking same page link or logo
+  const handleNavClick = (e, href) => {
+    if (location.pathname === href) {
+      e.preventDefault()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
+  const handleLogoClick = (e) => {
+    if (location.pathname === '/') {
+      e.preventDefault()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
   return (
     <motion.nav
       initial={{ y: -100 }}
@@ -53,7 +68,7 @@ const Navigation = () => {
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             className="flex items-center gap-3"
           >
-            <Link to="/">
+            <Link to="/" onClick={handleLogoClick}>
               <Logo showText={true} size="default" />
             </Link>
           </motion.div>
@@ -64,10 +79,11 @@ const Navigation = () => {
               <motion.div key={item.name} whileHover={{ y: -1 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
                 <Link
                   to={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
                   className={`font-medium transition-colors duration-300 text-sm tracking-wide ${
                     isActive(item.href)
                       ? 'text-[#0080FF]'
-                      : 'text-white/70 hover:text-white'
+                      : 'text-white/80 hover:text-white'
                   }`}
                 >
                   {item.name}
@@ -85,7 +101,7 @@ const Navigation = () => {
 
           {/* Mobile Menu Button */}
           <motion.button
-            className="md:hidden p-2 text-white/70"
+            className="md:hidden p-2 text-white/80"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             whileTap={{ scale: 0.9 }}
             aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
@@ -115,7 +131,10 @@ const Navigation = () => {
                   >
                     <Link
                       to={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
+                      onClick={(e) => {
+                        handleNavClick(e, item.href)
+                        setIsMobileMenuOpen(false)
+                      }}
                       className={`block font-medium transition-colors duration-200 py-1 ${
                         isActive(item.href)
                           ? 'text-[#0080FF]'
