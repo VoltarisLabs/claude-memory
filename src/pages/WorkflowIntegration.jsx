@@ -165,7 +165,7 @@ const WorkflowIntegration = () => {
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <SEO
         title="Getting Started & Integration"
-        description="Get started with Title Voice AI in 2 weeks. Seamless integration with ResWare, RamQuest, and all major title production software."
+        description="Get started with Title Voice AI the same day. Seamless integration with ResWare, RamQuest, and all major title production software."
         canonical="/workflow-integration"
       />
       {/* Background Canvas Layers */}
@@ -204,7 +204,7 @@ const WorkflowIntegration = () => {
 
             <div className="mb-8">
               <h2 className="text-2xl md:text-4xl font-medium text-white">
-                Live in 2 weeks with seamless software integration.
+                Live the same day with seamless software integration.
               </h2>
             </div>
 
@@ -648,7 +648,7 @@ const WorkflowIntegration = () => {
       <EnhancedCTA
         title="Ready to Get Started?"
         highlightText="Get Started"
-        description="Schedule your onboarding call and go live in 2 weeks with seamless software integration"
+        description="Start your onboarding and go live the same day with seamless software integration"
       />
     </div>
   )

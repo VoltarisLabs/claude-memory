@@ -500,7 +500,7 @@ const About = () => {
                   </div>
                   <div className="text-center p-4 rounded-xl bg-white/[0.02] border border-white/[0.08]">
                     <p className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#0080FF] to-[#4F1AD6] bg-clip-text text-transparent">
-                      2 weeks
+                      Same Day
                     </p>
                     <p className="text-white/60 text-sm mt-1">Setup Time</p>
                   </div>

@@ -42,9 +42,9 @@ const ResultsSection = () => {
     },
     {
       icon: <Users className="w-8 h-8" />,
-      value: "2 Weeks",
-      label: "Quick implementation",
-      description: "Get up and running quickly with our streamlined setup process"
+      value: "Same Day",
+      label: "Live immediately",
+      description: "Complete onboarding and your AI goes live the same day"
     }
   ]
 

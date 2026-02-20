@@ -81,7 +81,7 @@ _Last updated: 2026-02-21 | Business Hours Classification, Analytics Overhaul, M
 ### WF-012: Provision Retell Agent (`P1mYViAdW7LKt3YT`)
 - **Webhook**: `/provision-retell-agent`
 - **Flow**: Webhook → Get Onboarding → Get Team/FAQs → Build Prompt → Create LLM → Create Agent → Create Phone Number → Get/Create Location → Prepare DB Updates → Update Location → Respond
-- **Create Phone Number node**: Currently **MOCKED** (Code node returning fake `(000) 000-0000`). For production, restore to httpRequest calling `https://api.retellai.com/create-phone-number`. Reference execution `150825` for original config.
+- **Create Phone Number node**: LIVE — httpRequest `POST https://api.retellai.com/create-phone-number` (restored from mock, confirmed Feb 21 audit). Area code defaults to 216 if not in onboarding data.
 - **Fixes applied (Feb 18)**:
   - `knowledge_base_ids` (array) instead of `knowledge_base_id` (string) in Create Retell LLM
   - `Respond to Webhook` uses `={{ JSON.stringify({...}) }}` instead of broken mixed template
@@ -272,9 +272,26 @@ _Last updated: 2026-02-21 | Business Hours Classification, Analytics Overhaul, M
 - **Active location** (nafiurrahman52): `eaab0860-bbbd-4688-8d43-a19b0a55d807`
 - Migrations executed: 001–017, 022–025
 
+## Live Demo — Talk to Vera (Feb 21)
+- **Vera Agent ID**: `agent_3fc74da12f5375ca9a9f8d1bc8`
+- **Vera LLM ID**: `llm_a1620cdfe58fb2de14d90c6164dd`
+- **No phone number** — web calls only via Retell Web SDK (WebRTC)
+- **Identity**: Vera is Title Voice's product specialist (distinct from Taylor, the client-facing receptionist)
+- **DB tables**: `demo_usage` (per-user lifetime balance, 90s default), `demo_calls` (individual call log)
+- **Edge Functions**: `create-demo-call` (auth + usage check + Retell web call), `log-demo-call` (record duration)
+- **Retell API key**: Set as Supabase secret `RETELL_API_KEY` (server-side only in Edge Functions)
+- **Frontend**: `/try-vera` page (lazy-loaded, no Nav/Footer), `retell-client-js-sdk` (~458KB isolated chunk)
+- **Home.jsx**: "Talk to Vera — Live" CTA section added before FAQ
+- **State machine**: loading → ready → connecting → active → ended → exhausted
+- **Hooks**: `useDemoUsage()` (React Query), `useDemoCall()` (Retell SDK wrapper)
+- **Components**: `DemoCallInterface`, `DemoTimer` (SVG countdown ring), `AudioVisualizer` (volume bars)
+- **handle-signup updated**: Auto-creates `demo_usage` row on new signup
+- **Migration 025**: `demo_usage` + `demo_calls` tables with RLS (user reads own, service role full access)
+- **Spec**: Full feature spec at `LIVE-DEMO-SPEC.md`
+
 ## Production Go-Live Checklist
-- [ ] Restore "Create Phone Number" node in WF-012 from mock Code node back to httpRequest (`POST https://api.retellai.com/create-phone-number`)
-- [ ] Deactivate/reactivate WF-012 after restoring
+- [x] ~~Restore "Create Phone Number" node in WF-012~~ — Already live (confirmed Feb 21 audit)
+- [x] ~~Deactivate/reactivate WF-012 after restoring~~ — Already active
 - [ ] Verify KB pages are all indexed in Retell dashboard after onboarding
 - [ ] Test end-to-end with a real phone number purchase
 - [ ] Move Retell API key to server-side only (Supabase secret or Edge Function)
@@ -283,7 +300,35 @@ _Last updated: 2026-02-21 | Business Hours Classification, Analytics Overhaul, M
 
 ---
 
+## Critical Rules
+
+1. **NEVER touch production resources** (Retell agents, Supabase production configs, n8n production workflows, live phone numbers) without explicit user permission. Always ask before modifying any production system.
+2. **Always explain your plan BEFORE making edits.** Do not jump ahead with code changes before confirming the approach, especially for multi-file changes or architectural decisions.
+3. **Keep moving.** When the user says "continue" or "are u there?" it means you've stalled. Do not wait for confirmation on intermediate steps during multi-step tasks — keep executing unless you hit a genuine blocker that requires user input.
+
+## Project Overview
+
+- **Tech stack**: Vite + React (JavaScript), Supabase (auth + DB + Edge Functions), n8n (workflows/webhooks), Stripe (payments), Retell AI (voice), Resend (email)
+- **Do NOT reference** Convex, Next.js, or other frameworks unless explicitly told otherwise
+- **Timezone**: All time-related displays and logic use **EST**. Never convert to browser local time or UTC for user-facing features.
+
+## UI/Design Rules
+
+- When making UI/CSS changes, make them **BOLD and VISIBLY DIFFERENT**. Never make subtle/minimal tweaks when the user asks for improvements.
+- If the user says "make it better", that means a **noticeable redesign**, not a 2px padding change.
+- When unsure about design direction, ask for a reference component or screenshot rather than guessing.
+
+## n8n Rules
+
+- n8n Code nodes do **NOT** support `fetch()`. Use `this.helpers.httpRequest()` in Code nodes, or use the HTTP Request node.
+- n8n handles email sending and Stripe webhooks — do not try to replicate these in Edge Functions.
+- After updating any workflow via API, must **deactivate/reactivate** for webhooks to re-register.
+
+---
+
 ## 🎨 BRAND TONE GUIDELINES (CRITICAL - ALWAYS FOLLOW)
+
+> Full spec: `BRAND-TONE.md` — read it before writing ANY customer-facing copy. Follow it for **copy and voice only**. Colors and visual design use the palette below (not BRAND-TONE.md).
 
 **Color Palette:**
 - Primary Blue: `#0080FF`
@@ -304,10 +349,36 @@ _Last updated: 2026-02-21 | Business Hours Classification, Analytics Overhaul, M
 - Fonts: Manrope, Inter (sans-serif)
 - Style: Bold, professional, modern
 
-**Voice:**
-- Professional yet approachable
-- Title industry-specific
-- Clear, direct value propositions
-- Focus on efficiency & automation
+### Copy Rules (Non-Negotiable)
+
+1. **NEVER say "AI"** in customer-facing copy. Use: autonomous, intelligent, adaptive, receptionist, system, platform, Taylor.
+2. **No em dashes.** Use periods, commas, or restructure. Every time.
+3. **No buzzwords or superlatives.** If it sounds like a pitch deck, rewrite it.
+4. **Short sentences.** If a sentence needs a second comma, split it into two.
+5. **Loss aversion over gain framing.** "Every missed call is a deal that walked" > "Answer more calls."
+6. **Grounded confidence.** State facts. Show numbers. No hype.
+7. **Discovery-based.** Let the prospect arrive at the conclusion. Don't push.
+
+### Language Substitutions (Always)
+
+| Never Say | Always Say |
+|-----------|-----------|
+| AI-powered / AI agent / AI assistant | Autonomous / Intelligent receptionist / Taylor |
+| price / cost | investment |
+| get started / sign up | when we get you set up / lock in your spot |
+| missed calls | calls that went somewhere else / calls that never left a trace |
+| our product | the support / what we built for you |
+| just following up | I had a few ideas I wanted to share |
+| Processed / Serviced | Handled / Answered |
+| End user | Caller |
+| Portal / Interface | Dashboard |
+
+### Dashboard UI Copy
+
+- Empty state: "No calls yet. Once Taylor starts answering, every call will show up here."
+- Live call: "1 call happening right now" (not "1 active session")
+- Stats: "Calls Handled" not "Total Calls Processed"
+- Error: "Something went wrong loading your calls. We're on it."
+- Sentiment: Positive / Neutral / Frustrated (not Negative)
 
 **RULE:** Always check existing components for brand consistency before creating new designs.

@@ -91,7 +91,7 @@ const Onboarding = () => {
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <SEO
         title="Onboarding"
-        description="Get started with Title Voice AI. Live in 2 weeks with full setup support."
+        description="Get started with Title Voice AI. Live the same day with full setup support."
         canonical="/onboarding"
       />
 
@@ -122,7 +122,7 @@ const Onboarding = () => {
             transition={{ delay: 0.2 }}
             className="text-xl text-white/80 max-w-full md:max-w-3xl mx-auto"
           >
-            Your AI receptionist will be live in 2 weeks. Here's what to expect.
+            Your AI receptionist goes live the same day. Here's what to expect.
           </motion.p>
         </div>
       </section>
@@ -350,7 +350,7 @@ const Onboarding = () => {
       <EnhancedCTA
         title="Ready to Get Started?"
         highlightText="Get Started"
-        description="Schedule your onboarding call and go live in 2 weeks"
+        description="Start your onboarding and go live the same day"
       />
     </div>
   )
